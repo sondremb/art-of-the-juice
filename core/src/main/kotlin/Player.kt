@@ -2,8 +2,10 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Disposable
+import ktx.assets.disposeSafely
 
-class Player {
+class Player: Disposable {
     private var animations = PlayerAnimations()
 
     private val position = Vector2(100f, 100f) // Start position
@@ -66,7 +68,7 @@ class Player {
         )
     }
 
-    fun disposeSafely() {
+    override fun dispose() {
         animations.disposeSafely()
     }
 }

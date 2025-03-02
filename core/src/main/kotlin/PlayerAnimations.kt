@@ -1,9 +1,11 @@
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.utils.Disposable
+import ktx.assets.disposeSafely
 import ktx.assets.toInternalFile
 
-class PlayerAnimations {
+class PlayerAnimations: Disposable {
     private var atlas: TextureAtlas = TextureAtlas("player/Player.atlas".toInternalFile())
     private var currentState = State.IDLE
     private var stateTime = 0f
@@ -28,16 +30,12 @@ class PlayerAnimations {
         }
     }
 
-    fun dispose() {
-        atlas.dispose()
+    override fun dispose() {
+        atlas.disposeSafely()
     }
 
     enum class State {
         RUN,
         IDLE
     }
-}
-
-fun PlayerAnimations?.disposeSafely() {
-    this?.dispose()
 }
