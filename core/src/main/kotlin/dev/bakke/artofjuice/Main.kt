@@ -1,5 +1,6 @@
 package dev.bakke.artofjuice
 
+import Player
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.Texture.TextureFilter.Linear
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -21,18 +22,19 @@ class Main : KtxGame<KtxScreen>() {
 }
 
 class FirstScreen : KtxScreen {
-    private val image = Texture("logo.png".toInternalFile(), true).apply { setFilter(Linear, Linear) }
     private val batch = SpriteBatch()
+    private val player = Player()
 
     override fun render(delta: Float) {
         clearScreen(red = 0.7f, green = 0.7f, blue = 0.7f)
         batch.use {
-            it.draw(image, 100f, 160f)
+            player.update(delta)
+            player.render(it)
         }
     }
 
     override fun dispose() {
-        image.disposeSafely()
+        player.disposeSafely()
         batch.disposeSafely()
     }
 }
