@@ -1,0 +1,572 @@
+background.png
+size: 1312, 64
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+IndustrialTile
+  rotate: false
+  xy: 0, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+IndustrialTile
+  rotate: false
+  xy: 0, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+IndustrialTile
+  rotate: false
+  xy: 32, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+IndustrialTile
+  rotate: false
+  xy: 32, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 4
+IndustrialTile
+  rotate: false
+  xy: 64, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 5
+IndustrialTile
+  rotate: false
+  xy: 64, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 6
+IndustrialTile
+  rotate: false
+  xy: 96, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 7
+IndustrialTile
+  rotate: false
+  xy: 96, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 8
+IndustrialTile
+  rotate: false
+  xy: 128, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 9
+IndustrialTile
+  rotate: false
+  xy: 128, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 10
+IndustrialTile
+  rotate: false
+  xy: 160, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 11
+IndustrialTile
+  rotate: false
+  xy: 160, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 12
+IndustrialTile
+  rotate: false
+  xy: 192, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 13
+IndustrialTile
+  rotate: false
+  xy: 192, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 14
+IndustrialTile
+  rotate: false
+  xy: 224, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 15
+IndustrialTile
+  rotate: false
+  xy: 224, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 16
+IndustrialTile
+  rotate: false
+  xy: 256, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 17
+IndustrialTile
+  rotate: false
+  xy: 256, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 18
+IndustrialTile
+  rotate: false
+  xy: 288, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 19
+IndustrialTile
+  rotate: false
+  xy: 288, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 20
+IndustrialTile
+  rotate: false
+  xy: 320, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 21
+IndustrialTile
+  rotate: false
+  xy: 320, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 22
+IndustrialTile
+  rotate: false
+  xy: 352, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 23
+IndustrialTile
+  rotate: false
+  xy: 352, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 24
+IndustrialTile
+  rotate: false
+  xy: 384, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 25
+IndustrialTile
+  rotate: false
+  xy: 384, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 26
+IndustrialTile
+  rotate: false
+  xy: 416, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 27
+IndustrialTile
+  rotate: false
+  xy: 416, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 28
+IndustrialTile
+  rotate: false
+  xy: 448, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 29
+IndustrialTile
+  rotate: false
+  xy: 448, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 30
+IndustrialTile
+  rotate: false
+  xy: 480, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 31
+IndustrialTile
+  rotate: false
+  xy: 480, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 32
+IndustrialTile
+  rotate: false
+  xy: 512, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 33
+IndustrialTile
+  rotate: false
+  xy: 512, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 34
+IndustrialTile
+  rotate: false
+  xy: 544, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 35
+IndustrialTile
+  rotate: false
+  xy: 544, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 36
+IndustrialTile
+  rotate: false
+  xy: 576, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 37
+IndustrialTile
+  rotate: false
+  xy: 576, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 38
+IndustrialTile
+  rotate: false
+  xy: 608, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 39
+IndustrialTile
+  rotate: false
+  xy: 608, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 40
+IndustrialTile
+  rotate: false
+  xy: 640, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 41
+IndustrialTile
+  rotate: false
+  xy: 640, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 42
+IndustrialTile
+  rotate: false
+  xy: 672, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 43
+IndustrialTile
+  rotate: false
+  xy: 672, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 44
+IndustrialTile
+  rotate: false
+  xy: 704, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 45
+IndustrialTile
+  rotate: false
+  xy: 704, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 46
+IndustrialTile
+  rotate: false
+  xy: 736, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 47
+IndustrialTile
+  rotate: false
+  xy: 736, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 48
+IndustrialTile
+  rotate: false
+  xy: 768, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 49
+IndustrialTile
+  rotate: false
+  xy: 768, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 50
+IndustrialTile
+  rotate: false
+  xy: 800, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 51
+IndustrialTile
+  rotate: false
+  xy: 800, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 52
+IndustrialTile
+  rotate: false
+  xy: 832, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 53
+IndustrialTile
+  rotate: false
+  xy: 832, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 54
+IndustrialTile
+  rotate: false
+  xy: 864, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 55
+IndustrialTile
+  rotate: false
+  xy: 864, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 56
+IndustrialTile
+  rotate: false
+  xy: 896, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 57
+IndustrialTile
+  rotate: false
+  xy: 896, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 58
+IndustrialTile
+  rotate: false
+  xy: 928, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 59
+IndustrialTile
+  rotate: false
+  xy: 928, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 60
+IndustrialTile
+  rotate: false
+  xy: 960, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 61
+IndustrialTile
+  rotate: false
+  xy: 960, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 62
+IndustrialTile
+  rotate: false
+  xy: 992, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 63
+IndustrialTile
+  rotate: false
+  xy: 992, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 64
+IndustrialTile
+  rotate: false
+  xy: 1024, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 65
+IndustrialTile
+  rotate: false
+  xy: 1024, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 66
+IndustrialTile
+  rotate: false
+  xy: 1056, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 67
+IndustrialTile
+  rotate: false
+  xy: 1056, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 68
+IndustrialTile
+  rotate: false
+  xy: 1088, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 69
+IndustrialTile
+  rotate: false
+  xy: 1088, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 70
+IndustrialTile
+  rotate: false
+  xy: 1120, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 71
+IndustrialTile
+  rotate: false
+  xy: 1120, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 72
+IndustrialTile
+  rotate: false
+  xy: 1152, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 73
+IndustrialTile
+  rotate: false
+  xy: 1152, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 74
+IndustrialTile
+  rotate: false
+  xy: 1184, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 75
+IndustrialTile
+  rotate: false
+  xy: 1184, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 76
+IndustrialTile
+  rotate: false
+  xy: 1216, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 77
+IndustrialTile
+  rotate: false
+  xy: 1216, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 78
+IndustrialTile
+  rotate: false
+  xy: 1248, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 79
+IndustrialTile
+  rotate: false
+  xy: 1248, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 80
+IndustrialTile
+  rotate: false
+  xy: 1280, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 81
