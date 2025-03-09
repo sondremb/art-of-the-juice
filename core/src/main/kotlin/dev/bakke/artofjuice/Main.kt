@@ -3,10 +3,12 @@ package dev.bakke.artofjuice
 import Player
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
+import com.badlogic.gdx.math.Rectangle
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
@@ -25,10 +27,12 @@ class Main : KtxGame<KtxScreen>() {
 
 class FirstScreen : KtxScreen {
     private val batch = SpriteBatch()
+    private val shape = ShapeRenderer()
     private val player = Player()
     private lateinit var map: TiledMap
     private lateinit var renderer: OrthogonalTiledMapRenderer
     private lateinit var camera: OrthographicCamera
+    val rects = mutableListOf<Rectangle>()
 
     override fun show() {
         map = TmxMapLoader().load("map.tmx")
@@ -36,6 +40,18 @@ class FirstScreen : KtxScreen {
         camera = OrthographicCamera()
         camera.setToOrtho(false, 800f, 600f) // Adjust to match your game window size
         player.init(map)
+
+        val layer = map.layers.get("Colission") as TiledMapTileLayer
+        val w = layer.tileWidth.toFloat()
+        val h = layer.tileHeight.toFloat()
+        for (x in 0 until layer.width) {
+            for (y in 0 until layer.height) {
+                val cell = layer.getCell(x, y)
+                if (cell != null) {
+                    rects.add(Rectangle(x * w, y * h, w, h))
+                }
+            }
+        }
     }
 
     override fun render(delta: Float) {
@@ -45,9 +61,13 @@ class FirstScreen : KtxScreen {
         batch.projectionMatrix = camera.combined
         renderer.setView(camera)
         renderer.render()
-        batch.use {
-            player.update(delta, map)
-            player.render(it)
+        player.update(delta, rects)
+        player.render(batch, shape)
+        shape.projectionMatrix = camera.combined
+        shape.use(ShapeRenderer.ShapeType.Line) {
+            rects.forEach { rect ->
+                it.rect(rect.x, rect.y, rect.width, rect.height)
+            }
         }
     }
 

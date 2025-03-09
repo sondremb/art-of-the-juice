@@ -1,11 +1,13 @@
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.tiled.TiledMap
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
 import ktx.assets.disposeSafely
+import ktx.graphics.use
 import ktx.math.plus
 import ktx.math.times
 import ktx.math.vec2
@@ -23,6 +25,7 @@ class Player: Disposable {
     private val gravity = -900f
     private var isOnGround = false
     private var isFacingRight = true
+    private val bbox = Rectangle(position.x, position.y, 24f, 32f)
 
     fun init(map: TiledMap) {
         val layer = map.layers.get("Player")
@@ -31,7 +34,7 @@ class Player: Disposable {
         }
     }
 
-    fun update(delta: Float, map: TiledMap) {
+    fun update(delta: Float, rects: Collection<Rectangle>) {
         // Apply gravity
         velocity.y += gravity * delta
 
@@ -48,13 +51,13 @@ class Player: Disposable {
 
         // Update position
         val newPosition = position + (velocity * delta)
-        if (!collidesWithMap(map, newPosition)) {
+        if (!collidesWithMap(rects, newPosition)) {
             position.set(newPosition)
-        } else if (!collidesWithMap(map, vec2(newPosition.x, position.y))) {
+        } else if (!collidesWithMap(rects, vec2(newPosition.x, position.y))) {
             velocity.y = 0f
             isOnGround = true
             position.x = newPosition.x
-        } else if (!collidesWithMap(map, vec2(position.x, newPosition.y))) {
+        } else if (!collidesWithMap(rects, vec2(position.x, newPosition.y))) {
             position.y = newPosition.y
         }
 
@@ -73,22 +76,26 @@ class Player: Disposable {
         }
     }
 
-    fun collidesWithMap(map: TiledMap, position: Vector2): Boolean {
-        val layer = map.layers.get("Colission") as TiledMapTileLayer
-        val cell = layer.getCell((position.x / layer.tileWidth).toInt(), (position.y / layer.tileHeight).toInt())
-        return cell != null
+    fun collidesWithMap(map: Collection<Rectangle>, newPosition: Vector2): Boolean {
+        bbox.setPosition(newPosition)
+        return map.any { bbox.overlaps(it) }.also { bbox.setPosition(position) }
     }
 
-    fun render(batch: Batch) {
+    fun render(batch: Batch, shape: ShapeRenderer) {
         val frame = animations.getCurrentFrame()
         val scaleX = if (isFacingRight) 1f else -1f
-        batch.draw(
-            frame,
-            position.x + if (isFacingRight) 0f else frame.regionWidth.toFloat(),
-            position.y,
-            frame.regionWidth.toFloat() * scaleX,
-            frame.regionHeight.toFloat()
-        )
+        batch.use {
+            it.draw(
+                frame,
+                position.x + if (isFacingRight) 0f else frame.regionWidth.toFloat(),
+                position.y,
+                frame.regionWidth.toFloat() * scaleX,
+                frame.regionHeight.toFloat()
+            )
+        }
+        shape.use(ShapeRenderer.ShapeType.Line) {
+            it.rect(bbox.x, bbox.y, bbox.width, bbox.height)
+        }
     }
 
     override fun dispose() {
