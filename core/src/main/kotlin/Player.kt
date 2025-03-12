@@ -51,14 +51,15 @@ class Player: Disposable {
 
         // Update position
         val newPosition = position + (velocity * delta)
-        if (!collidesWithMap(rects, newPosition)) {
-            position.set(newPosition)
-        } else if (!collidesWithMap(rects, vec2(newPosition.x, position.y))) {
-            isOnGround = velocity.y <= 0
+        if (!collidesWithMap(rects, vec2(newPosition.x, position.y))) {
+           position.x = newPosition.x
+        }
+        if (collidesWithMap(rects, vec2(position.x, newPosition.y))) {
+            isOnGround = velocity.y <= 0f
             velocity.y = 0f
-            position.x = newPosition.x
-        } else if (!collidesWithMap(rects, vec2(position.x, newPosition.y))) {
+        } else {
             position.y = newPosition.y
+            isOnGround = false
         }
 
 
