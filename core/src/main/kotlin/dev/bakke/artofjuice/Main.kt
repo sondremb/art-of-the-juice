@@ -63,7 +63,7 @@ class FirstScreen : KtxScreen {
             }
         }
 
-        debugUI.render()
+        debugUI.render(delta)
     }
 
     override fun resize(width: Int, height: Int) {
