@@ -18,7 +18,7 @@ class Player: Disposable {
     private var animations = PlayerAnimations()
 
     val position = Vector2(100f, 100f) // Start position
-    private val velocity = Vector2(0f, 0f) // Movement speed
+    val velocity = Vector2(0f, 0f) // Movement speed
 
     private val speed = 200f // Horizontal speed
     private val jumpForce = 600f

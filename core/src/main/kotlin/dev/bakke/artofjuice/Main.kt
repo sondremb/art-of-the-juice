@@ -30,6 +30,7 @@ class FirstScreen : KtxScreen {
     private val batch = SpriteBatch()
     private val shape = ShapeRenderer()
     private val player = Player()
+    private val debugUI = DebugUI(batch, player)
     private lateinit var map: TiledMap
     private lateinit var renderer: OrthogonalTiledMapRenderer
     private lateinit var camera: OrthographicCamera
@@ -61,6 +62,8 @@ class FirstScreen : KtxScreen {
                 it.rect(rect.x, rect.y, rect.width, rect.height)
             }
         }
+
+        debugUI.render()
     }
 
     override fun resize(width: Int, height: Int) {
@@ -74,5 +77,7 @@ class FirstScreen : KtxScreen {
         renderer.disposeSafely()
         player.disposeSafely()
         batch.disposeSafely()
+        shape.disposeSafely()
+        debugUI.disposeSafely()
     }
 }
