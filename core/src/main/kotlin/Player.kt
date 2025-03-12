@@ -54,8 +54,8 @@ class Player: Disposable {
         if (!collidesWithMap(rects, newPosition)) {
             position.set(newPosition)
         } else if (!collidesWithMap(rects, vec2(newPosition.x, position.y))) {
+            isOnGround = velocity.y <= 0
             velocity.y = 0f
-            isOnGround = true
             position.x = newPosition.x
         } else if (!collidesWithMap(rects, vec2(position.x, newPosition.y))) {
             position.y = newPosition.y
