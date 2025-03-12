@@ -23,7 +23,7 @@ class DebugUI(private val batch: SpriteBatch, private val player: Player) : Disp
     }
 
     private fun printVector2(vector: Vector2): String {
-        return "(${"%.2f".format(vector.x)}, ${"%.2f".format(vector.y)})"
+        return "(%.2f, %.2f)".format(vector.x, vector.y)
     }
 
     override fun dispose() {
