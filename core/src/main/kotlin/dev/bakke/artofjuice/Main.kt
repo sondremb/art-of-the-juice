@@ -4,6 +4,7 @@ import Player
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
@@ -41,17 +42,8 @@ class FirstScreen : KtxScreen {
         camera.setToOrtho(false, 800f, 600f) // Adjust to match your game window size
         player.init(map)
 
-        val layer = map.layers.get("Colission") as TiledMapTileLayer
-        val w = layer.tileWidth.toFloat()
-        val h = layer.tileHeight.toFloat()
-        for (x in 0 until layer.width) {
-            for (y in 0 until layer.height) {
-                val cell = layer.getCell(x, y)
-                if (cell != null) {
-                    rects.add(Rectangle(x * w, y * h, w, h))
-                }
-            }
-        }
+        val layer = map.layers.get("metal_collision")
+        layer.objects.map { (it as RectangleMapObject).rectangle }.let { rects.addAll(it) }
     }
 
     override fun render(delta: Float) {
