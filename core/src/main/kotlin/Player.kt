@@ -27,6 +27,9 @@ class Player: Disposable {
     private var isFacingRight = true
     private val bbox = Rectangle(position.x, position.y, 24f, 32f)
 
+    private val jumpBufferTime = 0.1f
+    private var jumpBuffer = 0f
+
     fun init(map: TiledMap) {
         val layer = map.layers.get("Player")
         layer.objects.get("Spawn").let {
@@ -44,10 +47,17 @@ class Player: Disposable {
         else velocity.x = 0f
 
         // Jumping
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isOnGround) {
+        val spaceJustPressed = Gdx.input.isKeyJustPressed(Input.Keys.SPACE)
+        if (isOnGround && (spaceJustPressed || jumpBuffer > 0f)) {
             velocity.y = jumpForce
             isOnGround = false
+            jumpBuffer = 0f
+        } else if (!isOnGround && spaceJustPressed) {
+            jumpBuffer = jumpBufferTime
+        } else if (jumpBuffer > 0f) {
+            jumpBuffer -= delta
         }
+
 
         // Update position
         val newPosition = position + (velocity * delta)
