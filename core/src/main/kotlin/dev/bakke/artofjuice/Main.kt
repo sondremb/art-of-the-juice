@@ -48,12 +48,12 @@ class FirstScreen : KtxScreen {
 
     override fun render(delta: Float) {
         clearScreen(red = 0.7f, green = 0.7f, blue = 0.7f)
+        player.update(delta, rects)
         camera.position.set(player.position.x, player.position.y, 0f)
         camera.update()
         batch.projectionMatrix = camera.combined
         renderer.setView(camera)
         renderer.render()
-        player.update(delta, rects)
         player.render(batch, shape)
         shape.projectionMatrix = camera.combined
         shape.use(ShapeRenderer.ShapeType.Line) {
