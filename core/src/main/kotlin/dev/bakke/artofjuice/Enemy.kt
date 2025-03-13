@@ -15,7 +15,7 @@ import ktx.math.vec2
 import ktx.tiled.x
 import ktx.tiled.y
 
-class Enemy : Disposable{
+class Enemy : Disposable {
     private var animations = SkaterAnimations()
 
     val position = Vector2(100f, 100f) // Start position
@@ -76,6 +76,4 @@ class Enemy : Disposable{
     override fun dispose() {
         animations.disposeSafely()
     }
-
-
 }
