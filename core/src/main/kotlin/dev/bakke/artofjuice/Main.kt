@@ -31,6 +31,7 @@ class FirstScreen : KtxScreen {
     private val batch = SpriteBatch()
     private val shape = ShapeRenderer()
     private val player = Player()
+    private val enemy = Enemy()
     private val debugUI = DebugUI(batch, player)
     private lateinit var map: TiledMap
     private lateinit var renderer: OrthogonalTiledMapRenderer
@@ -43,6 +44,7 @@ class FirstScreen : KtxScreen {
         camera = OrthographicCamera()
         camera.setToOrtho(false, 800f, 600f) // Adjust to match your game window size
         player.init(map)
+        enemy.init(map)
 
         val layer = map.layers.get("metal_collision")
         layer.objects.map { (it as RectangleMapObject).rectangle }.let { rects.addAll(it) }
@@ -51,12 +53,14 @@ class FirstScreen : KtxScreen {
     override fun render(delta: Float) {
         clearScreen(red = 0.7f, green = 0.7f, blue = 0.7f)
         player.update(delta, rects)
+        enemy.update(delta, rects)
         camera.position.set(player.position.x, player.position.y, 0f)
         camera.update()
         batch.projectionMatrix = camera.combined
         renderer.setView(camera)
         renderer.render()
         player.render(batch, shape)
+        enemy.render(batch, shape)
         shape.projectionMatrix = camera.combined
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
