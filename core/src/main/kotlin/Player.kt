@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
+import dev.bakke.artofjuice.GamePreferences
 import ktx.assets.disposeSafely
 import ktx.graphics.use
 import ktx.math.plus
@@ -14,7 +15,7 @@ import ktx.math.vec2
 import ktx.tiled.x
 import ktx.tiled.y
 
-class Player: Disposable {
+class Player : Disposable {
     private var animations = PlayerAnimations()
 
     val position = Vector2(100f, 100f) // Start position
@@ -62,7 +63,7 @@ class Player: Disposable {
         // Update position
         val newPosition = position + (velocity * delta)
         if (!collidesWithMap(rects, vec2(newPosition.x, position.y))) {
-           position.x = newPosition.x
+            position.x = newPosition.x
         }
         if (collidesWithMap(rects, vec2(position.x, newPosition.y))) {
             isOnGround = velocity.y <= 0f
@@ -104,8 +105,10 @@ class Player: Disposable {
                 frame.regionHeight.toFloat()
             )
         }
-        shape.use(ShapeRenderer.ShapeType.Line) {
-            it.rect(bbox.x, bbox.y, bbox.width, bbox.height)
+        if (GamePreferences.renderDebug()) {
+            shape.use(ShapeRenderer.ShapeType.Line) {
+                it.rect(bbox.x, bbox.y, bbox.width, bbox.height)
+            }
         }
     }
 

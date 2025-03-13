@@ -1,12 +1,13 @@
 package dev.bakke.artofjuice
 
 import Player
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Rectangle
@@ -57,13 +58,19 @@ class FirstScreen : KtxScreen {
         renderer.render()
         player.render(batch, shape)
         shape.projectionMatrix = camera.combined
-        shape.use(ShapeRenderer.ShapeType.Line) {
-            rects.forEach { rect ->
-                it.rect(rect.x, rect.y, rect.width, rect.height)
-            }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
+            GamePreferences.setRenderDebug(!GamePreferences.renderDebug())
         }
 
-        debugUI.render(delta)
+        if (GamePreferences.renderDebug()) {
+            shape.use(ShapeRenderer.ShapeType.Line) {
+                rects.forEach { rect ->
+                    it.rect(rect.x, rect.y, rect.width, rect.height)
+                }
+            }
+            debugUI.render(delta)
+        }
     }
 
     override fun resize(width: Int, height: Int) {
