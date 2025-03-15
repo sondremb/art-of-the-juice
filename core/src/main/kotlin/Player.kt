@@ -1,82 +1,31 @@
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
+import dev.bakke.artofjuice.Entity
 import dev.bakke.artofjuice.GamePreferences
+import dev.bakke.artofjuice.PhysicsComponent
+import dev.bakke.artofjuice.PlayerInputComponent
+import dev.bakke.artofjuice.gdx.extensions.rect
 import ktx.assets.disposeSafely
 import ktx.graphics.use
-import ktx.math.plus
-import ktx.math.times
-import ktx.math.vec2
-import ktx.tiled.x
-import ktx.tiled.y
 
-class Player : Disposable {
+class Player(position: Vector2, private var physicsComponent: PhysicsComponent, private var input: PlayerInputComponent) : Entity(position), Disposable {
     private var animations = PlayerAnimations()
 
-    val position = Vector2(100f, 100f) // Start position
-    val velocity = Vector2(0f, 0f) // Movement speed
-
-    private val speed = 200f // Horizontal speed
-    private val jumpForce = 600f
-    private val gravity = -900f
-    private var isOnGround = false
+    val isOnGround: Boolean
+        get () = physicsComponent.isOnGround
     private var isFacingRight = true
-    private val bbox = Rectangle(position.x, position.y, 24f, 32f)
-
-    private val jumpBufferTime = 0.1f
-    private var jumpBuffer = 0f
-
-    fun init(map: TiledMap) {
-        val layer = map.layers.get("Player")
-        layer.objects.get("Spawn").let {
-            position.set(it.x, it.y)
-        }
-    }
+    override val collider = Rectangle(position.x, position.y, 24f, 32f)
 
     fun update(delta: Float, rects: Collection<Rectangle>) {
-        // Apply gravity
-        velocity.y += gravity * delta
+        input.update(this, delta)
+        physicsComponent.update(this, delta, rects)
 
-        // Movement input
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) velocity.x = -speed
-        else if (Gdx.input.isKeyPressed(Input.Keys.D)) velocity.x = speed
-        else velocity.x = 0f
-
-        // Jumping
-        val spaceJustPressed = Gdx.input.isKeyJustPressed(Input.Keys.SPACE)
-        if (isOnGround && (spaceJustPressed || jumpBuffer > 0f)) {
-            velocity.y = jumpForce
-            isOnGround = false
-            jumpBuffer = 0f
-        } else if (!isOnGround && spaceJustPressed) {
-            jumpBuffer = jumpBufferTime
-        } else if (jumpBuffer > 0f) {
-            jumpBuffer -= delta
-        }
-
-
-        // Update position
-        val newPosition = position + (velocity * delta)
-        if (!collidesWithMap(rects, vec2(newPosition.x, position.y))) {
-            position.x = newPosition.x
-        }
-        if (collidesWithMap(rects, vec2(position.x, newPosition.y))) {
-            isOnGround = velocity.y <= 0f
-            velocity.y = 0f
-        } else {
-            position.y = newPosition.y
-            isOnGround = false
-        }
-
-
-        if (velocity.x < 0) {
+        if (velocity.x < 0f) {
             isFacingRight = false
-        } else if (velocity.x > 0) {
+        } else if (velocity.x > 0f) {
             isFacingRight = true
         }
 
@@ -86,11 +35,6 @@ class Player : Disposable {
         } else {
             animations.setState(PlayerAnimations.State.IDLE)
         }
-    }
-
-    fun collidesWithMap(map: Collection<Rectangle>, newPosition: Vector2): Boolean {
-        bbox.setPosition(newPosition)
-        return map.any { bbox.overlaps(it) }.also { bbox.setPosition(position) }
     }
 
     fun render(batch: Batch, shape: ShapeRenderer) {
@@ -107,7 +51,7 @@ class Player : Disposable {
         }
         if (GamePreferences.renderDebug()) {
             shape.use(ShapeRenderer.ShapeType.Line) {
-                it.rect(bbox.x, bbox.y, bbox.width, bbox.height)
+                it.rect(collider)
             }
         }
     }

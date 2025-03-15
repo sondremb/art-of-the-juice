@@ -17,6 +17,9 @@ import ktx.app.clearScreen
 import ktx.assets.disposeSafely
 import ktx.async.KtxAsync
 import ktx.graphics.use
+import ktx.math.vec2
+import ktx.tiled.x
+import ktx.tiled.y
 
 class Main : KtxGame<KtxScreen>() {
     override fun create() {
@@ -30,7 +33,7 @@ class Main : KtxGame<KtxScreen>() {
 class FirstScreen : KtxScreen {
     private val batch = SpriteBatch()
     private val shape = ShapeRenderer()
-    private val player = Player()
+    private val player = Player(vec2(100f, 100f), PhysicsComponent(-900f), PlayerInputComponent())
     private val enemy = Enemy()
     private val debugUI = DebugUI(batch, player)
     private lateinit var map: TiledMap
@@ -40,10 +43,10 @@ class FirstScreen : KtxScreen {
 
     override fun show() {
         map = TmxMapLoader().load("map.tmx")
+        player.position = map.layers.get("Player").objects.get("Spawn").let { vec2(it.x, it.y) }
         renderer = OrthogonalTiledMapRenderer(map)
         camera = OrthographicCamera()
         camera.setToOrtho(false, 800f, 600f) // Adjust to match your game window size
-        player.init(map)
         enemy.init(map)
 
         val layer = map.layers.get("metal_collision")
