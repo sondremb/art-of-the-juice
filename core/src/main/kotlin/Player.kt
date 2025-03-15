@@ -11,7 +11,7 @@ import dev.bakke.artofjuice.gdx.extensions.rect
 import ktx.assets.disposeSafely
 import ktx.graphics.use
 
-class Player(position: Vector2, private var physicsComponent: PhysicsComponent, private var input: PlayerInputComponent) : Entity(position), Disposable {
+class Player(position: Vector2, var physicsComponent: PhysicsComponent, private var input: PlayerInputComponent) : Entity(position), Disposable {
     private var animations = PlayerAnimations()
 
     val isOnGround: Boolean

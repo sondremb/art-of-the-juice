@@ -6,7 +6,7 @@ import ktx.math.plus
 import ktx.math.times
 import ktx.math.vec2
 
-class PhysicsComponent(val gravity: Float) {
+class PhysicsComponent(var gravity: Float) {
     var isOnGround = false
         private set
     fun update(entity: Entity, delta: Float, rects: Collection<Rectangle>) {
