@@ -57,11 +57,11 @@ class FirstScreen : KtxScreen {
         camera.position.set(player.position.x, player.position.y, 0f)
         camera.update()
         batch.projectionMatrix = camera.combined
+        shape.projectionMatrix = camera.combined
         renderer.setView(camera)
         renderer.render()
         player.render(batch, shape)
         enemy.render(batch, shape)
-        shape.projectionMatrix = camera.combined
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
             GamePreferences.setRenderDebug(!GamePreferences.renderDebug())
