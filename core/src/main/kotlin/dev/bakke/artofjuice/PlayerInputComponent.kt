@@ -20,16 +20,25 @@ class PlayerInputComponent {
     private val jumpBufferTime = 0.1f
     private var jumpBuffer = 0f
 
+    private val coyoteTime = 0.1f
+    private var coyoteTimer = 0f
+
     fun update(player: Player, delta: Float) {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) player.velocity.x = -speed
         else if (Gdx.input.isKeyPressed(Input.Keys.D)) player.velocity.x = speed
         else player.velocity.x = 0f
 
+        if (player.isOnGround) {
+            coyoteTimer = coyoteTime
+        } else if (coyoteTimer > 0f) {
+            coyoteTimer -= delta
+        }
         // Jumping
         val spaceJustPressed = Gdx.input.isKeyJustPressed(Input.Keys.SPACE)
-        if (player.isOnGround && (spaceJustPressed || jumpBuffer > 0f)) {
+        if ((player.isOnGround || coyoteTimer > 0f) && (spaceJustPressed || jumpBuffer > 0f)) {
             player.velocity.y = jumpVelocity
             jumpBuffer = 0f
+            coyoteTimer = 0f
         } else if (!player.isOnGround && spaceJustPressed) {
             jumpBuffer = jumpBufferTime
         } else if (jumpBuffer > 0f) {
