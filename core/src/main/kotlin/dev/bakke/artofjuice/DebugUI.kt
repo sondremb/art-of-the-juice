@@ -1,10 +1,10 @@
 package dev.bakke.artofjuice
 
-import Player
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
+import dev.bakke.artofjuice.player.Player
 import ktx.assets.disposeSafely
 import ktx.graphics.use
 

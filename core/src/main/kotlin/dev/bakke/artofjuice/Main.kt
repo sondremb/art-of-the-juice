@@ -11,6 +11,11 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Rectangle
 import dev.bakke.artofjuice.components.PhysicsComponent
+import dev.bakke.artofjuice.enemy.Enemy
+import dev.bakke.artofjuice.enemy.SkaterAnimatedSprite
+import dev.bakke.artofjuice.player.Player
+import dev.bakke.artofjuice.player.PlayerAnimatedSprite
+import dev.bakke.artofjuice.player.PlayerInputComponent
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.app.clearScreen

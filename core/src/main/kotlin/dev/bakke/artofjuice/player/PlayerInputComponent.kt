@@ -1,6 +1,5 @@
-package dev.bakke.artofjuice
+package dev.bakke.artofjuice.player
 
-import Player
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 

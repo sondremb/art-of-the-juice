@@ -1,4 +1,4 @@
-package dev.bakke.artofjuice
+package dev.bakke.artofjuice.player
 
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
