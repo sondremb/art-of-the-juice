@@ -1,7 +1,8 @@
-package dev.bakke.artofjuice
+package dev.bakke.artofjuice.components
 
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import dev.bakke.artofjuice.Entity
 import ktx.math.plus
 import ktx.math.times
 import ktx.math.vec2

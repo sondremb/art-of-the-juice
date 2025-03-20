@@ -1,8 +1,9 @@
-package dev.bakke.artofjuice
+package dev.bakke.artofjuice.components
 
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import dev.bakke.artofjuice.Entity
 
 abstract class AnimatedSpriteComponent<TState>(
 ) {
