@@ -33,8 +33,8 @@ class Main : KtxGame<KtxScreen>() {
 class FirstScreen : KtxScreen {
     private val batch = SpriteBatch()
     private val shape = ShapeRenderer()
-    private val player = Player(vec2(100f, 100f), PhysicsComponent(-900f), PlayerInputComponent())
-    private val enemy = Enemy(vec2(200f, 100f), PhysicsComponent(-900f))
+    private val player = Player(vec2(100f, 100f), PhysicsComponent(-900f), PlayerInputComponent(), PlayerAnimatedSprite())
+    private val enemy = Enemy(vec2(200f, 100f), PhysicsComponent(-900f), SkaterAnimatedSprite())
     private val debugUI = DebugUI(batch, player)
     private lateinit var map: TiledMap
     private lateinit var renderer: OrthogonalTiledMapRenderer
@@ -89,7 +89,6 @@ class FirstScreen : KtxScreen {
     override fun dispose() {
         map.disposeSafely()
         renderer.disposeSafely()
-        player.disposeSafely()
         batch.disposeSafely()
         shape.disposeSafely()
         debugUI.disposeSafely()

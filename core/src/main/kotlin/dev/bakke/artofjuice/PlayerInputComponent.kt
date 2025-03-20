@@ -27,7 +27,11 @@ class PlayerInputComponent {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) player.velocity.x = -speed
         else if (Gdx.input.isKeyPressed(Input.Keys.D)) player.velocity.x = speed
         else player.velocity.x = 0f
-
+        if (player.velocity.x == 0f) {
+            player.animatedSpriteComponent.setState(PlayerAnimatedSprite.State.IDLE)
+        } else {
+            player.animatedSpriteComponent.setState(PlayerAnimatedSprite.State.RUN)
+        }
         if (player.isOnGround) {
             coyoteTimer = coyoteTime
         } else if (coyoteTimer > 0f) {

@@ -6,15 +6,14 @@ import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
 import dev.bakke.artofjuice.gdx.extensions.rect
-import ktx.assets.disposeSafely
 import ktx.graphics.use
 import ktx.math.vec2
 
 class Enemy(
     position: Vector2,
-    private var physicsComponent: PhysicsComponent
+    private var physicsComponent: PhysicsComponent,
+    private var animatedSpriteComponent: AnimatedSpriteComponent<SkaterAnimatedSprite.State>
     ) : Entity(position, vec2(0f, 0f)), Disposable {
-    private var animations = SkaterAnimations()
 
     private val speed = 100f // Horizontal speed
 
@@ -27,13 +26,12 @@ class Enemy(
     fun update(delta: Float, rects: Collection<Rectangle>) {
         // Apply gravity
         physicsComponent.update(this, delta, rects)
-        animations.update(delta)
+        animatedSpriteComponent.update(this, delta)
     }
 
     fun render(batch: SpriteBatch, shape: ShapeRenderer) {
-        animations.getCurrentFrame()
         batch.use {
-            batch.draw(animations.getCurrentFrame(), position.x, position.y)
+            animatedSpriteComponent.render(this, it)
         }
         if (GamePreferences.renderDebug()) {
             shape.use(ShapeRenderer.ShapeType.Line) {
@@ -43,6 +41,5 @@ class Enemy(
     }
 
     override fun dispose() {
-        animations.disposeSafely()
     }
 }
