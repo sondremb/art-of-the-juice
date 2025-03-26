@@ -10,7 +10,7 @@ import ktx.math.vec2
 class PhysicsComponent(var gravity: Float) {
     var isOnGround = false
         private set
-    fun update(entity: Entity, delta: Float, rects: Collection<Rectangle>) {
+    fun update(entity: Entity, delta: Float) {
 
         // Apply gravity
         val newPosition = entity.position + (entity.velocity * delta) + vec2(0f, gravity) * (delta * delta / 2f)
@@ -22,10 +22,10 @@ class PhysicsComponent(var gravity: Float) {
         }
 
         val collider = entity.collider!!
-        if (!collidesWithMap(rects, collider, vec2(newPosition.x, entity.position.y))) {
+        if (!collidesWithMap(entity.world.rects, collider, vec2(newPosition.x, entity.position.y))) {
             entity.position.x = newPosition.x
         }
-        if (collidesWithMap(rects, collider, vec2(entity.position.x, newPosition.y))) {
+        if (collidesWithMap(entity.world.rects, collider, vec2(entity.position.x, newPosition.y))) {
             isOnGround = entity.velocity.y < 0f
             entity.velocity.y = 0f
         } else {

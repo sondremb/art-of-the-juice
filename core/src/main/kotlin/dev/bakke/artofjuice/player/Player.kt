@@ -23,9 +23,9 @@ class Player(
         get () = physicsComponent.isOnGround
     override val collider = Rectangle(position.x, position.y, 24f, 32f)
 
-    fun update(delta: Float, rects: Collection<Rectangle>) {
+    override fun update(delta: Float) {
         input.update(this, delta)
-        physicsComponent.update(this, delta, rects)
+        physicsComponent.update(this, delta)
         animatedSpriteComponent.update(this, delta)
     }
 

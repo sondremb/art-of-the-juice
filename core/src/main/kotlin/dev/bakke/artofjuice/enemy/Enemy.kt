@@ -27,9 +27,8 @@ class Enemy(
 
     override val collider = Rectangle(position.x, position.y, 24f, 32f)
 
-    fun update(delta: Float, rects: Collection<Rectangle>) {
-        // Apply gravity
-        physicsComponent.update(this, delta, rects)
+    override fun update(delta: Float) {
+        physicsComponent.update(this, delta)
         animatedSpriteComponent.update(this, delta)
     }
 

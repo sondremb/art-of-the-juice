@@ -9,7 +9,6 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
-import com.badlogic.gdx.math.Rectangle
 import dev.bakke.artofjuice.components.PhysicsComponent
 import dev.bakke.artofjuice.enemy.Enemy
 import dev.bakke.artofjuice.enemy.SkaterAnimatedSprite
@@ -38,13 +37,24 @@ class Main : KtxGame<KtxScreen>() {
 class FirstScreen : KtxScreen {
     private val batch = SpriteBatch()
     private val shape = ShapeRenderer()
-    private val player = Player(vec2(100f, 100f), PhysicsComponent(-900f), PlayerInputComponent(), PlayerAnimatedSprite())
-    private val enemy = Enemy(vec2(200f, 100f), PhysicsComponent(-900f), SkaterAnimatedSprite())
+    private val player = Player(
+        vec2(100f, 100f),
+        PhysicsComponent(-900f),
+        PlayerInputComponent(),
+        PlayerAnimatedSprite())
+    private val enemy = Enemy(
+        vec2(200f, 100f),
+        PhysicsComponent(-900f),
+        SkaterAnimatedSprite())
+    private val world = World().apply {
+        addEntity(player)
+        addEntity(enemy)
+    }
     private val debugUI = DebugUI(batch, player)
     private lateinit var map: TiledMap
     private lateinit var renderer: OrthogonalTiledMapRenderer
     private lateinit var camera: OrthographicCamera
-    val rects = mutableListOf<Rectangle>()
+
 
     override fun show() {
         map = TmxMapLoader().load("map.tmx")
@@ -55,13 +65,12 @@ class FirstScreen : KtxScreen {
         map.layers.get("Player").objects.get("Enemy").let { enemy.position.set(it.x, it.y) }
 
         val layer = map.layers.get("metal_collision")
-        layer.objects.map { (it as RectangleMapObject).rectangle }.let { rects.addAll(it) }
+        layer.objects.map { (it as RectangleMapObject).rectangle }.let { world.rects.addAll(it) }
     }
 
     override fun render(delta: Float) {
         clearScreen(red = 0.7f, green = 0.7f, blue = 0.7f)
-        player.update(delta, rects)
-        enemy.update(delta, rects)
+        world.update(delta)
         camera.position.set(player.position.x, player.position.y, 0f)
         camera.update()
         batch.projectionMatrix = camera.combined
@@ -77,7 +86,7 @@ class FirstScreen : KtxScreen {
 
         if (GamePreferences.renderDebug()) {
             shape.use(ShapeRenderer.ShapeType.Line) {
-                rects.forEach { rect ->
+                world.rects.forEach { rect ->
                     it.rect(rect.x, rect.y, rect.width, rect.height)
                 }
             }
