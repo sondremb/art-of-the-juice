@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
+import dev.bakke.artofjuice.EnemyAIComponent
 import dev.bakke.artofjuice.Entity
 import dev.bakke.artofjuice.GamePreferences
 import dev.bakke.artofjuice.components.AnimatedSpriteComponent
@@ -15,19 +16,17 @@ import ktx.math.vec2
 
 class Enemy(
     position: Vector2,
+    private var aiComponent: EnemyAIComponent,
     private var physicsComponent: PhysicsComponent,
     private var animatedSpriteComponent: AnimatedSpriteComponent<SkaterAnimatedSprite.State>
     ) : Entity(position, vec2(0f, 0f)), Disposable {
 
     private val speed = 100f // Horizontal speed
 
-    init {
-        velocity.x = speed
-    }
-
     override val collider = Rectangle(position.x, position.y, 24f, 32f)
 
     override fun update(delta: Float) {
+        aiComponent.update(this, delta)
         physicsComponent.update(this, delta)
         animatedSpriteComponent.update(this, delta)
     }

@@ -44,6 +44,7 @@ class FirstScreen : KtxScreen {
         PlayerAnimatedSprite())
     private val enemy = Enemy(
         vec2(200f, 100f),
+        EnemyAIComponent(),
         PhysicsComponent(-900f),
         SkaterAnimatedSprite())
     private val world = World().apply {
