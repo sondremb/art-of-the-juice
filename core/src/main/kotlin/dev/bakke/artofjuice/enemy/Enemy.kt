@@ -31,7 +31,7 @@ class Enemy(
         animatedSpriteComponent.update(this, delta)
     }
 
-    fun render(batch: SpriteBatch, shape: ShapeRenderer) {
+    override fun render(batch: SpriteBatch, shape: ShapeRenderer) {
         batch.use {
             animatedSpriteComponent.render(this, it)
         }

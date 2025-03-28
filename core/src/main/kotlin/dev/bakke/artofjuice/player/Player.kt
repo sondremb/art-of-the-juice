@@ -1,6 +1,7 @@
 package dev.bakke.artofjuice.player
 
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
@@ -29,7 +30,7 @@ class Player(
         animatedSpriteComponent.update(this, delta)
     }
 
-    fun render(batch: Batch, shape: ShapeRenderer) {
+    override fun render(batch: SpriteBatch, shape: ShapeRenderer) {
         batch.use {
             animatedSpriteComponent.render(this, it)
         }
