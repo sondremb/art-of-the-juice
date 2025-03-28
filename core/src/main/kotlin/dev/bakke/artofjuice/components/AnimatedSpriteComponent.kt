@@ -1,18 +1,18 @@
 package dev.bakke.artofjuice.components
 
 import com.badlogic.gdx.graphics.g2d.Animation
-import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import dev.bakke.artofjuice.Entity
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import ktx.graphics.use
 
-abstract class AnimatedSpriteComponent<TState>(
-) {
+abstract class AnimatedSpriteComponent<TState> : Component() {
     abstract var animations: Map<TState, Animation<TextureRegion>>
     abstract var currentState: TState
     private var stateTime = 0f
     private var isFacingRight = true
 
-    fun update(entity: Entity, delta: Float) {
+    override fun update(delta: Float) {
         stateTime += delta
         if (entity.velocity.x < 0f) {
             isFacingRight = false
@@ -21,16 +21,18 @@ abstract class AnimatedSpriteComponent<TState>(
         }
     }
 
-    fun render(entity: Entity, spriteBatch: Batch) {
+    override fun render(batch: SpriteBatch, shape: ShapeRenderer) {
         val scaleX = if (isFacingRight) 1f else -1f
         val frame = getCurrentFrame()
-        spriteBatch.draw(
-            frame,
-            entity.position.x + if (isFacingRight) 0f else frame.regionWidth.toFloat(),
-            entity.position.y,
-            frame.regionWidth.toFloat() * scaleX,
-            frame.regionHeight.toFloat()
-        )
+        batch.use {
+            it.draw(
+                frame,
+                entity.position.x + if (isFacingRight) 0f else frame.regionWidth.toFloat(),
+                entity.position.y,
+                frame.regionWidth.toFloat() * scaleX,
+                frame.regionHeight.toFloat()
+            )
+        }
     }
 
     private fun getCurrentFrame(): TextureRegion {

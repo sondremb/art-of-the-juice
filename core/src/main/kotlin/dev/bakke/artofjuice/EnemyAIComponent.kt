@@ -2,12 +2,13 @@ package dev.bakke.artofjuice
 
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import dev.bakke.artofjuice.components.Component
 import ktx.math.vec2
 
-class EnemyAIComponent {
+class EnemyAIComponent : Component() {
     private val speed = 100f // Horizontal speed
 
-    fun update(entity: Entity, delta: Float) {
+    override fun update(delta: Float) {
         if (entity.velocity.x == 0f) {
             entity.velocity.x = speed
         }

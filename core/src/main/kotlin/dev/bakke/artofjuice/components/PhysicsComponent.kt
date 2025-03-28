@@ -2,16 +2,14 @@ package dev.bakke.artofjuice.components
 
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
-import dev.bakke.artofjuice.Entity
 import ktx.math.plus
 import ktx.math.times
 import ktx.math.vec2
 
-class PhysicsComponent(var gravity: Float) {
+class PhysicsComponent(var gravity: Float) : Component() {
     var isOnGround = false
         private set
-    fun update(entity: Entity, delta: Float) {
-
+    override fun update(delta: Float) {
         // Apply gravity
         val newPosition = entity.position + (entity.velocity * delta) + vec2(0f, gravity) * (delta * delta / 2f)
         entity.velocity.y += gravity * delta

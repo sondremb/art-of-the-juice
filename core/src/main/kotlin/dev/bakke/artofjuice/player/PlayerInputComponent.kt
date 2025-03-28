@@ -2,13 +2,12 @@ package dev.bakke.artofjuice.player
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
-import dev.bakke.artofjuice.Bullet
-import dev.bakke.artofjuice.components.SpriteComponent
+import dev.bakke.artofjuice.components.Component
+import dev.bakke.artofjuice.components.PhysicsComponent
 import dev.bakke.artofjuice.createBullet
 import ktx.math.vec2
-import kotlin.math.sign
 
-class PlayerInputComponent {
+class PlayerInputComponent : Component() {
     private val speed = 10 * 32f
     // parameterized jump, thanks to the GDC talk "Math for Game Programmers: Building a Better Jump" by Kyle Pittman
     // https://www.youtube.com/watch?v=hG9SzQxaCm8&t=1325s
@@ -28,14 +27,17 @@ class PlayerInputComponent {
     private var coyoteTimer = 0f
     private var isFacingRight = true
 
-    fun update(player: Player, delta: Float) {
+    override fun update(delta: Float) {
+        val player = entity
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) player.velocity.x = -speed
         else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) player.velocity.x = speed
         else player.velocity.x = 0f
+        val physicsComponent = player.getComponent<PhysicsComponent>()!!
+        val animatedSpriteComponent = player.getComponent<PlayerAnimatedSprite>()!!
         if (player.velocity.x == 0f) {
-            player.animatedSpriteComponent.setState(PlayerAnimatedSprite.State.IDLE)
+            animatedSpriteComponent.setState(PlayerAnimatedSprite.State.IDLE)
         } else {
-            player.animatedSpriteComponent.setState(PlayerAnimatedSprite.State.RUN)
+            animatedSpriteComponent.setState(PlayerAnimatedSprite.State.RUN)
         }
         if (!Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && player.velocity.x != 0f) {
             if (player.velocity.x > 0f) {
@@ -44,23 +46,23 @@ class PlayerInputComponent {
                 isFacingRight = false
             }
         }
-        if (player.isOnGround) {
+        if (physicsComponent.isOnGround) {
             coyoteTimer = coyoteTime
         } else if (coyoteTimer > 0f) {
             coyoteTimer -= delta
         }
         // Jumping
         val spaceJustPressed = Gdx.input.isKeyJustPressed(Input.Keys.SPACE)
-        if ((player.isOnGround || coyoteTimer > 0f) && (spaceJustPressed || jumpBuffer > 0f)) {
+        if ((physicsComponent.isOnGround || coyoteTimer > 0f) && (spaceJustPressed || jumpBuffer > 0f)) {
             player.velocity.y = jumpVelocity
             jumpBuffer = 0f
             coyoteTimer = 0f
-        } else if (!player.isOnGround && spaceJustPressed) {
+        } else if (!physicsComponent.isOnGround && spaceJustPressed) {
             jumpBuffer = jumpBufferTime
         } else if (jumpBuffer > 0f) {
             jumpBuffer -= delta
         }
-        player.physicsComponent.gravity =  when {
+        physicsComponent.gravity =  when {
             player.velocity.y < 0f -> fallGravity
             Gdx.input.isKeyPressed(Input.Keys.SPACE) -> upwardsGravity
             else -> releaseGravity

@@ -4,11 +4,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
-import dev.bakke.artofjuice.player.Player
 import ktx.assets.disposeSafely
 import ktx.graphics.use
 
-class DebugUI(private val batch: SpriteBatch, private val player: Player) : Disposable {
+class DebugUI(private val batch: SpriteBatch, private val player: Entity) : Disposable {
     private val font = BitmapFont()
     private var frames: List<Float> = listOf()
 

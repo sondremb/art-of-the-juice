@@ -9,10 +9,9 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
+import com.badlogic.gdx.math.Rectangle
 import dev.bakke.artofjuice.components.PhysicsComponent
-import dev.bakke.artofjuice.enemy.Enemy
 import dev.bakke.artofjuice.enemy.SkaterAnimatedSprite
-import dev.bakke.artofjuice.player.Player
 import dev.bakke.artofjuice.player.PlayerAnimatedSprite
 import dev.bakke.artofjuice.player.PlayerInputComponent
 import ktx.app.KtxGame
@@ -37,16 +36,19 @@ class Main : KtxGame<KtxScreen>() {
 class FirstScreen : KtxScreen {
     private val batch = SpriteBatch()
     private val shape = ShapeRenderer()
-    private val player = Player(
-        vec2(100f, 100f),
-        PhysicsComponent(-900f),
-        PlayerInputComponent(),
-        PlayerAnimatedSprite())
-    private val enemy = Enemy(
-        vec2(200f, 100f),
-        EnemyAIComponent(),
-        PhysicsComponent(-900f),
-        SkaterAnimatedSprite())
+    private val player = Entity(vec2(100f, 100f)).apply {
+        addComponent(PhysicsComponent(-900f))
+        addComponent(PlayerInputComponent())
+        addComponent(PlayerAnimatedSprite())
+        collider = Rectangle(position.x, position.y, 24f, 32f)
+    }
+    private val enemy = Entity(
+        vec2(200f, 100f)).apply {
+        addComponent(EnemyAIComponent())
+        addComponent(PhysicsComponent(-900f))
+        addComponent(SkaterAnimatedSprite())
+        collider = Rectangle(position.x, position.y, 24f, 32f)
+    }
     private val world = World().apply {
         addEntity(player)
         addEntity(enemy)
