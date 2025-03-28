@@ -46,6 +46,7 @@ class PlayerInputComponent : Component() {
                 isFacingRight = false
             }
         }
+        animatedSpriteComponent.flipX = !isFacingRight
         if (physicsComponent.isOnGround) {
             coyoteTimer = coyoteTime
         } else if (coyoteTimer > 0f) {

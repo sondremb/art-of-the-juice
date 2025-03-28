@@ -10,24 +10,19 @@ abstract class AnimatedSpriteComponent<TState> : Component() {
     abstract var animations: Map<TState, Animation<TextureRegion>>
     abstract var currentState: TState
     private var stateTime = 0f
-    private var isFacingRight = true
+    var flipX = false
 
     override fun update(delta: Float) {
         stateTime += delta
-        if (entity.velocity.x < 0f) {
-            isFacingRight = false
-        } else if (entity.velocity.x > 0f) {
-            isFacingRight = true
-        }
     }
 
     override fun render(batch: SpriteBatch, shape: ShapeRenderer) {
-        val scaleX = if (isFacingRight) 1f else -1f
+        val scaleX = if (flipX) -1f else 1f
         val frame = getCurrentFrame()
         batch.use {
             it.draw(
                 frame,
-                entity.position.x + if (isFacingRight) 0f else frame.regionWidth.toFloat(),
+                entity.position.x + if (flipX) frame.regionWidth.toFloat() else 0f,
                 entity.position.y,
                 frame.regionWidth.toFloat() * scaleX,
                 frame.regionHeight.toFloat()

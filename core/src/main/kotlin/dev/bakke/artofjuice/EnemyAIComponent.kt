@@ -3,6 +3,7 @@ package dev.bakke.artofjuice
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import dev.bakke.artofjuice.components.Component
+import dev.bakke.artofjuice.enemy.SkaterAnimatedSprite
 import ktx.math.vec2
 
 class EnemyAIComponent : Component() {
@@ -20,6 +21,9 @@ class EnemyAIComponent : Component() {
         if (collidesWithMap(entity.world.rects, collider, nextPosition)) {
             entity.velocity.x = -entity.velocity.x
         }
+        val animatedSprite = entity.getComponent<SkaterAnimatedSprite>()!!
+        animatedSprite.flipX = entity.velocity.x < 0
+        animatedSprite.setState(SkaterAnimatedSprite.State.RUN)
     }
 
     private fun collidesWithMap(map: Collection<Rectangle>, collider: Rectangle, newPosition: Vector2): Boolean {
