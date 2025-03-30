@@ -28,9 +28,10 @@ open class Entity(var position: Vector2, var velocity: Vector2 = vec2(0f, 0f)) {
     }
     open fun render(batch: SpriteBatch, shape: ShapeRenderer) {
         components.values.forEach { it.render(batch, shape) }
-        if (GamePreferences.renderDebug() && collider != null) {
+        if (GamePreferences.renderDebug()) {
             shape.use(ShapeRenderer.ShapeType.Line) {
-                it.rect(collider!!)
+                it.circle(position.x, position.y, 1f)
+                if (collider !== null) it.rect(collider!!)
             }
         }
     }

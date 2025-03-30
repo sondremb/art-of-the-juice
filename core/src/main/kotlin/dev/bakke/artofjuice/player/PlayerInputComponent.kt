@@ -74,7 +74,7 @@ class PlayerInputComponent : Component() {
             val direction = if (isFacingRight) 1f else -1f
             player.world.addEntity(
                 createBullet(
-                    vec2(player.position.x + direction * 16f, player.position.y + 16f),
+                    vec2(player.position.x + direction * 16f, player.position.y),
                     vec2(direction * 500f, 0f)))
         }
     }

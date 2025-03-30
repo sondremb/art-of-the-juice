@@ -27,7 +27,7 @@ class EnemyAIComponent : Component() {
     }
 
     private fun collidesWithMap(map: Collection<Rectangle>, collider: Rectangle, newPosition: Vector2): Boolean {
-        val box = Rectangle(newPosition.x, newPosition.y, collider.width, collider.height)
+        val box = Rectangle(0f, 0f, collider.width, collider.height).setCenter(newPosition)
         return map.any { box.overlaps(it) }
     }
 }

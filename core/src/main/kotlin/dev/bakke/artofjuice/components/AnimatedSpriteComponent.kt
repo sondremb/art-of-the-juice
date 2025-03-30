@@ -22,8 +22,8 @@ abstract class AnimatedSpriteComponent<TState> : Component() {
         batch.use {
             it.draw(
                 frame,
-                entity.position.x + if (flipX) frame.regionWidth.toFloat() else 0f,
-                entity.position.y,
+                entity.position.x - scaleX * frame.regionWidth / 2f,
+                entity.position.y - frame.regionHeight / 2f,
                 frame.regionWidth.toFloat() * scaleX,
                 frame.regionHeight.toFloat()
             )
