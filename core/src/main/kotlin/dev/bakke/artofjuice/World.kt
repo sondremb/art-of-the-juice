@@ -2,12 +2,11 @@ package dev.bakke.artofjuice
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import ktx.inject.Context
 
-class World {
+class World(val context: Context) {
     val entities = mutableListOf<Entity>()
-    val rects = mutableListOf<Rectangle>()
     private val nextEntities = mutableListOf<Entity>()
 
     fun entity(position: Vector2, block: Entity.() -> Unit): Entity {

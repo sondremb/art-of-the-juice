@@ -1,35 +1,32 @@
 package dev.bakke.artofjuice
 
-import com.badlogic.gdx.math.Rectangle
-import com.badlogic.gdx.math.Vector2
+import dev.bakke.artofjuice.components.ColliderComponent
 import dev.bakke.artofjuice.components.Component
 import dev.bakke.artofjuice.enemy.SkaterAnimatedSprite
+import dev.bakke.artofjuice.systems.CollisionSystem
 import ktx.math.vec2
 
 class EnemyAIComponent : Component() {
     private val speed = 100f // Horizontal speed
 
-    lateinit var animatedSprite: SkaterAnimatedSprite
+    private lateinit var animatedSprite: SkaterAnimatedSprite
+    private lateinit var collisionSystem: CollisionSystem
+    private lateinit var colliderComponent: ColliderComponent
     override fun lateInit() {
         entity.velocity.x = speed
         animatedSprite = entity.getComponent()!!
+        collisionSystem = context.inject()
+        colliderComponent = entity.getComponent()!!
     }
 
     override fun update(delta: Float) {
-        if (entity.collider == null) {
-            return
-        }
-        val collider = entity.collider!!
         val nextPosition = vec2(entity.position.x + entity.velocity.x * delta, entity.position.y)
-        if (collidesWithMap(entity.world.rects, collider, nextPosition)) {
+        colliderComponent.shape.setPosition(nextPosition.x, nextPosition.y)
+        if (collisionSystem.collidesWithTerrain(colliderComponent.shape)) {
             entity.velocity.x = -entity.velocity.x
         }
+        colliderComponent.resetPosition()
         animatedSprite.flipX = entity.velocity.x < 0
         animatedSprite.setState(SkaterAnimatedSprite.State.RUN)
-    }
-
-    private fun collidesWithMap(map: Collection<Rectangle>, collider: Rectangle, newPosition: Vector2): Boolean {
-        val box = Rectangle(0f, 0f, collider.width, collider.height).setCenter(newPosition)
-        return map.any { box.overlaps(it) }
     }
 }

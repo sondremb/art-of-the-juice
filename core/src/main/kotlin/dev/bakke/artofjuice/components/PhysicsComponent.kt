@@ -1,7 +1,6 @@
 package dev.bakke.artofjuice.components
 
-import com.badlogic.gdx.math.Rectangle
-import com.badlogic.gdx.math.Vector2
+import dev.bakke.artofjuice.systems.CollisionSystem
 import ktx.math.plus
 import ktx.math.times
 import ktx.math.vec2
@@ -9,32 +8,33 @@ import ktx.math.vec2
 class PhysicsComponent(var gravity: Float) : Component() {
     var isOnGround = false
         private set
+
+    private lateinit var colliderComponent: ColliderComponent
+    private lateinit var collisionSystem: CollisionSystem
+
+    override fun lateInit() {
+        colliderComponent = entity.getComponent()!!
+        collisionSystem = context.inject()
+    }
+
     override fun update(delta: Float) {
         // Apply gravity
         val newPosition = entity.position + (entity.velocity * delta) + vec2(0f, gravity) * (delta * delta / 2f)
         entity.velocity.y += gravity * delta
 
-        if (entity.collider == null) {
-            entity.position = newPosition
-            return
-        }
-
-        val collider = entity.collider!!
-        if (!collidesWithMap(entity.world.rects, collider, vec2(newPosition.x, entity.position.y))) {
+        val collider = colliderComponent.shape
+        collider.setPosition(newPosition.x, entity.position.y)
+        if (!collisionSystem.collidesWithTerrain(collider)) {
             entity.position.x = newPosition.x
         }
-        if (collidesWithMap(entity.world.rects, collider, vec2(entity.position.x, newPosition.y))) {
+        collider.setPosition(entity.position.x, newPosition.y)
+        if (collisionSystem.collidesWithTerrain(collider)) {
             isOnGround = entity.velocity.y < 0f
             entity.velocity.y = 0f
         } else {
             isOnGround = false
             entity.position.y = newPosition.y
         }
-        entity.collider!!.setCenter(entity.position)
-    }
-
-    fun collidesWithMap(map: Collection<Rectangle>, collider: Rectangle, newPosition: Vector2): Boolean {
-        val box = Rectangle(0f, 0f, collider.width, collider.height).setCenter(newPosition)
-        return map.any { box.overlaps(it) }
+        collider.setPosition(entity.position.x, entity.position.y)
     }
 }

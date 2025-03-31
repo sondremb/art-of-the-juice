@@ -4,9 +4,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.Disposable
 import dev.bakke.artofjuice.Entity
+import ktx.inject.Context
 
 abstract class Component : Disposable {
     lateinit var entity: Entity
+    val context: Context get() = entity.world.context
 
     /**
      * Called when the component is added to an entity

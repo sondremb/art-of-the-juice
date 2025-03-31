@@ -10,16 +10,19 @@ import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Rectangle
+import dev.bakke.artofjuice.collision.shapes.RectangleCollisionShape
+import dev.bakke.artofjuice.components.ColliderComponent
 import dev.bakke.artofjuice.components.PhysicsComponent
 import dev.bakke.artofjuice.enemy.SkaterAnimatedSprite
 import dev.bakke.artofjuice.player.PlayerAnimatedSprite
 import dev.bakke.artofjuice.player.PlayerInputComponent
+import dev.bakke.artofjuice.systems.CollisionSystem
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
 import ktx.async.KtxAsync
-import ktx.graphics.use
+import ktx.inject.Context
 import ktx.math.vec2
 import ktx.tiled.x
 import ktx.tiled.y
@@ -36,18 +39,20 @@ class Main : KtxGame<KtxScreen>() {
 class FirstScreen : KtxScreen {
     private val batch = SpriteBatch()
     private val shape = ShapeRenderer()
-    private val world = World()
+    private val context = Context()
+    private val world = World(context)
+    private val collisionSystem = CollisionSystem().apply { context.bindSingleton(this) }
     private val player = world.entity(vec2(100f, 100f)) {
         +PhysicsComponent(-900f)
         +PlayerInputComponent()
         +PlayerAnimatedSprite()
-        collider = Rectangle(position.x, position.y, 24f, 32f)
+        +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 24f, 32f)))
     }
     private val enemy = world.entity(vec2(200f, 100f)) {
         +EnemyAIComponent()
         +PhysicsComponent(-900f)
         +SkaterAnimatedSprite()
-        collider = Rectangle(position.x, position.y, 24f, 32f)
+        +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 24f, 32f)))
     }
     private val debugUI = DebugUI(batch, player)
     private lateinit var map: TiledMap
@@ -64,7 +69,10 @@ class FirstScreen : KtxScreen {
         map.layers.get("Player").objects.get("Enemy").let { enemy.position.set(it.x, it.y) }
 
         val layer = map.layers.get("metal_collision")
-        layer.objects.map { (it as RectangleMapObject).rectangle }.let { world.rects.addAll(it) }
+        //layer.objects.map { (it as RectangleMapObject).rectangle }.let { world.rects.addAll(it) }
+        layer.objects
+            .map { (it as RectangleMapObject).rectangle }
+            .forEach { collisionSystem.addTerrainCollider(RectangleCollisionShape(it)) }
     }
 
     override fun render(delta: Float) {
@@ -77,17 +85,13 @@ class FirstScreen : KtxScreen {
         renderer.setView(camera)
         renderer.render()
         world.render(batch, shape)
+        collisionSystem.render(batch, shape)
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
             GamePreferences.setRenderDebug(!GamePreferences.renderDebug())
         }
 
         if (GamePreferences.renderDebug()) {
-            shape.use(ShapeRenderer.ShapeType.Line) {
-                world.rects.forEach { rect ->
-                    it.rect(rect.x, rect.y, rect.width, rect.height)
-                }
-            }
             debugUI.render(delta)
         }
     }

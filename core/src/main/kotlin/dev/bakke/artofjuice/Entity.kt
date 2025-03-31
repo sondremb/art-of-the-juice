@@ -2,11 +2,9 @@ package dev.bakke.artofjuice
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
 import dev.bakke.artofjuice.components.Component
-import dev.bakke.artofjuice.gdx.extensions.rect
 import ktx.assets.disposeSafely
 import ktx.graphics.use
 import ktx.math.vec2
@@ -47,10 +45,7 @@ open class Entity(val world: World, var position: Vector2) : Disposable {
         if (GamePreferences.renderDebug()) {
             shape.use(ShapeRenderer.ShapeType.Line) {
                 it.circle(position.x, position.y, 1f)
-                if (collider !== null) it.rect(collider!!)
             }
         }
     }
-
-    open var collider: Rectangle? = null
 }
