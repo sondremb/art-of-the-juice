@@ -1,16 +1,20 @@
-package dev.bakke.artofjuice.components
+package dev.bakke.artofjuice.collision
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
-import dev.bakke.artofjuice.systems.CollisionSystem
 import dev.bakke.artofjuice.Entity
 import dev.bakke.artofjuice.GamePreferences
 import dev.bakke.artofjuice.collision.shapes.CollisionShape
+import dev.bakke.artofjuice.components.Component
 import ktx.graphics.use
 
 open class ColliderComponent(val shape: CollisionShape) : Component() {
     var onCollision: ((Entity) -> Unit)? = null
+
+    fun onCollision(callback: (Entity) -> Unit) {
+        this.onCollision = callback
+    }
 
     override fun init() {
         context.inject<CollisionSystem>().addEntityCollider(this)

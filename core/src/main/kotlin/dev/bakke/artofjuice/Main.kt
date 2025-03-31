@@ -11,12 +11,12 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Rectangle
 import dev.bakke.artofjuice.collision.shapes.RectangleCollisionShape
-import dev.bakke.artofjuice.components.ColliderComponent
+import dev.bakke.artofjuice.collision.ColliderComponent
 import dev.bakke.artofjuice.components.PhysicsComponent
 import dev.bakke.artofjuice.enemy.SkaterAnimatedSprite
 import dev.bakke.artofjuice.player.PlayerAnimatedSprite
 import dev.bakke.artofjuice.player.PlayerInputComponent
-import dev.bakke.artofjuice.systems.CollisionSystem
+import dev.bakke.artofjuice.collision.CollisionSystem
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.app.clearScreen

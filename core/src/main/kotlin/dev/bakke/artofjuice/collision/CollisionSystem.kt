@@ -1,10 +1,9 @@
-package dev.bakke.artofjuice.systems
+package dev.bakke.artofjuice.collision
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import dev.bakke.artofjuice.GamePreferences
 import dev.bakke.artofjuice.collision.shapes.CollisionShape
-import dev.bakke.artofjuice.components.ColliderComponent
 import ktx.graphics.use
 
 class CollisionSystem() {

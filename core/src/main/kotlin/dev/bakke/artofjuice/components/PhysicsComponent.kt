@@ -1,6 +1,7 @@
 package dev.bakke.artofjuice.components
 
-import dev.bakke.artofjuice.systems.CollisionSystem
+import dev.bakke.artofjuice.collision.ColliderComponent
+import dev.bakke.artofjuice.collision.CollisionSystem
 import ktx.math.plus
 import ktx.math.times
 import ktx.math.vec2

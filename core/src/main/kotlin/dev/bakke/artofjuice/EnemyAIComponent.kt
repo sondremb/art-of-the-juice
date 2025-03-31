@@ -1,9 +1,9 @@
 package dev.bakke.artofjuice
 
-import dev.bakke.artofjuice.components.ColliderComponent
+import dev.bakke.artofjuice.collision.ColliderComponent
 import dev.bakke.artofjuice.components.Component
 import dev.bakke.artofjuice.enemy.SkaterAnimatedSprite
-import dev.bakke.artofjuice.systems.CollisionSystem
+import dev.bakke.artofjuice.collision.CollisionSystem
 import ktx.math.vec2
 
 class EnemyAIComponent : Component() {
