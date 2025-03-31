@@ -25,11 +25,11 @@ class PlayerInputComponent : Component() {
     private var coyoteTimer = 0f
     private var isFacingRight = true
 
-    lateinit var physicsComponent: PhysicsComponent
-    lateinit var animatedSpriteComponent: PlayerAnimatedSprite
+    private lateinit var physicsComponent: PhysicsComponent
+    private lateinit var animatedSpriteComponent: PlayerAnimatedSprite
     override fun lateInit() {
-        physicsComponent = entity.getComponent()!!
-        animatedSpriteComponent = entity.getComponent()!!
+        physicsComponent = getComponent()
+        animatedSpriteComponent = getComponent()
     }
 
     override fun update(delta: Float) {

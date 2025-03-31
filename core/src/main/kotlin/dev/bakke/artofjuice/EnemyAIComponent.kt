@@ -14,9 +14,9 @@ class EnemyAIComponent : Component() {
     private lateinit var colliderComponent: ColliderComponent
     override fun lateInit() {
         entity.velocity.x = speed
-        animatedSprite = entity.getComponent()!!
+        animatedSprite = getComponent()
         collisionSystem = context.inject()
-        colliderComponent = entity.getComponent()!!
+        colliderComponent = getComponent()
     }
 
     override fun update(delta: Float) {

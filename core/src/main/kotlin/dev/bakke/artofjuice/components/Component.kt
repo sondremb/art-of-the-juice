@@ -10,6 +10,14 @@ abstract class Component : Disposable {
     lateinit var entity: Entity
     val context: Context get() = entity.world.context
 
+    inline fun <reified T : Component> getComponent(): T {
+        return entity.getComponent<T>()
+    }
+
+    inline fun <reified T : Component> tryGetComponent(): T? {
+        return entity.tryGetComponent<T>()
+    }
+
     /**
      * Called when the component is added to an entity
      */

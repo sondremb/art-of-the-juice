@@ -14,7 +14,11 @@ open class Entity(val world: World, var position: Vector2) : Disposable {
     var velocity: Vector2 = vec2(0f, 0f)
     @PublishedApi internal val components: Map<KClass<*>, Component> = mutableMapOf()
 
-    inline fun <reified T : Component> getComponent(): T? {
+    inline fun <reified T : Component> getComponent(): T {
+        return components[T::class] as T
+    }
+
+    inline fun <reified T : Component> tryGetComponent(): T? {
         return components[T::class] as T?
     }
 
