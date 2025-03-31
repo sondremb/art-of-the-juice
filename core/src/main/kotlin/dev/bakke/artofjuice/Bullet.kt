@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import dev.bakke.artofjuice.components.SpriteComponent
-
+/*
 class Bullet(
     position: Vector2,
     private val spriteComponent: SpriteComponent) : Entity(position) {
@@ -30,4 +30,4 @@ fun createBullet(position: Vector2, velocity: Vector2): Bullet {
     return Bullet(position, spriteComponent).apply {
         this.velocity = velocity
     }
-}
+}*/

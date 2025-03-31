@@ -9,10 +9,13 @@ import ktx.math.vec2
 class EnemyAIComponent : Component() {
     private val speed = 100f // Horizontal speed
 
+    lateinit var animatedSprite: SkaterAnimatedSprite
+    override fun lateInit() {
+        entity.velocity.x = speed
+        animatedSprite = entity.getComponent()!!
+    }
+
     override fun update(delta: Float) {
-        if (entity.velocity.x == 0f) {
-            entity.velocity.x = speed
-        }
         if (entity.collider == null) {
             return
         }
@@ -21,7 +24,6 @@ class EnemyAIComponent : Component() {
         if (collidesWithMap(entity.world.rects, collider, nextPosition)) {
             entity.velocity.x = -entity.velocity.x
         }
-        val animatedSprite = entity.getComponent<SkaterAnimatedSprite>()!!
         animatedSprite.flipX = entity.velocity.x < 0
         animatedSprite.setState(SkaterAnimatedSprite.State.RUN)
     }

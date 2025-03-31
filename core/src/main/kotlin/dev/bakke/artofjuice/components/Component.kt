@@ -2,10 +2,27 @@ package dev.bakke.artofjuice.components
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.utils.Disposable
 import dev.bakke.artofjuice.Entity
 
-abstract class Component {
+abstract class Component : Disposable {
     lateinit var entity: Entity
+
+    /**
+     * Called when the component is added to an entity
+     */
+    open fun init() {}
+
+    /**
+     * Called when entity is added to the world, after all components have been initialized
+     */
+    open fun lateInit() {}
+
+    /**
+     * Called when the component is removed from an entity
+     */
+    override fun dispose() {}
+
     open fun update(delta: Float) {}
     open fun render(batch: SpriteBatch, shape: ShapeRenderer) {}
 }

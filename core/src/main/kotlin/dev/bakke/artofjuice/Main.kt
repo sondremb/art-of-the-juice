@@ -36,22 +36,18 @@ class Main : KtxGame<KtxScreen>() {
 class FirstScreen : KtxScreen {
     private val batch = SpriteBatch()
     private val shape = ShapeRenderer()
-    private val player = Entity(vec2(100f, 100f)).apply {
-        addComponent(PhysicsComponent(-900f))
-        addComponent(PlayerInputComponent())
-        addComponent(PlayerAnimatedSprite())
+    private val world = World()
+    private val player = world.entity(vec2(100f, 100f)) {
+        +PhysicsComponent(-900f)
+        +PlayerInputComponent()
+        +PlayerAnimatedSprite()
         collider = Rectangle(position.x, position.y, 24f, 32f)
     }
-    private val enemy = Entity(
-        vec2(200f, 100f)).apply {
-        addComponent(EnemyAIComponent())
-        addComponent(PhysicsComponent(-900f))
-        addComponent(SkaterAnimatedSprite())
+    private val enemy = world.entity(vec2(200f, 100f)) {
+        +EnemyAIComponent()
+        +PhysicsComponent(-900f)
+        +SkaterAnimatedSprite()
         collider = Rectangle(position.x, position.y, 24f, 32f)
-    }
-    private val world = World().apply {
-        addEntity(player)
-        addEntity(enemy)
     }
     private val debugUI = DebugUI(batch, player)
     private lateinit var map: TiledMap
