@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import dev.bakke.artofjuice.components.Component
 import dev.bakke.artofjuice.components.PhysicsComponent
+import dev.bakke.artofjuice.createBullet
+import ktx.math.vec2
 
 class PlayerInputComponent : Component() {
     private val speed = 10 * 32f
@@ -75,10 +77,9 @@ class PlayerInputComponent : Component() {
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
             player.velocity.x *= 0.7f
             val direction = if (isFacingRight) 1f else -1f
-/*            player.world.addEntity(
-                createBullet(
-                    vec2(player.position.x + direction * 16f, player.position.y),
-                    vec2(direction * 500f, 0f)))*/
+            entity.world.createBullet(
+                vec2(player.position.x + direction * 24f, player.position.y),
+                vec2(direction, 0f))
         }
     }
 }
