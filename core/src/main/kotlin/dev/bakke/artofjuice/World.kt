@@ -8,6 +8,7 @@ import ktx.inject.Context
 class World(val context: Context) {
     val entities = mutableListOf<Entity>()
     private val nextEntities = mutableListOf<Entity>()
+    private val entitiesToRemove = mutableListOf<Entity>()
 
     fun entity(position: Vector2, block: Entity.() -> Unit): Entity {
         val entity = Entity(this, position)
@@ -16,11 +17,25 @@ class World(val context: Context) {
         return entity
     }
 
+    fun destroyEntity(entity: Entity) {
+        entitiesToRemove.add(entity)
+    }
+
     fun update(delta: Float) {
+        addNewEntities()
+        removeDestroyedEntities()
+        entities.forEach { it.update(delta) }
+    }
+
+    private fun addNewEntities() {
         nextEntities.forEach { it.init() }
         entities.addAll(nextEntities)
         nextEntities.clear()
-        entities.forEach { it.update(delta) }
+    }
+
+    private fun removeDestroyedEntities() {
+        entitiesToRemove.forEach { it.dispose() }
+        entities.removeAll(entitiesToRemove)
     }
 
     fun render(spriteBatch: SpriteBatch, shapeRenderer: ShapeRenderer) {

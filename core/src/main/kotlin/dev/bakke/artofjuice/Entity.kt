@@ -11,6 +11,7 @@ import ktx.math.vec2
 import kotlin.reflect.KClass
 
 open class Entity(val world: World, var position: Vector2) : Disposable {
+    private var isActive: Boolean = true
     var velocity: Vector2 = vec2(0f, 0f)
     @PublishedApi internal val components: Map<KClass<*>, Component> = mutableMapOf()
 
@@ -36,15 +37,23 @@ open class Entity(val world: World, var position: Vector2) : Disposable {
         components.values.forEach { it.lateInit() }
     }
 
+    fun destroy() {
+        this.isActive = false
+        components.values.forEach { it.isActive = false }
+        world.destroyEntity(this)
+    }
+
     override fun dispose() {
         components.values.forEach { it.disposeSafely() }
     }
 
     open fun update(delta: Float) {
+        if (!isActive) return
         components.values.forEach { it.update(delta) }
     }
 
     open fun render(batch: SpriteBatch, shape: ShapeRenderer) {
+        if (!isActive) return
         components.values.forEach { it.render(batch, shape) }
         if (GamePreferences.renderDebug()) {
             shape.use(ShapeRenderer.ShapeType.Line) {

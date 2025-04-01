@@ -11,11 +11,19 @@ class CollisionSystem() {
     private val entityColliders = mutableListOf<ColliderComponent>()
 
     fun update(delta: Float) {
-        for (i in 0 until entityColliders.size) {
+        for (i in 0 until entityColliders.size - 1) {
+            val collider = entityColliders[i]
+            if (!collider.isActive) continue
             for (j in i + 1 until entityColliders.size) {
-                if (entityColliders[i].collidesWith(entityColliders[j])) {
-                    entityColliders[i].onCollision?.invoke(entityColliders[j].entity)
-                    entityColliders[j].onCollision?.invoke(entityColliders[i].entity)
+                val other = entityColliders[j]
+                if (!other.isActive) continue
+                if (collider.collidesWith(other)) {
+                    collider.onCollision?.invoke(other.entity)
+                    other.onCollision?.invoke(collider.entity)
+                }
+            }
+        }
+    }
                 }
             }
         }

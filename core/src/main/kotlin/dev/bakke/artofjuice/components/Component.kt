@@ -9,6 +9,7 @@ import ktx.inject.Context
 abstract class Component : Disposable {
     lateinit var entity: Entity
     val context: Context get() = entity.world.context
+    var isActive: Boolean = true
 
     inline fun <reified T : Component> getComponent(): T {
         return entity.getComponent<T>()
