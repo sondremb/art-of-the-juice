@@ -9,13 +9,16 @@ import dev.bakke.artofjuice.collision.shapes.CollisionShape
 import dev.bakke.artofjuice.components.Component
 import ktx.graphics.use
 
-open class ColliderComponent(val shape: CollisionShape) : Component() {
+open class ColliderComponent(val shape: CollisionShape, val collidesWithTerrain: Boolean = false) : Component() {
     var onCollision: ((Entity) -> Unit)? = null
+    var onTerrainCollision: ((CollisionShape) -> Unit)? = null
 
     fun onCollision(callback: (Entity) -> Unit) {
         this.onCollision = callback
     }
-
+    fun onTerrainCollision(callback: (CollisionShape) -> Unit) {
+        this.onTerrainCollision = callback
+    }
     override fun init() {
         context.inject<CollisionSystem>().addEntityCollider(this)
         resetPosition()

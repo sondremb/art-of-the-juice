@@ -22,8 +22,16 @@ class CollisionSystem() {
                     other.onCollision?.invoke(collider.entity)
                 }
             }
+            checkTerrainCollisions(collider)
         }
+        checkTerrainCollisions(entityColliders.last())
     }
+
+    private fun checkTerrainCollisions(collider: ColliderComponent) {
+        if (collider.collidesWithTerrain) {
+            terrainColliders.forEach {
+                if (collider.collidesWith(it)) {
+                    collider.onTerrainCollision?.invoke(it)
                 }
             }
         }
