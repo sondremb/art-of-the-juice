@@ -78,6 +78,7 @@ class FirstScreen : KtxScreen {
     override fun render(delta: Float) {
         clearScreen(red = 0.7f, green = 0.7f, blue = 0.7f)
         world.update(delta)
+        collisionSystem.update(delta)
         camera.position.set(player.position.x, player.position.y, 0f)
         camera.update()
         batch.projectionMatrix = camera.combined
