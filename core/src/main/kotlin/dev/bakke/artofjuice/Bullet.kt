@@ -15,6 +15,7 @@ fun World.createBullet(position: Vector2, direction: Vector2): Entity {
     val sprite = Sprite(region)
     return entity(position) {
         velocity = direction.cpy().nor().scl(300f)
+        +Tag.PROJECTILE
         +BulletComponent()
         +SpriteComponent(sprite)
         +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 12f, 4f)), true)
@@ -25,7 +26,9 @@ class BulletComponent : Component() {
     override fun lateInit() {
         val colliderComponent = getComponent<ColliderComponent>()
         colliderComponent.onCollision {
-            entity.destroy()
+            if (it.hasTag(Tag.ENEMY)) {
+                entity.destroy()
+            }
         }
         colliderComponent.onTerrainCollision {
             entity.destroy()

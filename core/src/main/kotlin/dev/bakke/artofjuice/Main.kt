@@ -43,12 +43,14 @@ class FirstScreen : KtxScreen {
     private val world = World(context)
     private val collisionSystem = CollisionSystem().apply { context.bindSingleton(this) }
     private val player = world.entity(vec2(100f, 100f)) {
+        +Tag.PLAYER
         +PhysicsComponent(-900f)
         +PlayerInputComponent()
         +PlayerAnimatedSprite()
         +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 24f, 32f)))
     }
     private val enemy = world.entity(vec2(200f, 100f)) {
+        +Tag.ENEMY
         +EnemyAIComponent()
         +PhysicsComponent(-900f)
         +SkaterAnimatedSprite()

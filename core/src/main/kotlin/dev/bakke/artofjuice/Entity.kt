@@ -11,9 +11,12 @@ import ktx.math.vec2
 import kotlin.reflect.KClass
 
 open class Entity(val world: World, var position: Vector2) : Disposable {
+    private val tags = mutableSetOf<String>()
     private var isActive: Boolean = true
     var velocity: Vector2 = vec2(0f, 0f)
     @PublishedApi internal val components: Map<KClass<*>, Component> = mutableMapOf()
+
+    val hasTag: (String) -> Boolean = { tags.contains(it) }
 
     inline fun <reified T : Component> getComponent(): T {
         return components[T::class] as T
@@ -31,6 +34,10 @@ open class Entity(val world: World, var position: Vector2) : Disposable {
         (components as MutableMap)[T::class] = component
         component.entity = this
         component.init()
+    }
+
+    operator fun String.unaryPlus() {
+        tags.add(this)
     }
 
     fun init() {
