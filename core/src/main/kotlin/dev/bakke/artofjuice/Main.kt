@@ -13,7 +13,6 @@ import com.badlogic.gdx.math.Rectangle
 import dev.bakke.artofjuice.collision.shapes.RectangleCollisionShape
 import dev.bakke.artofjuice.collision.ColliderComponent
 import dev.bakke.artofjuice.components.PhysicsComponent
-import dev.bakke.artofjuice.enemy.SkaterAnimatedSprite
 import dev.bakke.artofjuice.player.PlayerAnimatedSprite
 import dev.bakke.artofjuice.player.PlayerInputComponent
 import dev.bakke.artofjuice.collision.CollisionSystem
@@ -49,12 +48,8 @@ class FirstScreen : KtxScreen {
         +PlayerAnimatedSprite()
         +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 24f, 32f)))
     }
-    private val enemy = world.entity(vec2(200f, 100f)) {
-        +Tag.ENEMY
-        +EnemyAIComponent()
-        +PhysicsComponent(-900f)
-        +SkaterAnimatedSprite()
-        +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 24f, 32f)))
+    private val enemySpawner = world.entity(vec2(0f, 0f)) {
+        +SpawnEnemyComponent(0.5f)
     }
     private val debugUI = DebugUI(batch, player)
     private lateinit var map: TiledMap
@@ -68,7 +63,7 @@ class FirstScreen : KtxScreen {
         renderer = OrthogonalTiledMapRenderer(map)
         camera = OrthographicCamera()
         camera.setToOrtho(false, 800f, 600f) // Adjust to match your game window size
-        map.layers.get("Player").objects.get("Enemy").let { enemy.position.set(it.x, it.y) }
+        map.layers.get("Player").objects.get("Enemy").let { enemySpawner.position.set(it.x, it.y) }
 
         val layer = map.layers.get("metal_collision")
         //layer.objects.map { (it as RectangleMapObject).rectangle }.let { world.rects.addAll(it) }
