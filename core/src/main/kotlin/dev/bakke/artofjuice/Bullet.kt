@@ -9,6 +9,7 @@ class BulletComponent(private val gunStats: GunStats) : Component() {
         val colliderComponent = getComponent<ColliderComponent>()
         colliderComponent.onCollision {
             if (it.hasTag(Tag.ENEMY)) {
+                it.getComponent<HealthComponent>().damage(gunStats.damage)
                 entity.destroy()
             }
         }

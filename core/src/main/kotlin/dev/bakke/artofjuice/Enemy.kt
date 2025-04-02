@@ -26,5 +26,6 @@ fun World.spawnEnemy(position: Vector2) {
         +PhysicsComponent(-900f)
         +SkaterAnimatedSprite()
         +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 24f, 32f)))
+        +HealthComponent(100)
     }
 }
