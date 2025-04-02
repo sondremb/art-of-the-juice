@@ -16,6 +16,8 @@ import dev.bakke.artofjuice.components.PhysicsComponent
 import dev.bakke.artofjuice.player.PlayerAnimatedSprite
 import dev.bakke.artofjuice.player.PlayerInputComponent
 import dev.bakke.artofjuice.collision.CollisionSystem
+import dev.bakke.artofjuice.player.GunComponent
+import dev.bakke.artofjuice.player.GunStats
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
@@ -47,6 +49,7 @@ class FirstScreen : KtxScreen {
         +PlayerInputComponent()
         +PlayerAnimatedSprite()
         +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 24f, 32f)))
+        +GunComponent(GunStats.DEFAULT)
     }
     private val enemySpawner = world.entity(vec2(0f, 0f)) {
         +SpawnEnemyComponent(0.5f)

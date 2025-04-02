@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import dev.bakke.artofjuice.components.Component
 import dev.bakke.artofjuice.components.PhysicsComponent
-import dev.bakke.artofjuice.createBullet
+import ktx.math.plus
 import ktx.math.vec2
 
 class PlayerInputComponent : Component() {
@@ -29,9 +29,11 @@ class PlayerInputComponent : Component() {
 
     private lateinit var physicsComponent: PhysicsComponent
     private lateinit var animatedSpriteComponent: PlayerAnimatedSprite
+    private lateinit var gunComponent: GunComponent
     override fun lateInit() {
         physicsComponent = getComponent()
         animatedSpriteComponent = getComponent()
+        gunComponent = getComponent()
     }
 
     override fun update(delta: Float) {
@@ -75,10 +77,10 @@ class PlayerInputComponent : Component() {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-            player.velocity.x *= 0.7f
             val direction = if (isFacingRight) 1f else -1f
-            entity.world.createBullet(
-                vec2(player.position.x + direction * 24f, player.position.y),
+            player.velocity.x -= direction * speed * 0.5f
+            gunComponent.shoot(
+                player.position.cpy().add(direction * 24f, 0f),
                 vec2(direction, 0f))
         }
     }
