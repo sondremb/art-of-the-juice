@@ -14,10 +14,10 @@ import dev.bakke.artofjuice.components.SpriteComponent
 data class GunStats(val damage: Int, val bulletSpeed: Float, val fireRate: Float, val sprite: Sprite) {
     companion object {
         val DEFAULT = GunStats(
-            30,
+            10,
             800f,
-            0.4f,
-            TextureAtlas("Bullets.atlas").findRegion("2").let(::Sprite))
+            0.05f,
+            TextureAtlas("Bullets.atlas").findRegions("2")[1].let(::Sprite))
     }
 }
 
@@ -25,12 +25,12 @@ class GunComponent(private val stats: GunStats) : Component() {
     private var timeSinceLastShot = stats.fireRate
 
     override fun update(delta: Float) {
-        timeSinceLastShot += delta
+        timeSinceLastShot = (timeSinceLastShot + delta).coerceAtMost(stats.fireRate)
     }
 
     fun shoot(position: Vector2, direction: Vector2) {
         if (timeSinceLastShot < stats.fireRate) return
-        timeSinceLastShot = 0f
+        timeSinceLastShot %= stats.fireRate
         entity.world.entity(entity.position.cpy()) {
             velocity = direction.cpy().nor().scl(stats.bulletSpeed)
             +Tag.PROJECTILE
