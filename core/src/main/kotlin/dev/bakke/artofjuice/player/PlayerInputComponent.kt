@@ -2,6 +2,7 @@ package dev.bakke.artofjuice.player
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
+import dev.bakke.artofjuice.ScreenshakeSystem
 import dev.bakke.artofjuice.components.Component
 import dev.bakke.artofjuice.components.PhysicsComponent
 import ktx.math.plus
@@ -30,10 +31,12 @@ class PlayerInputComponent : Component() {
     private lateinit var physicsComponent: PhysicsComponent
     private lateinit var animatedSpriteComponent: PlayerAnimatedSprite
     private lateinit var gunComponent: GunComponent
+    private lateinit var screenshakeSystem: ScreenshakeSystem
     override fun lateInit() {
         physicsComponent = getComponent()
         animatedSpriteComponent = getComponent()
         gunComponent = getComponent()
+        screenshakeSystem = entity.world.context.inject()
     }
 
     override fun update(delta: Float) {
@@ -79,6 +82,7 @@ class PlayerInputComponent : Component() {
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
             val direction = if (isFacingRight) 1f else -1f
             player.velocity.x -= direction * speed * 0.5f
+            screenshakeSystem.setMin(0.4f)
             gunComponent.shoot(
                 player.position.cpy().add(direction * 24f, 0f),
                 vec2(direction, 0f))
