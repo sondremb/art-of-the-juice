@@ -31,11 +31,13 @@ class PlayerInputComponent : Component() {
     private lateinit var physicsComponent: PhysicsComponent
     private lateinit var animatedSpriteComponent: PlayerAnimatedSprite
     private lateinit var gunComponent: GunComponent
+    private lateinit var grenadeComponent: GrenadeThrowerComponent
     private lateinit var screenshakeSystem: ScreenshakeSystem
     override fun lateInit() {
         physicsComponent = getComponent()
         animatedSpriteComponent = getComponent()
         gunComponent = getComponent()
+        grenadeComponent = getComponent()
         screenshakeSystem = entity.world.context.inject()
     }
 
@@ -86,6 +88,10 @@ class PlayerInputComponent : Component() {
             gunComponent.shoot(
                 player.position.cpy().add(direction * 24f, 0f),
                 vec2(direction, 0f))
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+            grenadeComponent.throwGrenade(vec2(if (isFacingRight) 1f else -1f, 1f))
         }
     }
 }

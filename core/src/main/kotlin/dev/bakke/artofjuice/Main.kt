@@ -47,6 +47,7 @@ class FirstScreen : KtxScreen {
         +PlayerAnimatedSprite()
         +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 24f, 32f)))
         +GunComponent(GunStats.DEFAULT)
+        +GrenadeThrowerComponent()
     }
     private val enemySpawner = world.entity(vec2(0f, 0f)) {
         +SpawnEnemyComponent(0.5f)
