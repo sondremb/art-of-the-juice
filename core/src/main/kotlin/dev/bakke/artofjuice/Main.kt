@@ -13,11 +13,8 @@ import com.badlogic.gdx.math.Rectangle
 import dev.bakke.artofjuice.collision.shapes.RectangleCollisionShape
 import dev.bakke.artofjuice.collision.ColliderComponent
 import dev.bakke.artofjuice.components.PhysicsComponent
-import dev.bakke.artofjuice.player.PlayerAnimatedSprite
-import dev.bakke.artofjuice.player.PlayerInputComponent
 import dev.bakke.artofjuice.collision.CollisionSystem
-import dev.bakke.artofjuice.player.GunComponent
-import dev.bakke.artofjuice.player.GunStats
+import dev.bakke.artofjuice.player.*
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
@@ -54,17 +51,17 @@ class FirstScreen : KtxScreen {
     private val enemySpawner = world.entity(vec2(0f, 0f)) {
         +SpawnEnemyComponent(0.5f)
     }
+    private val camera = OrthographicCamera()
+    private val screenshakeSystem = ScreenshakeSystem(camera, player).apply { context.bindSingleton(this) }
     private val debugUI = DebugUI(batch, player)
     private lateinit var map: TiledMap
     private lateinit var renderer: OrthogonalTiledMapRenderer
-    private lateinit var camera: OrthographicCamera
 
 
     override fun show() {
         map = TmxMapLoader().load("map.tmx")
         player.position = map.layers.get("Player").objects.get("Spawn").let { vec2(it.x, it.y) }
         renderer = OrthogonalTiledMapRenderer(map)
-        camera = OrthographicCamera()
         camera.setToOrtho(false, 800f, 600f) // Adjust to match your game window size
         map.layers.get("Player").objects.get("Enemy").let { enemySpawner.position.set(it.x, it.y) }
 
@@ -80,7 +77,7 @@ class FirstScreen : KtxScreen {
         world.update(delta)
         collisionSystem.update(delta)
         camera.position.set(player.position.x, player.position.y, 0f)
-        camera.update()
+        screenshakeSystem.update(delta)
         batch.projectionMatrix = camera.combined
         shape.projectionMatrix = camera.combined
         renderer.setView(camera)
@@ -94,6 +91,7 @@ class FirstScreen : KtxScreen {
 
         if (GamePreferences.renderDebug()) {
             debugUI.render(delta)
+            screenshakeSystem.render(batch, shape)
         }
     }
 
