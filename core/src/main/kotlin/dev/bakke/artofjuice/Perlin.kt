@@ -1,7 +1,5 @@
 package dev.bakke.artofjuice
 
-import kotlin.math.floor
-
 object Perlin {
     // Ken Perlins originale permutasjonstabell - alle tallene fra 0 til 255 i tilfeldig rekkefølge,
     // duplisert, for håndtering av overflow
@@ -167,19 +165,28 @@ object Perlin {
     }
 
     private fun grad(hash: Int, x: Float, y: Float, z: Float): Float {
-        // hentet fra https://stackoverflow.com/a/17351156
+        // hentet fra https://adrianb.io/2014/08/09/perlinnoise.html
         // tar imot en hashverdig og to tall x og y
-        // basert på hash-verdien, velg en vektor [x, y, z] hvor hver verdi kan være -1 eller 1
+        // basert på hash-verdien, velg en vektor [x, y, z] slik at to av verdiene er -1 eller 1 og en er 0
         // returner prikkproduktet (a.x * b.x + a.y * b.y + a.z * b.z) mellom den valgte vektoren og [x, y, z]
-        return when (hash and 0x07) {
-            0 -> x + y + z
-            1 -> -x + y + z
-            2 -> x - y + z
-            3 -> -x - y + z
-            4 -> x + y - z
-            5 -> -x + y - z
-            6 -> x - y - z
-            else -> -x - y - z
+        return when (hash and 0xF) {
+            0x0 ->  x + y
+            0x1 -> -x + y
+            0x2 ->  x - y
+            0x3 -> -x - y
+            0x4 ->  x + z
+            0x5 -> -x + z
+            0x6 ->  x - z
+            0x7 -> -x - z
+            0x8 ->  y + z
+            0x9 -> -y + z
+            0xA ->  y - z
+            0xB -> -y - z
+            0xC ->  y + x
+            0xD -> -y + z
+            0xE ->  y - x
+            0xF -> -y - z
+            else -> 0f
         }
     }
 
