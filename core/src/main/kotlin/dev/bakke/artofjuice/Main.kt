@@ -30,6 +30,7 @@ class Main : KtxGame<KtxScreen>() {
         KtxAsync.initiate()
 
         addScreen(FirstScreen())
+        addScreen(PerlinTest())
         setScreen<FirstScreen>()
     }
 }
@@ -46,7 +47,7 @@ class FirstScreen : KtxScreen {
         +PlayerInputComponent()
         +PlayerAnimatedSprite()
         +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 24f, 32f)))
-        +GunComponent(GunStats.DEFAULT)
+        +GunComponent(GunStats.SNIPER)
         +GrenadeThrowerComponent()
     }
     private val enemySpawner = world.entity(vec2(0f, 0f)) {

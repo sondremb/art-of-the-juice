@@ -11,9 +11,15 @@ abstract class AnimatedSpriteComponent<TState> : Component() {
     abstract var currentState: TState
     private var stateTime = 0f
     var flipX = false
+    var nextState: TState? = null
 
     override fun update(delta: Float) {
         stateTime += delta
+        if (nextState != null && animations[currentState]!!.isAnimationFinished(stateTime)) {
+            currentState = nextState!!
+            nextState = null
+            stateTime = 0f
+        }
     }
 
     override fun render(batch: SpriteBatch, shape: ShapeRenderer) {
@@ -36,6 +42,14 @@ abstract class AnimatedSpriteComponent<TState> : Component() {
 
     fun setState(state: TState) {
         if (currentState != state) {
+            currentState = state
+            stateTime = 0f
+        }
+    }
+
+    fun playOnce(state: TState, nextState: TState? = null) {
+        if (currentState != state) {
+            this.nextState = nextState ?: currentState
             currentState = state
             stateTime = 0f
         }

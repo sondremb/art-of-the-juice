@@ -33,6 +33,11 @@ class PlayerInputComponent : Component() {
     private lateinit var gunComponent: GunComponent
     private lateinit var grenadeComponent: GrenadeThrowerComponent
     private lateinit var screenshakeSystem: ScreenshakeSystem
+    var guns = listOf(
+        GunStats.DEFAULT,
+        GunStats.SNIPER,
+    )
+    var currentGun = 0
     override fun lateInit() {
         physicsComponent = getComponent()
         animatedSpriteComponent = getComponent()
@@ -68,6 +73,7 @@ class PlayerInputComponent : Component() {
         val spaceJustPressed = Gdx.input.isKeyJustPressed(Input.Keys.SPACE)
         if ((physicsComponent.isOnGround || coyoteTimer > 0f) && (spaceJustPressed || jumpBuffer > 0f)) {
             player.velocity.y = jumpVelocity
+            animatedSpriteComponent.playOnce(PlayerAnimatedSprite.State.JUMP)
             jumpBuffer = 0f
             coyoteTimer = 0f
         } else if (!physicsComponent.isOnGround && spaceJustPressed) {
@@ -92,6 +98,10 @@ class PlayerInputComponent : Component() {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
             grenadeComponent.throwGrenade(vec2(if (isFacingRight) 1f else -1f, 1f))
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
+            currentGun = (currentGun + 1) % guns.size
+            gunComponent.stats = guns[currentGun]
         }
     }
 }
