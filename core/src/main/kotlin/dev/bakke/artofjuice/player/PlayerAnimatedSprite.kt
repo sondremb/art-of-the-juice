@@ -1,26 +1,170 @@
 package dev.bakke.artofjuice.player
 
-import com.badlogic.gdx.graphics.g2d.Animation
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.graphics.g2d.TextureRegion
-import dev.bakke.artofjuice.components.AnimatedSpriteComponent
+import com.badlogic.gdx.graphics.g2d.*
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import dev.bakke.artofjuice.components.Component
 import ktx.assets.toInternalFile
+import ktx.collections.toGdxArray
+import ktx.graphics.use
+import ktx.math.vec2
 
-class PlayerAnimatedSprite : AnimatedSpriteComponent<PlayerAnimatedSprite.State>() {
-    private var atlas = TextureAtlas("new_character.atlas".toInternalFile())
-    override var currentState = State.IDLE
+class PlayerVisuals : Component() {
+    private val playerAtlas = TextureAtlas("new_character.atlas".toInternalFile())
+    private var currentState = State.IDLE
+    private lateinit var currentAnimation: Animation<TextureRegion>
+    private var nextState: State? = null
+    private var stateTime = 0f
+    var flipX = false
+    private val arm1 = Sprite(playerAtlas.findRegion("arm1_forward"))
+    private val arm2 = Sprite(playerAtlas.findRegion("arm2_forward"))
 
-    override var animations = mapOf<State, Animation<TextureRegion>>(
-        State.RUN to Animation(1f / 8f, atlas.findRegions("both_hands_run"), Animation.PlayMode.LOOP),
-        State.IDLE to Animation(1f / 6f, atlas.findRegions("both_hands_idle"), Animation.PlayMode.LOOP),
-        State.JUMP to Animation(1f / 8f, atlas.findRegions("both_hands_jump"), Animation.PlayMode.NORMAL),
-        State.HURT to Animation(1f / 6f, atlas.findRegions("hurt"), Animation.PlayMode.NORMAL),
+    private val transitions = mapOf(
+        State.IDLE to mapOf(
+            State.RUN to true,
+            State.JUMP to true,
+            State.FALL to true,
+            State.HURT to true,
+        ),
+        State.RUN to mapOf(
+            State.IDLE to true,
+            State.JUMP to true,
+            State.FALL to true,
+            State.HURT to true,
+        ),
+        State.JUMP to mapOf(
+            State.IDLE to false,
+            State.RUN to false,
+            State.FALL to true,
+            State.HURT to true,
+        ),
+        State.FALL to mapOf(
+            State.IDLE to false,
+            State.RUN to false,
+            State.JUMP to true,
+            State.HURT to true,
+        ),
+        State.HURT to mapOf(
+            State.IDLE to false,
+            State.RUN to false,
+            State.JUMP to false,
+            State.FALL to false,
+        ),
     )
+
+    fun requestTransition(state: State) {
+        if (currentState == state) return
+        val transition = transitions[currentState]?.get(state)
+        when (transition) {
+            true -> {
+                currentState = state
+                stateTime = 0f
+            }
+            false -> {
+                nextState = state
+            }
+            null -> {
+                // invalid state transition
+            }
+        }
+
+    }
+
+    private lateinit var gunComponent: GunComponent
+    override fun lateInit() {
+        gunComponent = getComponent()
+    }
+
+    override fun update(delta: Float) {
+        stateTime += delta
+        currentAnimation = getCurrentBodyAnimation()
+        if (currentAnimation.isAnimationFinished(stateTime) && nextState != null) {
+            currentState = nextState ?: currentState
+            nextState = null
+            stateTime = 0f
+            currentAnimation = getCurrentBodyAnimation()
+        }
+    }
+
+    override fun render(batch: SpriteBatch, shape: ShapeRenderer) {
+        val scaleX = if (flipX) -1f else 1f
+        batch.use {
+            if (gunComponent.stats?.arms == PlayerArms.One) {
+                val offset = vec2(6f * scaleX, 2f)
+                arm1.setCenter(entity.position.x + offset.x, entity.position.y + offset.y)
+                arm1.setFlip(flipX, false)
+                arm1.draw(it)
+            }
+            drawCurrentBodySprite(it)
+            drawCurrentGunSprite(it)
+            if (gunComponent.stats?.arms == PlayerArms.Two) {
+                val offset = vec2(4f * scaleX, 1f)
+                arm2.setCenter(entity.position.x + offset.x, entity.position.y + offset.y)
+                arm2.setFlip(flipX, false)
+                arm2.draw(it)
+            }
+        }
+    }
+
+    private fun drawCurrentBodySprite(batch: SpriteBatch) {
+        val frame = currentAnimation.getKeyFrame(stateTime)
+        val scaleX = if (flipX) -1f else 1f
+        batch.draw(
+            frame,
+            entity.position.x - scaleX * frame.regionWidth / 2f,
+            entity.position.y - frame.regionHeight / 2f,
+            frame.regionWidth.toFloat() * scaleX,
+            frame.regionHeight.toFloat()
+        )
+    }
+
+    private fun drawCurrentGunSprite(batch: SpriteBatch) {
+        val gunSprite = gunComponent.stats?.gunSprite ?: return
+        val scaleX = if (flipX) -1f else 1f
+        val offset = vec2(12f * scaleX, 1f)
+        gunSprite.setCenter(entity.position.x + offset.x, entity.position.y + offset.y)
+        gunSprite.setFlip(flipX, false)
+        gunSprite.draw(batch)
+    }
+
+    private fun getCurrentBodyAnimation(): Animation<TextureRegion> {
+        return when (currentState) {
+            State.IDLE -> {
+                when (gunComponent.stats?.arms) {
+                    null -> playerAtlas.findRegions("both_hands_idle")
+                    PlayerArms.One -> playerAtlas.findRegions("one_hand_idle")
+                    PlayerArms.Two -> playerAtlas.findRegions("no_hands_idle")
+                }.let { Animation(1f / 6f, it, Animation.PlayMode.LOOP) }
+            }
+            State.RUN -> {
+                when (gunComponent.stats?.arms) {
+                    null -> playerAtlas.findRegions("both_hands_run")
+                    PlayerArms.One -> playerAtlas.findRegions("one_hand_walk")
+                    PlayerArms.Two -> playerAtlas.findRegions("no_hands_walk")
+                }.let { Animation(1f / 8f, it, Animation.PlayMode.LOOP) }
+            }
+            State.JUMP -> {
+                when (gunComponent.stats?.arms) {
+                    null -> playerAtlas.findRegions("both_hands_jump")
+                    PlayerArms.One -> playerAtlas.findRegions("one_hand_jump")
+                    PlayerArms.Two -> playerAtlas.findRegions("no_hands_jump")
+                }.let { Animation(1f / 8f, it, Animation.PlayMode.NORMAL) }
+            }
+            State.FALL -> {
+                when (gunComponent.stats?.arms) {
+                    null -> playerAtlas.findRegions("both_hands_jump").toArray().takeLast(2)
+                    PlayerArms.One -> playerAtlas.findRegions("one_hand_jump").toArray().takeLast(2)
+                    PlayerArms.Two -> playerAtlas.findRegions("no_hands_jump").toArray().takeLast(2)
+                }.let { Animation(1f / 8f, it.toGdxArray(), Animation.PlayMode.NORMAL) }
+            }
+            State.HURT -> Animation(1f / 6f, playerAtlas.findRegions("hurt"), Animation.PlayMode.NORMAL)
+        }
+    }
 
     enum class State {
         RUN,
         IDLE,
         JUMP,
+        FALL,
         HURT,
     }
 }

@@ -10,7 +10,7 @@ import ktx.math.vec2
 class PlayerInputComponent : Component() {
 
     private lateinit var physicsComponent: PhysicsComponent
-    private lateinit var animatedSpriteComponent: PlayerAnimatedSprite
+    private lateinit var animatedSpriteComponent: PlayerVisuals
     private lateinit var gunComponent: GunComponent
     private lateinit var grenadeComponent: GrenadeThrowerComponent
     private lateinit var screenshakeSystem: ScreenshakeSystem
@@ -41,10 +41,12 @@ class PlayerInputComponent : Component() {
             entity.velocity.x = 0f
         }
 
-        if (entity.velocity.x == 0f) {
-            animatedSpriteComponent.setState(PlayerAnimatedSprite.State.IDLE)
-        } else {
-            animatedSpriteComponent.setState(PlayerAnimatedSprite.State.RUN)
+        if (physicsComponent.isOnGround) {
+            if (entity.velocity.x == 0f) {
+                animatedSpriteComponent.requestTransition(PlayerVisuals.State.IDLE)
+            } else {
+                animatedSpriteComponent.requestTransition(PlayerVisuals.State.RUN)
+            }
         }
 
         if (!Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && entity.velocity.x != 0f) {
@@ -99,11 +101,12 @@ class PlayerInputComponent : Component() {
             Gdx.input.isKeyPressed(Input.Keys.SPACE) -> upwardsGravity
             else -> releaseGravity
         }
+        entity.velocity.y = entity.velocity.y.coerceAtLeast(-900f)
     }
 
     private fun jump() {
         entity.velocity.y = jumpVelocity
-        animatedSpriteComponent.playOnce(PlayerAnimatedSprite.State.JUMP)
+        animatedSpriteComponent.requestTransition(PlayerVisuals.State.JUMP)
         jumpBuffer = 0f
         coyoteTimer = 0f
     }

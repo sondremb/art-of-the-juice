@@ -45,7 +45,7 @@ class FirstScreen : KtxScreen {
         +Tag.PLAYER
         +PhysicsComponent(-900f)
         +PlayerInputComponent()
-        +PlayerAnimatedSprite()
+        +PlayerVisuals()
         +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 24f, 32f)))
         +GunComponent(GunStats.SNIPER)
         +GrenadeThrowerComponent()
