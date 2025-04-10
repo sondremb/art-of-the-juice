@@ -11,9 +11,11 @@ import dev.bakke.artofjuice.Tag
 import dev.bakke.artofjuice.collision.ColliderComponent
 import dev.bakke.artofjuice.collision.shapes.RectangleCollisionShape
 import dev.bakke.artofjuice.components.Component
+import dev.bakke.artofjuice.components.PhysicsComponent
 import dev.bakke.artofjuice.components.SpriteComponent
 import ktx.assets.disposeSafely
 import ktx.graphics.use
+import ktx.math.unaryMinus
 import ktx.math.vec2
 
 enum class PlayerArms {
@@ -28,6 +30,7 @@ data class GunStats(
     val gunSprite: Sprite,
     val bulletSprite: Sprite,
     val arms: PlayerArms,
+    val impulse: Float
 ) {
     companion object {
         val DEFAULT = GunStats(
@@ -36,15 +39,17 @@ data class GunStats(
             0.05f,
             TextureAtlas("Weapons.atlas").findRegion("pistol1").let(::Sprite),
             TextureAtlas("Weapons.atlas").findRegion("pistol_bullet1").let(::Sprite),
-            PlayerArms.One
+            PlayerArms.One,
+            100f,
         )
         val SNIPER = GunStats(
-            100,
+            80,
             1200f,
             0.4f,
             TextureAtlas("Weapons.atlas").findRegion("rifle6").let(::Sprite),
             TextureAtlas("Weapons.atlas").findRegion("rifle_bullet6").let(::Sprite),
-            PlayerArms.Two
+            PlayerArms.Two,
+            800f
         )
     }
 }
@@ -52,6 +57,11 @@ data class GunStats(
 class GunComponent(var stats: GunStats?) : Component() {
     private var timeSinceLastShot = stats?.fireRate ?: 0f
     private val playerAtlas = TextureAtlas("new_character.atlas")
+
+    private lateinit var physicsComponent: PhysicsComponent
+    override fun lateInit() {
+        physicsComponent = getComponent()
+    }
 
     override fun update(delta: Float) {
         timeSinceLastShot = (timeSinceLastShot + delta).coerceAtMost(stats?.fireRate ?: 0f)
@@ -62,8 +72,12 @@ class GunComponent(var stats: GunStats?) : Component() {
         val stats = this.stats!!
         if (timeSinceLastShot < stats.fireRate) return
         timeSinceLastShot %= stats.fireRate
-        entity.world.entity(entity.position.cpy()) {
-            velocity = direction.cpy().nor().scl(stats.bulletSpeed)
+        physicsComponent.applyImpulse(
+            // TODO player knockback som egen stat?
+            -direction, stats.impulse
+        )
+        entity.world.entity(position.cpy()) {
+            velocity = direction.cpy().setLength(stats.bulletSpeed)
             +Tag.PROJECTILE
             +BulletComponent(stats)
             +SpriteComponent(stats.bulletSprite)

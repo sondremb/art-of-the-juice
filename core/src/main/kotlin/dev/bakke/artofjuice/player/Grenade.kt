@@ -18,6 +18,7 @@ import dev.bakke.artofjuice.components.PhysicsComponent
 import dev.bakke.artofjuice.components.SpriteComponent
 import ktx.assets.toInternalFile
 import ktx.graphics.use
+import ktx.math.plus
 
 class GrenadeComponent(var fuseTime: Float, var explosionRadius: Float, var damage: Int) : Component() {
     private var timeSinceThrown = 0f
@@ -27,7 +28,7 @@ class GrenadeComponent(var fuseTime: Float, var explosionRadius: Float, var dama
     override fun update(delta: Float) {
         if (hasExploded) {
             timeSinceExplosion += delta
-            if (timeSinceExplosion >= 0.5f) {
+            if (timeSinceExplosion >= 0.1f) {
                 entity.destroy()
             }
         } else {
@@ -56,6 +57,9 @@ class GrenadeComponent(var fuseTime: Float, var explosionRadius: Float, var dama
         collisionSystem.getEntityCollisions(CircleCollisionShape(Circle(entity.position.cpy(), explosionRadius))).forEach {
             if (it.entity.hasTag(Tag.ENEMY)) {
                 it.getComponent<HealthComponent>().damage(damage)
+                it.getComponent<PhysicsComponent>().applyImpulse(
+                    Vector2(it.entity.position.cpy().sub(entity.position.cpy().sub(0f, 32f))), 2000f
+                )
             }
         }
         entity.world.context.inject<ScreenshakeSystem>().shake(1f)
@@ -75,7 +79,7 @@ class GrenadeThrowerComponent : Component() {
         timeSinceThrow = 0f
         entity.world.entity(entity.position.cpy()) {
             position = entity.position.cpy()
-            velocity = direction.cpy().nor().scl(400f)
+            velocity = direction.cpy().setLength(400f)
             +SpriteComponent(Sprite(Texture("grenade.png".toInternalFile())))
             +PhysicsComponent(-900f)
             +ColliderComponent(CircleCollisionShape(Circle(entity.position.cpy(), 8f)))
