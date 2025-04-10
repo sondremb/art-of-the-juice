@@ -51,7 +51,7 @@ class FirstScreen : KtxScreen {
         +GrenadeThrowerComponent()
     }
     private val enemySpawner = world.entity(vec2(0f, 0f)) {
-        +SpawnEnemyComponent(0.5f)
+        +SpawnEnemyComponent(0.8f)
     }
     private val camera = OrthographicCamera()
     private val screenshakeSystem = ScreenshakeSystem(camera, player).apply { context.bindSingleton(this) }
