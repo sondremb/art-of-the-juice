@@ -14,15 +14,15 @@ class SpawnEnemyComponent(private var timeBetween: Float) : Component() {
         timeSinceLastSpawn += delta
         if (timeSinceLastSpawn >= timeBetween) {
             timeSinceLastSpawn %= timeBetween
-            entity.world.spawnEnemy(entity.position.cpy())
+            entity.world.spawnEnemy(entity.position.cpy(), Math.random().toFloat() - 0.5f)
         }
     }
 }
 
-fun World.spawnEnemy(position: Vector2) {
+fun World.spawnEnemy(position: Vector2, direction: Float) {
     entity(position) {
         +Tag.ENEMY
-        +EnemyAIComponent()
+        +EnemyAIComponent(direction)
         +PhysicsComponent(-900f)
         +SkaterAnimatedSprite()
         +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 24f, 32f)))

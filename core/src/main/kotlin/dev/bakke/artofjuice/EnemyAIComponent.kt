@@ -5,15 +5,16 @@ import dev.bakke.artofjuice.components.Component
 import dev.bakke.artofjuice.enemy.SkaterAnimatedSprite
 import dev.bakke.artofjuice.collision.CollisionSystem
 import ktx.math.vec2
+import kotlin.math.sign
 
-class EnemyAIComponent : Component() {
+class EnemyAIComponent(private var direction: Float = 1f) : Component() {
     private val speed = 100f // Horizontal speed
 
     private lateinit var animatedSprite: SkaterAnimatedSprite
     private lateinit var collisionSystem: CollisionSystem
     private lateinit var colliderComponent: ColliderComponent
     override fun lateInit() {
-        entity.velocity.x = speed
+        entity.velocity.x = speed * sign(direction)
         animatedSprite = getComponent()
         collisionSystem = context.inject()
         colliderComponent = getComponent()
