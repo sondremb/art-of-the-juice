@@ -5,39 +5,15 @@ import com.badlogic.gdx.Input
 import dev.bakke.artofjuice.ScreenshakeSystem
 import dev.bakke.artofjuice.components.Component
 import dev.bakke.artofjuice.components.PhysicsComponent
-import ktx.math.plus
 import ktx.math.vec2
 
 class PlayerInputComponent : Component() {
-    private val speed = 10 * 32f
-    // parameterized jump, thanks to the GDC talk "Math for Game Programmers: Building a Better Jump" by Kyle Pittman
-    // https://www.youtube.com/watch?v=hG9SzQxaCm8&t=1325s
-    private val jumpHeight = 6.5f * 32f
-    // how much distance the player will travel in the x direction before reaching the peak of the jump
-    private val jumpLength = 4 * 32f
-
-    private val jumpVelocity = 2 * jumpHeight * speed / jumpLength
-    private val upwardsGravity = -2 * jumpHeight * speed * speed / (jumpLength * jumpLength)
-    private val releaseGravity = upwardsGravity * 3f
-    private val fallGravity = upwardsGravity * 1.2f
-
-    private val jumpBufferTime = 0.1f
-    private var jumpBuffer = 0f
-
-    private val coyoteTime = 0.1f
-    private var coyoteTimer = 0f
-    private var isFacingRight = true
 
     private lateinit var physicsComponent: PhysicsComponent
     private lateinit var animatedSpriteComponent: PlayerAnimatedSprite
     private lateinit var gunComponent: GunComponent
     private lateinit var grenadeComponent: GrenadeThrowerComponent
     private lateinit var screenshakeSystem: ScreenshakeSystem
-    var guns = listOf(
-        GunStats.DEFAULT,
-        GunStats.SNIPER,
-    )
-    var currentGun = 0
     override fun lateInit() {
         physicsComponent = getComponent()
         animatedSpriteComponent = getComponent()
@@ -47,58 +23,115 @@ class PlayerInputComponent : Component() {
     }
 
     override fun update(delta: Float) {
-        val player = entity
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) player.velocity.x = -speed
-        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) player.velocity.x = speed
-        else player.velocity.x = 0f
-        if (player.velocity.x == 0f) {
+        handleMove()
+        handleJump(delta)
+        handleShoot()
+        handleThrowGrenade()
+        handleSwitchGun()
+    }
+
+    private val speed = 10 * 32f
+    private var isFacingRight = true
+    private fun handleMove() {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            entity.velocity.x = -speed
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            entity.velocity.x = speed
+        } else {
+            entity.velocity.x = 0f
+        }
+
+        if (entity.velocity.x == 0f) {
             animatedSpriteComponent.setState(PlayerAnimatedSprite.State.IDLE)
         } else {
             animatedSpriteComponent.setState(PlayerAnimatedSprite.State.RUN)
         }
-        if (!Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && player.velocity.x != 0f) {
-            if (player.velocity.x > 0f) {
+
+        if (!Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && entity.velocity.x != 0f) {
+            if (entity.velocity.x > 0f) {
                 isFacingRight = true
-            } else if (player.velocity.x < 0f) {
+            } else if (entity.velocity.x < 0f) {
                 isFacingRight = false
             }
         }
+
         animatedSpriteComponent.flipX = !isFacingRight
+    }
+
+    // parameterized jump, thanks to the GDC talk "Math for Game Programmers: Building a Better Jump" by Kyle Pittman
+    // https://www.youtube.com/watch?v=hG9SzQxaCm8&t=1325s
+    private val jumpHeight = 6.5f * 32f
+
+    // how much distance the player will travel in the x direction before reaching the peak of the jump
+    private val jumpLength = 4 * 32f
+
+    // derived values, don't change these
+    private val jumpVelocity = 2 * jumpHeight * speed / jumpLength
+    private val upwardsGravity = -2 * jumpHeight * speed * speed / (jumpLength * jumpLength)
+
+    private val releaseGravity = upwardsGravity * 3f
+    private val fallGravity = upwardsGravity * 1.2f
+    private val jumpBufferTime = 0.1f
+    private var jumpBuffer = 0f
+    private val coyoteTime = 0.1f
+    private var coyoteTimer = 0f
+
+    private fun handleJump(delta: Float) {
         if (physicsComponent.isOnGround) {
             coyoteTimer = coyoteTime
         } else if (coyoteTimer > 0f) {
             coyoteTimer -= delta
         }
-        // Jumping
+
         val spaceJustPressed = Gdx.input.isKeyJustPressed(Input.Keys.SPACE)
-        if ((physicsComponent.isOnGround || coyoteTimer > 0f) && (spaceJustPressed || jumpBuffer > 0f)) {
-            player.velocity.y = jumpVelocity
-            animatedSpriteComponent.playOnce(PlayerAnimatedSprite.State.JUMP)
-            jumpBuffer = 0f
-            coyoteTimer = 0f
+        val canJump = physicsComponent.isOnGround || coyoteTimer > 0f
+        val wantsJump = spaceJustPressed || jumpBuffer > 0f
+        if (canJump && wantsJump) {
+            jump()
         } else if (!physicsComponent.isOnGround && spaceJustPressed) {
             jumpBuffer = jumpBufferTime
         } else if (jumpBuffer > 0f) {
             jumpBuffer -= delta
         }
-        physicsComponent.gravity =  when {
-            player.velocity.y < 0f -> fallGravity
+
+        physicsComponent.gravity = when {
+            entity.velocity.y < 0f -> fallGravity
             Gdx.input.isKeyPressed(Input.Keys.SPACE) -> upwardsGravity
             else -> releaseGravity
         }
+    }
 
+    private fun jump() {
+        entity.velocity.y = jumpVelocity
+        animatedSpriteComponent.playOnce(PlayerAnimatedSprite.State.JUMP)
+        jumpBuffer = 0f
+        coyoteTimer = 0f
+    }
+
+    private fun handleShoot() {
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
             val direction = if (isFacingRight) 1f else -1f
-            player.velocity.x -= direction * speed * 0.5f
+            entity.velocity.x -= direction * speed * 0.5f
             screenshakeSystem.setMin(0.4f)
             gunComponent.shoot(
-                player.position.cpy().add(direction * 24f, 0f),
-                vec2(direction, 0f))
+                entity.position.cpy().add(direction * 24f, 0f),
+                vec2(direction, 0f)
+            )
         }
+    }
 
+    private fun handleThrowGrenade() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
             grenadeComponent.throwGrenade(vec2(if (isFacingRight) 1f else -1f, 1f))
         }
+    }
+
+    private var guns = listOf(
+        GunStats.DEFAULT,
+        GunStats.SNIPER,
+    )
+    private var currentGun = 0
+    private fun handleSwitchGun() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
             currentGun = (currentGun + 1) % guns.size
             gunComponent.stats = guns[currentGun]
