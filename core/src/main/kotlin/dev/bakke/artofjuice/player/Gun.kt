@@ -1,12 +1,11 @@
 package dev.bakke.artofjuice.player
 
 import com.badlogic.gdx.graphics.g2d.Sprite
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import dev.bakke.artofjuice.BulletComponent
+import dev.bakke.artofjuice.ScreenshakeSystem
 import dev.bakke.artofjuice.Tag
 import dev.bakke.artofjuice.collision.ColliderComponent
 import dev.bakke.artofjuice.collision.shapes.RectangleCollisionShape
@@ -14,9 +13,7 @@ import dev.bakke.artofjuice.components.Component
 import dev.bakke.artofjuice.components.PhysicsComponent
 import dev.bakke.artofjuice.components.SpriteComponent
 import ktx.assets.disposeSafely
-import ktx.graphics.use
 import ktx.math.unaryMinus
-import ktx.math.vec2
 
 enum class PlayerArms {
     One,
@@ -30,7 +27,8 @@ data class GunStats(
     val gunSprite: Sprite,
     val bulletSprite: Sprite,
     val arms: PlayerArms,
-    val impulse: Float
+    val impulse: Float,
+    val shakeIntensity: Float = 0.1f,
 ) {
     companion object {
         val DEFAULT = GunStats(
@@ -41,6 +39,7 @@ data class GunStats(
             TextureAtlas("Weapons.atlas").findRegion("pistol_bullet1").let(::Sprite),
             PlayerArms.One,
             100f,
+            0.4f
         )
         val SNIPER = GunStats(
             80,
@@ -49,7 +48,8 @@ data class GunStats(
             TextureAtlas("Weapons.atlas").findRegion("rifle6").let(::Sprite),
             TextureAtlas("Weapons.atlas").findRegion("rifle_bullet6").let(::Sprite),
             PlayerArms.Two,
-            800f
+            800f,
+            0.6f
         )
     }
 }
@@ -59,8 +59,10 @@ class GunComponent(var stats: GunStats?) : Component() {
     private val playerAtlas = TextureAtlas("new_character.atlas")
 
     private lateinit var physicsComponent: PhysicsComponent
+    private lateinit var screenshakeSystem: ScreenshakeSystem
     override fun lateInit() {
         physicsComponent = getComponent()
+        screenshakeSystem = context.inject()
     }
 
     override fun update(delta: Float) {
@@ -76,6 +78,7 @@ class GunComponent(var stats: GunStats?) : Component() {
             // TODO player knockback som egen stat?
             -direction, stats.impulse
         )
+        screenshakeSystem.setMin(stats.shakeIntensity)
         entity.world.entity(position.cpy()) {
             velocity = direction.cpy().setLength(stats.bulletSpeed)
             +Tag.PROJECTILE
