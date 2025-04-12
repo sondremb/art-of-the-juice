@@ -31,6 +31,7 @@ class Main : KtxGame<KtxScreen>() {
 
         addScreen(FirstScreen())
         addScreen(PerlinTest())
+        addScreen(ConfigGunVisualsScreen())
         setScreen<FirstScreen>()
     }
 }

@@ -11,6 +11,7 @@ class CollisionSystem() {
     private val entityColliders = mutableListOf<ColliderComponent>()
 
     fun update(delta: Float) {
+        if (entityColliders.isEmpty()) return
         for (i in 0 until entityColliders.size - 1) {
             val collider = entityColliders[i]
             if (!collider.isActive) continue

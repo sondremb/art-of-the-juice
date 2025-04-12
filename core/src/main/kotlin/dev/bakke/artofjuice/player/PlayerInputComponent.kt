@@ -115,7 +115,6 @@ class PlayerInputComponent : Component() {
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
             val direction = if (isFacingRight) 1f else -1f
             gunComponent.shoot(
-                entity.position.cpy().add(direction * 24f, 0f),
                 vec2(direction, 0f)
             )
         }

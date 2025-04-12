@@ -1,0 +1,236 @@
+[
+  {
+    "spriteName": "rifle1",
+    "arms": "Two",
+    "gunOffset": {
+      "x": 8,
+      "y": 1
+    },
+    "bulletOffset": {
+      "x": 19,
+      "y": 1
+    }
+  },
+  {
+    "spriteName": "rifle2",
+    "arms": "Two",
+    "gunOffset": {
+      "x": 6,
+      "y": 1
+    },
+    "bulletOffset": {
+      "x": 18,
+      "y": 1
+    }
+  },
+  {
+    "spriteName": "rifle3",
+    "arms": "Two",
+    "gunOffset": {
+      "x": 7,
+      "y": 1
+    },
+    "bulletOffset": {
+      "x": 18,
+      "y": 2
+    }
+  },
+  {
+    "spriteName": "rifle4",
+    "arms": "Two",
+    "gunOffset": {
+      "x": 7,
+      "y": 1
+    },
+    "bulletOffset": {
+      "x": 20,
+      "y": 3
+    }
+  },
+  {
+    "spriteName": "rifle5",
+    "arms": "Two",
+    "gunOffset": {
+      "x": 8
+    },
+    "bulletOffset": {
+      "x": 19,
+      "y": 1
+    }
+  },
+  {
+    "spriteName": "rifle6",
+    "arms": "Two",
+    "gunOffset": {
+      "x": 12,
+      "y": 2
+    },
+    "bulletOffset": {
+      "x": 23,
+      "y": 2
+    }
+  },
+  {
+    "spriteName": "rifle7",
+    "arms": "Two",
+    "gunOffset": {
+      "x": 5,
+      "y": 1
+    },
+    "bulletOffset": {
+      "x": 20,
+      "y": 4
+    }
+  },
+  {
+    "spriteName": "rifle8",
+    "arms": "Two",
+    "gunOffset": {
+      "x": 7,
+      "y": 2
+    },
+    "bulletOffset": {
+      "x": 20,
+      "y": 1
+    }
+  },
+  {
+    "spriteName": "rifle9",
+    "arms": "Two",
+    "gunOffset": {
+      "x": 7,
+      "y": 3
+    },
+    "bulletOffset": {
+      "x": 21
+    }
+  },
+  {
+    "spriteName": "rifle10",
+    "arms": "Two",
+    "gunOffset": {
+      "x": 7,
+      "y": 3
+    },
+    "bulletOffset": {
+      "x": 20,
+      "y": 2
+    }
+  },
+  {
+    "spriteName": "pistol1",
+    "arms": "One",
+    "gunOffset": {
+      "x": 19,
+      "y": 4
+    },
+    "bulletOffset": {
+      "x": 6,
+      "y": 1
+    }
+  },
+  {
+    "spriteName": "pistol2",
+    "arms": "One",
+    "gunOffset": {
+      "x": 19,
+      "y": 4
+    },
+    "bulletOffset": {
+      "x": 6,
+      "y": 1
+    }
+  },
+  {
+    "spriteName": "pistol3",
+    "arms": "One",
+    "gunOffset": {
+      "x": 17,
+      "y": 4
+    },
+    "bulletOffset": {
+      "x": 7
+    }
+  },
+  {
+    "spriteName": "pistol4",
+    "arms": "One",
+    "gunOffset": {
+      "x": 18,
+      "y": 3
+    },
+    "bulletOffset": {
+      "x": 7
+    }
+  },
+  {
+    "spriteName": "pistol5",
+    "arms": "One",
+    "gunOffset": {
+      "x": 17,
+      "y": 3
+    },
+    "bulletOffset": {
+      "x": 8
+    }
+  },
+  {
+    "spriteName": "pistol6",
+    "arms": "One",
+    "gunOffset": {
+      "x": 18,
+      "y": 3
+    },
+    "bulletOffset": {
+      "x": 8,
+      "y": 2
+    }
+  },
+  {
+    "spriteName": "pistol7",
+    "arms": "One",
+    "gunOffset": {
+      "x": 17,
+      "y": 4
+    },
+    "bulletOffset": {
+      "x": 9,
+      "y": 1
+    }
+  },
+  {
+    "spriteName": "pistol8",
+    "arms": "One",
+    "gunOffset": {
+      "x": 18,
+      "y": 3
+    },
+    "bulletOffset": {
+      "x": 12
+    }
+  },
+  {
+    "spriteName": "pistol9",
+    "arms": "One",
+    "gunOffset": {
+      "x": 17,
+      "y": 4
+    },
+    "bulletOffset": {
+      "x": 9,
+      "y": 2
+    }
+  },
+  {
+    "spriteName": "pistol10",
+    "arms": "One",
+    "gunOffset": {
+      "x": 17,
+      "y": 3
+    },
+    "bulletOffset": {
+      "x": 9,
+      "y": 1
+    }
+  }
+]

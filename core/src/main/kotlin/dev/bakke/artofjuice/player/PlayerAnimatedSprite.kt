@@ -88,7 +88,7 @@ class PlayerVisuals : Component() {
     override fun render(batch: SpriteBatch, shape: ShapeRenderer) {
         val scaleX = if (flipX) -1f else 1f
         batch.use {
-            if (gunComponent.stats?.arms == PlayerArms.One) {
+            if (gunComponent.stats?.visuals?.arms == PlayerArms.One) {
                 val offset = vec2(6f * scaleX, 2f)
                 arm1.setCenter(entity.position.x + offset.x, entity.position.y + offset.y)
                 arm1.setFlip(flipX, false)
@@ -96,7 +96,7 @@ class PlayerVisuals : Component() {
             }
             drawCurrentBodySprite(it)
             drawCurrentGunSprite(it)
-            if (gunComponent.stats?.arms == PlayerArms.Two) {
+            if (gunComponent.stats?.visuals?.arms == PlayerArms.Two) {
                 val offset = vec2(4f * scaleX, 1f)
                 arm2.setCenter(entity.position.x + offset.x, entity.position.y + offset.y)
                 arm2.setFlip(flipX, false)
@@ -118,39 +118,41 @@ class PlayerVisuals : Component() {
     }
 
     private fun drawCurrentGunSprite(batch: SpriteBatch) {
-        val gunSprite = gunComponent.stats?.gunSprite ?: return
-        val scaleX = if (flipX) -1f else 1f
-        val offset = vec2(12f * scaleX, 1f)
-        gunSprite.setCenter(entity.position.x + offset.x, entity.position.y + offset.y)
-        gunSprite.setFlip(flipX, false)
-        gunSprite.draw(batch)
+        gunComponent.stats?.visuals?.let {
+            val gunSprite = gunComponent.gunSprite ?: return
+            val scaleX = if (flipX) -1f else 1f
+            val offset = it.gunOffset
+            gunSprite.setCenter(entity.position.x + offset.x * scaleX, entity.position.y + offset.y)
+            gunSprite.setFlip(flipX, false)
+            gunSprite.draw(batch)
+        }
     }
 
     private fun getCurrentBodyAnimation(): Animation<TextureRegion> {
         return when (currentState) {
             State.IDLE -> {
-                when (gunComponent.stats?.arms) {
+                when (gunComponent.stats?.visuals?.arms) {
                     null -> playerAtlas.findRegions("both_hands_idle")
                     PlayerArms.One -> playerAtlas.findRegions("one_hand_idle")
                     PlayerArms.Two -> playerAtlas.findRegions("no_hands_idle")
                 }.let { Animation(1f / 6f, it, Animation.PlayMode.LOOP) }
             }
             State.RUN -> {
-                when (gunComponent.stats?.arms) {
+                when (gunComponent.stats?.visuals?.arms) {
                     null -> playerAtlas.findRegions("both_hands_run")
                     PlayerArms.One -> playerAtlas.findRegions("one_hand_walk")
                     PlayerArms.Two -> playerAtlas.findRegions("no_hands_walk")
                 }.let { Animation(1f / 8f, it, Animation.PlayMode.LOOP) }
             }
             State.JUMP -> {
-                when (gunComponent.stats?.arms) {
+                when (gunComponent.stats?.visuals?.arms) {
                     null -> playerAtlas.findRegions("both_hands_jump")
                     PlayerArms.One -> playerAtlas.findRegions("one_hand_jump")
                     PlayerArms.Two -> playerAtlas.findRegions("no_hands_jump")
                 }.let { Animation(1f / 8f, it, Animation.PlayMode.NORMAL) }
             }
             State.FALL -> {
-                when (gunComponent.stats?.arms) {
+                when (gunComponent.stats?.visuals?.arms) {
                     null -> playerAtlas.findRegions("both_hands_jump").toArray().takeLast(2)
                     PlayerArms.One -> playerAtlas.findRegions("one_hand_jump").toArray().takeLast(2)
                     PlayerArms.Two -> playerAtlas.findRegions("no_hands_jump").toArray().takeLast(2)
