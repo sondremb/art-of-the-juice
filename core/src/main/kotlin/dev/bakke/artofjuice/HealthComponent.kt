@@ -22,9 +22,16 @@ class HealthComponent(private val maxHealth: Int) : Component() {
     private var waitTime = 1f
     private var animationTime = 0.2f
 
+    val onDeath: MutableSet<() -> Unit> = mutableSetOf()
+
+    fun onDeath(callback: () -> Unit) {
+        onDeath.add(callback)
+    }
+
     override fun update(delta: Float) {
         timeSinceLastDamage += delta
         if (health <= 0) {
+            onDeath.forEach { it.invoke() }
             entity.destroy()
         }
     }

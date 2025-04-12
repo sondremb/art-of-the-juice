@@ -66,6 +66,7 @@ class GunComponent(initialStats: GunStats?) : Component() {
         if (GamePreferences.renderDebug()) {
             shape.use(ShapeRenderer.ShapeType.Line) {
                 val rect = Rectangle(0f, 0f, 2f, 2f)
+                // TODO flip these somehow
                 rect.setCenter(
                     entity.position.x + stats!!.visuals.gunOffset.x,
                     entity.position.y + stats!!.visuals.gunOffset.y

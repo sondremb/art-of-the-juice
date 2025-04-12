@@ -51,7 +51,7 @@ class GrenadeComponent(var fuseTime: Float, var explosionRadius: Float, var dama
     private fun explode() {
         hasExploded = true
         entity.velocity = Vector2.Zero
-        getComponent<PhysicsComponent>().gravity = 0f
+        tryGetComponent<PhysicsComponent>()?.gravity = 0f
         val collisionSystem = context.inject<CollisionSystem>()
         getComponent<SpriteComponent>().isActive = false
         collisionSystem.getEntityCollisions(CircleCollisionShape(Circle(entity.position.cpy(), explosionRadius))).forEach {
