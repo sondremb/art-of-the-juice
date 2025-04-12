@@ -18,7 +18,6 @@ import dev.bakke.artofjuice.components.PhysicsComponent
 import dev.bakke.artofjuice.components.SpriteComponent
 import ktx.assets.toInternalFile
 import ktx.graphics.use
-import ktx.math.plus
 
 class GrenadeComponent(var fuseTime: Float, var explosionRadius: Float, var damage: Int) : Component() {
     private var timeSinceThrown = 0f
@@ -62,7 +61,7 @@ class GrenadeComponent(var fuseTime: Float, var explosionRadius: Float, var dama
                 )
             }
         }
-        entity.world.context.inject<ScreenshakeSystem>().shake(1f)
+        context.inject<ScreenshakeSystem>().shake(1f)
     }
 }
 
@@ -77,7 +76,7 @@ class GrenadeThrowerComponent : Component() {
     fun throwGrenade(direction: Vector2) {
         if (timeSinceThrow < throwCooldown) return
         timeSinceThrow = 0f
-        entity.world.entity(entity.position.cpy()) {
+        spawnEntity(entity.position.cpy()) {
             position = entity.position.cpy()
             velocity = direction.cpy().setLength(400f)
             +SpriteComponent(Sprite(Texture("grenade.png".toInternalFile())))

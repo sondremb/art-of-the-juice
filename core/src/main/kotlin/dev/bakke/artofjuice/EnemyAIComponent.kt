@@ -8,7 +8,6 @@ import dev.bakke.artofjuice.components.Component
 import dev.bakke.artofjuice.enemy.SkaterAnimatedSprite
 import dev.bakke.artofjuice.collision.CollisionSystem
 import dev.bakke.artofjuice.collision.shapes.CircleCollisionShape
-import dev.bakke.artofjuice.components.PhysicsComponent
 import dev.bakke.artofjuice.components.SpriteComponent
 import dev.bakke.artofjuice.player.GrenadeComponent
 import ktx.assets.toInternalFile
@@ -28,7 +27,7 @@ class EnemyAIComponent(private var direction: Float = 1f) : Component() {
         colliderComponent = getComponent()
         getComponent<HealthComponent>().onDeath {
             if (Math.random() < 0.2f) {
-                entity.world.entity(entity.position.cpy()) {
+                entity.world.spawnEntity(entity.position.cpy()) {
                     // TODO refactorer til å separere granat og eksplosjon
                     position = entity.position.cpy()
                     +SpriteComponent(Sprite(Texture("grenade.png".toInternalFile())))

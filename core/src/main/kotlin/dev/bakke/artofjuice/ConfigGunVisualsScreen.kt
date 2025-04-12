@@ -29,19 +29,19 @@ class ConfigGunVisualsScreen : KtxScreen {
         addTerrainCollider(RectangleCollisionShape(Rectangle(0f, -100f, 800f, 100f)))
         addTerrainCollider(RectangleCollisionShape(Rectangle(0f, 600f, 800f, 100f)))
     }
-    private val player1 = world.entity(vec2(300f, 300f)) {
+    private val player1 = world.spawnEntity(vec2(300f, 300f)) {
         +Tag.PLAYER
         +AutoShooterComponent(-1f)
         +PlayerVisuals()
         +GunComponent(GunStats.SNIPER.copy(bulletSpeed = 100f))
     }
-    private val player2 = world.entity(vec2(500f, 300f)) {
+    private val player2 = world.spawnEntity(vec2(500f, 300f)) {
         +Tag.PLAYER
         +AutoShooterComponent(1f)
         +PlayerVisuals()
         +GunComponent(GunStats.SNIPER.copy(bulletSpeed = 100f))
     }
-    private val controller = world.entity(vec2(0f, 0f)) {
+    private val controller = world.spawnEntity(vec2(0f, 0f)) {
         +MasterMindComponent(player1, player2)
     }
 

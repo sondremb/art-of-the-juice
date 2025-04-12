@@ -18,6 +18,10 @@ open class Entity(val world: World, var position: Vector2) : Disposable {
 
     val hasTag: (String) -> Boolean = { tags.contains(it) }
 
+    fun spawnEntity(position: Vector2, block: Entity.() -> Unit): Entity {
+        return world.spawnEntity(position, block)
+    }
+
     inline fun <reified T : Component> getComponent(): T {
         return components[T::class] as T
     }

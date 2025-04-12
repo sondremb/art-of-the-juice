@@ -19,7 +19,7 @@ class PlayerInputComponent : Component() {
         animatedSpriteComponent = getComponent()
         gunComponent = getComponent()
         grenadeComponent = getComponent()
-        screenshakeSystem = entity.world.context.inject()
+        screenshakeSystem = context.inject()
     }
 
     override fun update(delta: Float) {

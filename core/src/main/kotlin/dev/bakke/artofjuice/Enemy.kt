@@ -20,7 +20,7 @@ class SpawnEnemyComponent(private var timeBetween: Float) : Component() {
 }
 
 fun World.spawnEnemy(position: Vector2, direction: Float) {
-    entity(position) {
+    spawnEntity(position) {
         +Tag.ENEMY
         +EnemyAIComponent(direction)
         +PhysicsComponent(-900f)

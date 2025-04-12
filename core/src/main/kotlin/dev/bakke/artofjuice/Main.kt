@@ -42,7 +42,7 @@ class FirstScreen : KtxScreen {
     private val context = Context()
     private val world = World(context)
     private val collisionSystem = CollisionSystem().apply { context.bindSingleton(this) }
-    private val player = world.entity(vec2(100f, 100f)) {
+    private val player = world.spawnEntity(vec2(100f, 100f)) {
         +Tag.PLAYER
         +PhysicsComponent(-900f)
         +PlayerInputComponent()
@@ -51,7 +51,7 @@ class FirstScreen : KtxScreen {
         +GunComponent(GunStats.SNIPER)
         +GrenadeThrowerComponent()
     }
-    private val enemySpawner = world.entity(vec2(0f, 0f)) {
+    private val enemySpawner = world.spawnEntity(vec2(0f, 0f)) {
         +SpawnEnemyComponent(0.8f)
     }
     private val camera = OrthographicCamera()

@@ -10,7 +10,7 @@ class World(val context: Context) {
     private val nextEntities = mutableListOf<Entity>()
     private val entitiesToRemove = mutableListOf<Entity>()
 
-    fun entity(position: Vector2, block: Entity.() -> Unit): Entity {
+    fun spawnEntity(position: Vector2, block: Entity.() -> Unit): Entity {
         val entity = Entity(this, position)
         entity.block()
         nextEntities.add(entity)

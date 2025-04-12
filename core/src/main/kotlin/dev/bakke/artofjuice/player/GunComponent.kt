@@ -91,7 +91,7 @@ class GunComponent(initialStats: GunStats?) : Component() {
         screenshakeSystem.setMin(stats.shakeIntensity)
         val offsetScaleX = if (direction.x < 0) -1f else 1f
         val offset = (stats.visuals.gunOffset + stats.visuals.bulletOffset).scl(offsetScaleX, 1f)
-        entity.world.entity(entity.position + offset) {
+        spawnEntity(entity.position + offset) {
             velocity = direction.cpy().setLength(stats.bulletSpeed)
             +Tag.PROJECTILE
             +BulletComponent(stats)

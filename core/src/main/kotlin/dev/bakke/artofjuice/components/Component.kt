@@ -2,6 +2,7 @@ package dev.bakke.artofjuice.components
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
 import dev.bakke.artofjuice.Entity
 import ktx.inject.Context
@@ -17,6 +18,10 @@ abstract class Component : Disposable {
 
     inline fun <reified T : Component> tryGetComponent(): T? {
         return entity.tryGetComponent<T>()
+    }
+
+    fun spawnEntity(position: Vector2, block: Entity.() -> Unit): Entity {
+        return entity.spawnEntity(position, block)
     }
 
     /**
