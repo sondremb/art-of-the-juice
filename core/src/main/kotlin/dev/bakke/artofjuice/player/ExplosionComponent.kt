@@ -27,8 +27,8 @@ class ExplosionComponent(
 
     override fun update(delta: Float) {
         if (!hasExploded) {
-            explode();
-            return;
+            explode()
+            return
         }
         timeSinceExplosion += delta
         if (timeSinceExplosion >= lingerTime) {
