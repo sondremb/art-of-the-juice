@@ -19,49 +19,65 @@ import dev.bakke.artofjuice.components.SpriteComponent
 import ktx.assets.toInternalFile
 import ktx.graphics.use
 
-class GrenadeComponent(var fuseTime: Float, var explosionRadius: Float, var damage: Int) : Component() {
+class GrenadeComponent(
+    private var fuseTime: Float,
+    private var explosionRadius: Float,
+    private var damage: Int) : Component() {
     private var timeSinceThrown = 0f
+
+    override fun update(delta: Float) {
+        timeSinceThrown += delta
+        if (timeSinceThrown >= fuseTime) {
+            spawnEntity(entity.position.cpy()) {
+                +ExplosionComponent(explosionRadius, damage)
+            }
+            entity.destroy()
+        }
+    }
+}
+
+class ExplosionComponent(
+    private var explosionRadius: Float,
+    private var damage: Int,
+    private var knockbackIntensity: Float = 1000f,
+    private var screenshakeIntensity: Float = 0.8f,
+    private var lingerTime: Float = 0.1f
+) : Component() {
+
     private var hasExploded = false
     private var timeSinceExplosion = 0f
 
     override fun update(delta: Float) {
-        if (hasExploded) {
-            timeSinceExplosion += delta
-            if (timeSinceExplosion >= 0.1f) {
-                entity.destroy()
-            }
-        } else {
-            timeSinceThrown += delta
-            if (timeSinceThrown >= fuseTime) {
-                explode()
-            }
+        if (!hasExploded) {
+            explode();
+            return;
+        }
+        timeSinceExplosion += delta
+        if (timeSinceExplosion >= lingerTime) {
+            entity.destroy()
         }
     }
 
     override fun render(batch: SpriteBatch, shape: ShapeRenderer) {
-        if (hasExploded) {
-            shape.use(ShapeRenderer.ShapeType.Filled) {
-                it.color = Color.ORANGE
-                shape.circle(entity.position.x, entity.position.y, explosionRadius)
-            }
+        shape.use(ShapeRenderer.ShapeType.Filled) {
+            it.color = Color.ORANGE
+            shape.circle(entity.position.x, entity.position.y, explosionRadius)
         }
     }
 
     private fun explode() {
         hasExploded = true
-        entity.velocity = Vector2.Zero
-        tryGetComponent<PhysicsComponent>()?.gravity = 0f
         val collisionSystem = context.inject<CollisionSystem>()
-        getComponent<SpriteComponent>().isActive = false
-        collisionSystem.getEntityCollisions(CircleCollisionShape(Circle(entity.position.cpy(), explosionRadius))).forEach {
-            if (it.entity.hasTag(Tag.ENEMY)) {
-                it.getComponent<HealthComponent>().damage(damage)
-                it.getComponent<PhysicsComponent>().applyImpulse(
-                    Vector2(it.entity.position.cpy().sub(entity.position.cpy().sub(0f, 32f))), 2000f
-                )
+        collisionSystem.getEntityCollisions(CircleCollisionShape(Circle(entity.position.cpy(), explosionRadius)))
+            .forEach {
+                if (it.entity.hasTag(Tag.ENEMY)) {
+                    it.getComponent<HealthComponent>().damage(damage)
+                    it.getComponent<PhysicsComponent>().applyImpulse(
+                        Vector2(it.entity.position.cpy().sub(entity.position.cpy().sub(0f, 32f))), knockbackIntensity
+                    )
+                }
             }
-        }
-        context.inject<ScreenshakeSystem>().shake(1f)
+        context.inject<ScreenshakeSystem>().shake(screenshakeIntensity)
     }
 }
 
