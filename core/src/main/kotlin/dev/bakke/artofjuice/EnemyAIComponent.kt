@@ -19,7 +19,7 @@ class EnemyAIComponent(private var direction: Float = 1f) : Component() {
         animatedSprite = getComponent()
         collisionSystem = context.inject()
         colliderComponent = getComponent()
-        getComponent<HealthComponent>().onDeath {
+        getComponent<HealthComponent>().onDeath += {
             if (Math.random() < 0.2f) {
                 entity.world.spawnEntity(entity.position.cpy()) {
                     +ExplosionComponent(50f, 70, screenshakeIntensity = 0.6f, knockbackIntensity = 1000f)

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils.lerp
 import com.badlogic.gdx.math.Rectangle
+import dev.bakke.artofjuice.Event.Event
 import dev.bakke.artofjuice.components.Component
 import dev.bakke.artofjuice.gdx.extensions.rect
 import ktx.graphics.use
@@ -22,16 +23,12 @@ class HealthComponent(private val maxHealth: Int) : Component() {
     private var waitTime = 1f
     private var animationTime = 0.2f
 
-    val onDeath: MutableSet<() -> Unit> = mutableSetOf()
-
-    fun onDeath(callback: () -> Unit) {
-        onDeath.add(callback)
-    }
+    val onDeath = Event()
 
     override fun update(delta: Float) {
         timeSinceLastDamage += delta
         if (health <= 0) {
-            onDeath.forEach { it.invoke() }
+            onDeath()
             entity.destroy()
         }
     }
