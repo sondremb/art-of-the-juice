@@ -7,6 +7,7 @@ import dev.bakke.artofjuice.collision.shapes.RectangleCollisionShape
 import dev.bakke.artofjuice.components.Component
 import dev.bakke.artofjuice.components.PhysicsComponent
 import dev.bakke.artofjuice.enemy.SkaterAnimatedSprite
+import ktx.math.vec2
 
 class SpawnEnemyComponent(private var timeBetween: Float) : Component() {
     private var timeSinceLastSpawn = timeBetween
@@ -27,5 +28,6 @@ fun World.spawnEnemy(position: Vector2, direction: Float) {
         +SkaterAnimatedSprite()
         +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 24f, 32f)))
         +HealthComponent(100)
+        +HealthBarComponent(vec2(0f, 20f), 32f, 4f)
     }
 }
