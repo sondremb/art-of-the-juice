@@ -15,6 +15,8 @@ class PlayerVisuals : Component() {
     private var nextState: State? = null
     private var stateTime = 0f
     var flipX = false
+    private val scaleX
+        get() = if (flipX) -1f else 1f
     private val arm1 = Sprite(playerAtlas.findRegion("arm1_forward"))
     private val arm2 = Sprite(playerAtlas.findRegion("arm2_forward"))
 
@@ -86,28 +88,34 @@ class PlayerVisuals : Component() {
     }
 
     override fun render(batch: SpriteBatch, shape: ShapeRenderer) {
-        val scaleX = if (flipX) -1f else 1f
         batch.use {
             if (gunComponent.stats?.visuals?.arms == PlayerArms.One) {
-                val offset = vec2(6f * scaleX, 2f)
-                arm1.setCenter(entity.position.x + offset.x, entity.position.y + offset.y)
-                arm1.setFlip(flipX, false)
-                arm1.draw(it)
+                drawOneArm(batch)
             }
             drawCurrentBodySprite(it)
             drawCurrentGunSprite(it)
             if (gunComponent.stats?.visuals?.arms == PlayerArms.Two) {
-                val offset = vec2(4f * scaleX, 1f)
-                arm2.setCenter(entity.position.x + offset.x, entity.position.y + offset.y)
-                arm2.setFlip(flipX, false)
-                arm2.draw(it)
+                drawTwoArms(batch)
             }
         }
     }
 
+    private fun drawOneArm(batch: SpriteBatch) {
+        val offset = vec2(6f * scaleX, 2f)
+        arm1.setCenter(entity.position.x + offset.x, entity.position.y + offset.y)
+        arm1.setFlip(flipX, false)
+        arm1.draw(batch)
+    }
+
+    private fun drawTwoArms(batch: SpriteBatch) {
+        val offset = vec2(4f * scaleX, 1f)
+        arm2.setCenter(entity.position.x + offset.x, entity.position.y + offset.y)
+        arm2.setFlip(flipX, false)
+        arm2.draw(batch)
+    }
+
     private fun drawCurrentBodySprite(batch: SpriteBatch) {
         val frame = currentAnimation.getKeyFrame(stateTime)
-        val scaleX = if (flipX) -1f else 1f
         batch.draw(
             frame,
             entity.position.x - scaleX * frame.regionWidth / 2f,
@@ -120,7 +128,6 @@ class PlayerVisuals : Component() {
     private fun drawCurrentGunSprite(batch: SpriteBatch) {
         gunComponent.stats?.visuals?.let {
             val gunSprite = gunComponent.gunSprite ?: return
-            val scaleX = if (flipX) -1f else 1f
             val offset = it.gunOffset
             gunSprite.setCenter(entity.position.x + offset.x * scaleX, entity.position.y + offset.y)
             gunSprite.setFlip(flipX, false)
