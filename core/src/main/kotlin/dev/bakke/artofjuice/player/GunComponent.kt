@@ -1,8 +1,6 @@
 package dev.bakke.artofjuice.player
 
-import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
@@ -16,26 +14,20 @@ import dev.bakke.artofjuice.components.Component
 import dev.bakke.artofjuice.components.PhysicsComponent
 import dev.bakke.artofjuice.components.SpriteComponent
 import dev.bakke.artofjuice.gdx.extensions.rect
-import ktx.assets.disposeSafely
 import ktx.graphics.use
 import ktx.math.plus
 import ktx.math.unaryMinus
 
 
 
-class GunComponent(initialStats: GunStats?) : Component() {
+class GunComponent(initialGun: Gun?) : Component() {
     private var timeSinceLastShot = 0f
-    private val weaponsAtlas = TextureAtlas("weapons.atlas")
-    var gunSprite: Sprite? = null
-        private set
-    private var bulletSprite: Sprite? = null
 
-    var stats: GunStats? = initialStats
+    var gun: Gun? = initialGun
         set(value) {
             field = value
             value?.let {
-                timeSinceLastShot = it.fireRate
-                updateVisuals()
+                timeSinceLastShot = it.stats.fireRate
             }
         }
 
@@ -44,63 +36,51 @@ class GunComponent(initialStats: GunStats?) : Component() {
     override fun lateInit() {
         physicsComponent = tryGetComponent()
         screenshakeSystem = context.inject()
-        stats?.let { stats ->
-            timeSinceLastShot = stats.fireRate
-            updateVisuals()
-        }
-    }
-
-    fun updateVisuals() {
-        stats?.let {
-            bulletSprite = Sprite(weaponsAtlas.findRegion(it.bulletSprite))
-            gunSprite = Sprite(weaponsAtlas.findRegion(it.visuals.spriteName))
+        gun?.let { g ->
+            timeSinceLastShot = g.stats.fireRate
         }
     }
 
     override fun update(delta: Float) {
-        timeSinceLastShot = (timeSinceLastShot + delta).coerceAtMost(stats?.fireRate ?: 0f)
+        timeSinceLastShot = (timeSinceLastShot + delta).coerceAtMost(gun?.stats?.fireRate ?: 0f)
     }
 
     override fun render(batch: SpriteBatch, shape: ShapeRenderer) {
-        if (stats == null) return
+        if (gun == null) return
         if (GamePreferences.renderDebug()) {
             shape.use(ShapeRenderer.ShapeType.Line) {
                 val rect = Rectangle(0f, 0f, 2f, 2f)
                 // TODO flip these somehow
                 rect.setCenter(
-                    entity.position.x + stats!!.visuals.gunOffset.x,
-                    entity.position.y + stats!!.visuals.gunOffset.y
+                    entity.position.x + gun!!.visuals.gunOffset.x,
+                    entity.position.y + gun!!.visuals.gunOffset.y
                 )
                 shape.rect(rect)
-                rect.x += stats!!.visuals.bulletOffset.x
-                rect.y += stats!!.visuals.bulletOffset.y
+                rect.x += gun!!.visuals.bulletOffset.x
+                rect.y += gun!!.visuals.bulletOffset.y
                 shape.rect(rect)
             }
         }
     }
 
     fun shoot(direction: Vector2) {
-        if (stats == null) return
-        val stats = this.stats!!
-        if (timeSinceLastShot < stats.fireRate) return
-        timeSinceLastShot %= stats.fireRate
+        if (gun == null) return
+        val gun = this.gun!!
+        if (timeSinceLastShot < gun.stats.fireRate) return
+        timeSinceLastShot %= gun.stats.fireRate
         physicsComponent?.applyImpulse(
             // TODO player knockback som egen stat?
-            -direction, stats.impulse
+            -direction, gun.stats.impulse
         )
-        screenshakeSystem.setMin(stats.shakeIntensity)
+        screenshakeSystem.setMin(gun.stats.shakeIntensity)
         val offsetScaleX = if (direction.x < 0) -1f else 1f
-        val offset = (stats.visuals.gunOffset + stats.visuals.bulletOffset).scl(offsetScaleX, 1f)
+        val offset = (gun.visuals.gunOffset + gun.visuals.bulletOffset).scl(offsetScaleX, 1f)
         spawnEntity(entity.position + offset) {
-            velocity = direction.cpy().setLength(stats.bulletSpeed)
+            velocity = direction.cpy().setLength(gun.stats.bulletSpeed)
             +Tag.PROJECTILE
-            +BulletComponent(stats)
-            +SpriteComponent(bulletSprite!!)
+            +BulletComponent(gun.stats)
+            +SpriteComponent(gun.bulletSprite)
             +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 12f, 4f)), true)
         }
-    }
-
-    override fun dispose() {
-        weaponsAtlas.disposeSafely()
     }
 }

@@ -15,6 +15,7 @@ import dev.bakke.artofjuice.player.*
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
+import ktx.assets.toInternalFile
 import ktx.inject.Context
 import ktx.math.vec2
 
@@ -29,17 +30,22 @@ class ConfigGunVisualsScreen : KtxScreen {
         addTerrainCollider(RectangleCollisionShape(Rectangle(0f, -100f, 800f, 100f)))
         addTerrainCollider(RectangleCollisionShape(Rectangle(0f, 600f, 800f, 100f)))
     }
+    val gunVisualsManager = GunVisualsManager().apply { loadJson() }
+    val gun = Gun(
+        GunStats.SNIPER.copy(bulletSpeed = 100f),
+        gunVisualsManager.getVisualsBySpriteName(GunSprites.Rifle1),
+        gunVisualsManager.getSpriteByName(BulletSprites.RifleBullet6))
     private val player1 = world.spawnEntity(vec2(300f, 300f)) {
         +Tag.PLAYER
         +AutoShooterComponent(-1f)
         +PlayerVisuals()
-        +GunComponent(GunStats.SNIPER.copy(bulletSpeed = 100f))
+        +GunComponent(gun)
     }
     private val player2 = world.spawnEntity(vec2(500f, 300f)) {
         +Tag.PLAYER
         +AutoShooterComponent(1f)
         +PlayerVisuals()
-        +GunComponent(GunStats.SNIPER.copy(bulletSpeed = 100f))
+        +GunComponent(gun)
     }
     private val controller = world.spawnEntity(vec2(0f, 0f)) {
         +MasterMindComponent(player1, player2)
@@ -103,7 +109,7 @@ class MasterMindComponent(private val player1: Entity, private val player2: Enti
     private lateinit var gunComponent1: GunComponent
     private lateinit var gunComponent2: GunComponent
     private var json = Json().apply { this.setOutputType(JsonWriter.OutputType.json) }
-    private val visuals = json.fromJson(Array<GunVisuals>::class.java, Gdx.files.internal("gunVisuals.json"))
+    private val visuals = json.fromJson(Array<GunVisualsSerializable>::class.java, "gunVisuals.json".toInternalFile())
     private val originalVisuals = visuals.map { it.copy() }
     private var currentVisualsIndex = 0
 
@@ -111,26 +117,22 @@ class MasterMindComponent(private val player1: Entity, private val player2: Enti
     override fun lateInit() {
         gunComponent1 = player1.getComponent()
         gunComponent2 = player2.getComponent()
-        gunComponent1.stats?.visuals = visuals.first()
-        gunComponent2.stats?.visuals = visuals.first()
+        //gunComponent1.gun?.visuals = visuals.first()
+        //gunComponent2.gun?.visuals = visuals.first()
     }
 
     override fun update(delta: Float) {
-        val stats1 = gunComponent1.stats!!
-        val stats2 = gunComponent2.stats!!
+        val stats1 = gunComponent1.gun!!
+        val stats2 = gunComponent2.gun!!
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             currentVisualsIndex = (currentVisualsIndex + 1) % visuals.size
-            stats1.visuals = visuals[currentVisualsIndex]
-            gunComponent1.updateVisuals()
-            stats2.visuals = visuals[currentVisualsIndex]
-            gunComponent2.updateVisuals()
+            //stats1.visuals = visuals[currentVisualsIndex]
+            //stats2.visuals = visuals[currentVisualsIndex]
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             visuals[currentVisualsIndex] = originalVisuals[currentVisualsIndex].copy()
-            stats1.visuals = visuals[currentVisualsIndex]
-            gunComponent1.updateVisuals()
-            stats2.visuals = visuals[currentVisualsIndex]
-            gunComponent2.updateVisuals()
+            //stats1.visuals = visuals[currentVisualsIndex]
+            //stats2.visuals = visuals[currentVisualsIndex]
         }
         val currentVisuals = visuals[currentVisualsIndex]
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
@@ -160,7 +162,5 @@ class MasterMindComponent(private val player1: Entity, private val player2: Enti
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             println(json.toJson(visuals))
         }
-        gunComponent1.updateVisuals()
-        gunComponent2.updateVisuals()
     }
 }

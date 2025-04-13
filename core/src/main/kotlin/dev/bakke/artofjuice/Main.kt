@@ -42,13 +42,15 @@ class FirstScreen : KtxScreen {
     private val context = Context()
     private val world = World(context)
     private val collisionSystem = CollisionSystem().apply { context.bindSingleton(this) }
+    private val gunVisualsManager = GunVisualsManager().apply { loadJson() }
     private val player = world.spawnEntity(vec2(100f, 100f)) {
         +Tag.PLAYER
         +PhysicsComponent(-900f)
         +PlayerInputComponent()
         +PlayerVisuals()
         +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 24f, 32f)))
-        +GunComponent(GunStats.SNIPER)
+        +GunComponent(null)
+        +GunInventoryComponent()
         +GrenadeThrowerComponent()
     }
     private val enemySpawner = world.spawnEntity(vec2(0f, 0f)) {
@@ -110,5 +112,6 @@ class FirstScreen : KtxScreen {
         batch.disposeSafely()
         shape.disposeSafely()
         debugUI.disposeSafely()
+        gunVisualsManager.disposeSafely()
     }
 }

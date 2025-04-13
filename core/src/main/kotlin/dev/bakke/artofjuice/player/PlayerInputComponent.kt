@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input
 import dev.bakke.artofjuice.ScreenshakeSystem
 import dev.bakke.artofjuice.components.Component
 import dev.bakke.artofjuice.components.PhysicsComponent
+import ktx.assets.disposeSafely
 import ktx.math.vec2
 
 class PlayerInputComponent : Component() {
@@ -14,12 +15,14 @@ class PlayerInputComponent : Component() {
     private lateinit var gunComponent: GunComponent
     private lateinit var grenadeComponent: GrenadeThrowerComponent
     private lateinit var screenshakeSystem: ScreenshakeSystem
+    private lateinit var gunInventoryComponent: GunInventoryComponent
     override fun lateInit() {
         physicsComponent = getComponent()
         animatedSpriteComponent = getComponent()
         gunComponent = getComponent()
         grenadeComponent = getComponent()
         screenshakeSystem = context.inject()
+        gunInventoryComponent = getComponent()
     }
 
     override fun update(delta: Float) {
@@ -126,15 +129,51 @@ class PlayerInputComponent : Component() {
         }
     }
 
-    private var guns = listOf(
-        GunStats.DEFAULT,
-        GunStats.SNIPER,
-    )
-    private var currentGun = 0
     private fun handleSwitchGun() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
-            currentGun = (currentGun + 1) % guns.size
-            gunComponent.stats = guns[currentGun]
+            gunInventoryComponent.nextGun()
         }
+    }
+}
+
+class GunInventoryComponent() : Component() {
+    private lateinit var gunVisualsManager: GunVisualsManager
+    private lateinit var gunComponent: GunComponent
+    private lateinit var guns: List<Gun>
+    private var currentGun = 0
+    override fun lateInit() {
+        gunVisualsManager = GunVisualsManager().apply { loadJson() }
+        gunComponent = getComponent()
+        guns = listOf(
+            Gun(
+                GunStats.SNIPER,
+                gunVisualsManager.getVisualsBySpriteName(GunSprites.Rifle6),
+                gunVisualsManager.getSpriteByName(BulletSprites.RifleBullet6)),
+            Gun(
+                GunStats.DEFAULT,
+                gunVisualsManager.getVisualsBySpriteName(GunSprites.Pistol2),
+                gunVisualsManager.getSpriteByName(BulletSprites.PistolBullet2)),
+            Gun(
+                GunStats(
+                    100,
+                    100f,
+                    1f,
+                    0f,
+                    1f
+                ),
+                gunVisualsManager.getVisualsBySpriteName(GunSprites.Rifle10),
+                gunVisualsManager.getSpriteByName(BulletSprites.RifleBullet10)
+            ),
+        )
+        gunComponent.gun = guns.first()
+    }
+
+    fun nextGun() {
+        currentGun = (currentGun + 1) % guns.size
+        gunComponent.gun = guns[currentGun]
+    }
+
+    override fun dispose() {
+        gunVisualsManager.disposeSafely()
     }
 }
