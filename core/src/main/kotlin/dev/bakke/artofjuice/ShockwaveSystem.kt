@@ -12,17 +12,19 @@ class ShockwaveSystem {
 
 
     fun update(delta: Float) {
-        if (center == null) return
+        if (center == null) {
+            return
+        }
         time += delta
         if (time >= maxTime) {
             center = null
-            println("Removed explosion at $time")
         }
     }
 
     fun setExplosion(position: Vector2, duration: Float = 0.5f) {
-        if (center != null) return
-        println("Set center to $position")
+        if (center != null) {
+            return
+        }
         center = position
         maxTime = duration
         time = 0f
