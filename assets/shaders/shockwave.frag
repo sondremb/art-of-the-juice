@@ -7,16 +7,6 @@ uniform sampler2D u_texture;
 uniform vec2 u_screenSize;
 
 void main() {
-/*     vec2 explosionCenter = vec2(0.5, 0.5);
-    vec2 dir = v_texCoord - explosionCenter;
-    vec2 finalUV = v_texCoord;
-    float dist = length(dir);
-    float time = 1.0;
-
-    float shock = sin(dist * 20.0 - time * 40.0) * 0.02;
-    shock *= smoothstep(1.0, 0.0, dist / (0.5 * time + 0.2)); // Fade out
-    finalUV += normalize(dir) * shock;
-    gl_FragColor = texture2D(u_texture, finalUV); */
     vec2 uv = v_texCoord;
 
     vec2 center = vec2(0.5, 0.5);
@@ -26,8 +16,6 @@ void main() {
     float strength = 0.08;
     float aberration = 0.100;
 
-    //float aspect_ratio = u_screenSize.y / u_screenSize.x;
-    //vec2 scaled_st = (uv - vec2(0.0, 0.5)) / vec2(1.0, aspect_ratio) + vec2(0, 0.5);
     vec2 dir = uv - center;
     dir.y *= u_screenSize.y / u_screenSize.x;
 
