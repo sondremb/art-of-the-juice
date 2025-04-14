@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3
 import dev.bakke.artofjuice.engine.Entity
 import dev.bakke.artofjuice.engine.utils.Perlin
 import ktx.graphics.use
+import ktx.math.unaryMinus
 
 class ScreenshakeSystem(private val camera: Camera, private val player: Entity) {
     private var trauma = 0f
@@ -18,12 +19,10 @@ class ScreenshakeSystem(private val camera: Camera, private val player: Entity) 
     private var maxRotationDegrees = 5f
     private var seed = 0.2387f; // guaranteed random!
     private var time = 0f
-    private var prevRotation = 0f
 
     fun render(batch: SpriteBatch, shape: ShapeRenderer) {
         if (GamePreferences.renderDebug()) {
             // TODO hvorfor fungerer ikke dette? Sett opp UI camera i stedet
-            shape.projectionMatrix.setToOrtho2D(0f, 0f, 800f, 600f)
             shape.use(ShapeRenderer.ShapeType.Filled) {
                 shape.color = Color.RED
                 shape.rect(10f, 10f, 800f * trauma, 10f)
@@ -39,8 +38,7 @@ class ScreenshakeSystem(private val camera: Camera, private val player: Entity) 
 
     fun update(delta: Float) {
         time += delta
-        // TODO det må finnes en bedre måte å gjøre dette på
-        camera.rotate(Vector3.Z, -prevRotation)
+        resetRotation()
         // TODO trekk ut hoved camera movement til noe annet
         camera.position.x = player.position.x
         camera.position.y = player.position.y + 128f
@@ -51,7 +49,6 @@ class ScreenshakeSystem(private val camera: Camera, private val player: Entity) 
             val offsetX = noise(seed) * amplitude
             val offsetY = noise(seed + 1) * amplitude
             val rotation = noise(seed + 2) * maxRotationDegrees * t2
-            prevRotation = rotation
             camera.position.x += offsetX
             camera.position.y += offsetY
             camera.rotate(Vector3.Z, rotation)
@@ -69,5 +66,11 @@ class ScreenshakeSystem(private val camera: Camera, private val player: Entity) 
 
     fun setMin(intensity: Float) {
         trauma = trauma.coerceAtLeast(intensity)
+    }
+
+    private fun resetRotation() {
+        // TODO det må finnes en bedre måte å gjøre dette på
+        camera.up.set(Vector3.Y.cpy())
+        camera.direction.set(-Vector3.Z)
     }
 }
