@@ -3,12 +3,16 @@ package dev.bakke.artofjuice
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.glutils.FrameBuffer
+import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
+import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.math.Rectangle
 import dev.bakke.artofjuice.collision.shapes.RectangleCollisionShape
 import dev.bakke.artofjuice.collision.ColliderComponent
@@ -19,7 +23,9 @@ import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
+import ktx.assets.toInternalFile
 import ktx.async.KtxAsync
+import ktx.graphics.use
 import ktx.inject.Context
 import ktx.math.vec2
 import ktx.tiled.x
@@ -61,9 +67,20 @@ class FirstScreen : KtxScreen {
     private val debugUI = DebugUI(batch, player)
     private lateinit var map: TiledMap
     private lateinit var renderer: OrthogonalTiledMapRenderer
+    lateinit var frameBuffer: FrameBuffer
+    lateinit var shader: ShaderProgram
+    lateinit var shaderBatch: SpriteBatch
 
 
     override fun show() {
+        frameBuffer = FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.width, Gdx.graphics.height, false)
+        shader = ShaderProgram("shaders/shockwave.vert".toInternalFile(), "shaders/shockwave.frag".toInternalFile())
+
+        if (!shader.isCompiled) {
+            Gdx.app.error("Shader", "Compilation failed:\n" + shader.log)
+        }
+
+        shaderBatch = SpriteBatch(1000, shader)
         map = TmxMapLoader().load("map.tmx")
         player.position = map.layers.get("Player").objects.get("Spawn").let { vec2(it.x, it.y) }
         renderer = OrthogonalTiledMapRenderer(map)
@@ -71,14 +88,12 @@ class FirstScreen : KtxScreen {
         map.layers.get("Player").objects.get("Enemy").let { enemySpawner.position.set(it.x, it.y) }
 
         val layer = map.layers.get("metal_collision")
-        //layer.objects.map { (it as RectangleMapObject).rectangle }.let { world.rects.addAll(it) }
         layer.objects
             .map { (it as RectangleMapObject).rectangle }
             .forEach { collisionSystem.addTerrainCollider(RectangleCollisionShape(it)) }
     }
 
     override fun render(delta: Float) {
-        clearScreen(red = 0.7f, green = 0.7f, blue = 0.7f)
         world.update(delta)
         collisionSystem.update(delta)
         camera.position.set(player.position.x, player.position.y, 0f)
@@ -86,17 +101,25 @@ class FirstScreen : KtxScreen {
         batch.projectionMatrix = camera.combined
         shape.projectionMatrix = camera.combined
         renderer.setView(camera)
-        renderer.render()
-        world.render(batch, shape)
-        collisionSystem.render(batch, shape)
+        frameBuffer.use {
+            clearScreen(red = 0.7f, green = 0.7f, blue = 0.7f)
+            renderer.render()
+            world.render(batch, shape)
+            collisionSystem.render(batch, shape)
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
-            GamePreferences.setRenderDebug(!GamePreferences.renderDebug())
+            if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
+                GamePreferences.setRenderDebug(!GamePreferences.renderDebug())
+            }
+
+            if (GamePreferences.renderDebug()) {
+                debugUI.render(delta)
+                screenshakeSystem.render(batch, shape)
+            }
         }
 
-        if (GamePreferences.renderDebug()) {
-            debugUI.render(delta)
-            screenshakeSystem.render(batch, shape)
+        shaderBatch.projectionMatrix = Matrix4().setToOrtho2D(0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+        shaderBatch.use {
+            it.draw(frameBuffer.colorBufferTexture, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat(), 0f, 0f, 1f, 1f)
         }
     }
 
