@@ -5,18 +5,25 @@ precision mediump float;
 varying vec2 v_texCoord;
 uniform sampler2D u_texture;
 uniform vec2 u_screenSize;
+uniform float u_time;
+uniform float u_maxTime;
+uniform vec2 u_center;
 
 void main() {
     vec2 uv = v_texCoord;
+    if(u_time >= u_maxTime) {
+        gl_FragColor = texture2D(u_texture, uv);
+        return;
+    }
 
-    vec2 center = vec2(0.5, 0.5);
-    float radius = 0.5;
+    float t = u_time / u_maxTime;
+    float radius = mix(0.2, 1.0, t);
+    float strength = mix(0.2, 0.0, t);
     float width = 0.05;
     float feather = 0.135;
-    float strength = 0.08;
     float aberration = 0.100;
 
-    vec2 dir = uv - center;
+    vec2 dir = uv - u_center;
     dir.y *= u_screenSize.y / u_screenSize.x;
 
     float dist = length(dir);

@@ -13,6 +13,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Matrix4
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 import dev.bakke.artofjuice.DebugUI
 import dev.bakke.artofjuice.GamePreferences
 import dev.bakke.artofjuice.ScreenshakeSystem
@@ -28,6 +30,7 @@ import ktx.assets.disposeSafely
 import ktx.assets.toInternalFile
 import ktx.graphics.use
 import ktx.inject.Context
+import ktx.math.div
 import ktx.math.vec2
 import ktx.tiled.x
 import ktx.tiled.y
@@ -49,9 +52,11 @@ class GameScreen : KtxScreen {
     private val debugUI = DebugUI(batch, player)
     private lateinit var map: TiledMap
     private lateinit var renderer: OrthogonalTiledMapRenderer
+    private var shockwaveSystem = ShockwaveSystem().apply { context.bindSingleton(this) }
     lateinit var frameBuffer: FrameBuffer
     lateinit var shader: ShaderProgram
     lateinit var shaderBatch: SpriteBatch
+    var time = 0f
 
 
     override fun show() {
@@ -76,9 +81,11 @@ class GameScreen : KtxScreen {
     }
 
     override fun render(delta: Float) {
+        time += delta
         world.update(delta)
         collisionSystem.update(delta)
         screenshakeSystem.update(delta)
+        shockwaveSystem.update(delta)
         batch.projectionMatrix = camera.combined
         shape.projectionMatrix = camera.combined
         renderer.setView(camera)
@@ -98,13 +105,28 @@ class GameScreen : KtxScreen {
             }
         }
 
+        val screenSize = vec2(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         shader.use {
-            it.setUniformf("u_screenSize", Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+            it.setUniformf("u_time", shockwaveSystem.time)
+            it.setUniformf("u_maxTime", shockwaveSystem.maxTime)
+            it.setUniformf("u_center", worldToUV(shockwaveSystem.center ?: vec2(0f, 0f)))
+            it.setUniformf("u_screenSize", screenSize)
         }
         shaderBatch.projectionMatrix = Matrix4().setToOrtho2D(0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         shaderBatch.use {
             it.draw(frameBuffer.colorBufferTexture, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat(), 0f, 0f, 1f, 1f)
         }
+    }
+
+    fun worldToUV(world: Vector2): Vector2 {
+        // 1. Project world coords to screen space
+        val projected = camera.project(Vector3(world.x, world.y, 0f))
+
+        // 2. Normalize to UV [0, 1]
+        val uvX = projected.x / Gdx.graphics.width
+        val uvY = projected.y / Gdx.graphics.height
+
+        return vec2(uvX, uvY)
     }
 
     override fun resize(width: Int, height: Int) {
@@ -122,5 +144,32 @@ class GameScreen : KtxScreen {
         shape.disposeSafely()
         debugUI.disposeSafely()
         gunVisualsManager.disposeSafely()
+    }
+}
+
+class ShockwaveSystem {
+    var center: Vector2? = null
+        private set
+    var time = 0f
+        private set
+    var maxTime = 0f
+        private set
+
+
+    fun update(delta: Float) {
+        if (center == null) return
+        time += delta
+        if (time >= maxTime) {
+            center = null
+            println("Removed explosion at $time")
+        }
+    }
+
+    fun setExplosion(position: Vector2, duration: Float = 0.5f) {
+        if (center != null) return
+        println("Set center to $position")
+        center = position
+        maxTime = duration
+        time = 0f
     }
 }
