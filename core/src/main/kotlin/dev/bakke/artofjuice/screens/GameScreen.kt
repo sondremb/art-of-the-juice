@@ -98,7 +98,9 @@ class GameScreen : KtxScreen {
             }
         }
 
-        shader.setUniform2fv("u_texture", floatArrayOf(800f, 600f), 0, 2)
+        shader.use {
+            it.setUniformf("u_screenSize", Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+        }
         shaderBatch.projectionMatrix = Matrix4().setToOrtho2D(0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         shaderBatch.use {
             it.draw(frameBuffer.colorBufferTexture, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat(), 0f, 0f, 1f, 1f)
@@ -109,6 +111,8 @@ class GameScreen : KtxScreen {
         camera.viewportWidth = width.toFloat()
         camera.viewportHeight = height.toFloat()
         camera.update()
+        frameBuffer.disposeSafely()
+        frameBuffer = FrameBuffer(Pixmap.Format.RGBA8888, width, height, false)
     }
 
     override fun dispose() {
