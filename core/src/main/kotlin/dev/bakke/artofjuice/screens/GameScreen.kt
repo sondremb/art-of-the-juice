@@ -78,7 +78,6 @@ class GameScreen : KtxScreen {
     override fun render(delta: Float) {
         world.update(delta)
         collisionSystem.update(delta)
-        camera.position.set(player.position.x, player.position.y, 0f)
         screenshakeSystem.update(delta)
         batch.projectionMatrix = camera.combined
         shape.projectionMatrix = camera.combined
