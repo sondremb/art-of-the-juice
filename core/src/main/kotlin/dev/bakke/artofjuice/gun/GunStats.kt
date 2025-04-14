@@ -1,9 +1,5 @@
 package dev.bakke.artofjuice.gun
 
-import com.badlogic.gdx.graphics.g2d.Sprite
-
-class Gun(val stats: GunStats, val visuals: GunVisuals, val bulletSprite: Sprite)
-
 data class GunStats(
     val damage: Int,
     val bulletSpeed: Float,
