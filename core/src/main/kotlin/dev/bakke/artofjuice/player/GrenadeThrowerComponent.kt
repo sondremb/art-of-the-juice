@@ -4,11 +4,11 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.Vector2
-import dev.bakke.artofjuice.collision.ColliderComponent
-import dev.bakke.artofjuice.collision.shapes.CircleCollisionShape
-import dev.bakke.artofjuice.components.Component
-import dev.bakke.artofjuice.components.PhysicsComponent
-import dev.bakke.artofjuice.components.SpriteComponent
+import dev.bakke.artofjuice.engine.collision.ColliderComponent
+import dev.bakke.artofjuice.engine.collision.shapes.CircleCollisionShape
+import dev.bakke.artofjuice.engine.components.Component
+import dev.bakke.artofjuice.engine.components.PhysicsComponent
+import dev.bakke.artofjuice.engine.components.SpriteComponent
 import ktx.assets.toInternalFile
 
 class GrenadeThrowerComponent : Component() {

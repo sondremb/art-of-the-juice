@@ -1,6 +1,6 @@
 package dev.bakke.artofjuice.player
 
-import dev.bakke.artofjuice.components.Component
+import dev.bakke.artofjuice.engine.components.Component
 
 class GrenadeComponent(
     private var fuseTime: Float,

@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector3
+import dev.bakke.artofjuice.engine.Entity
+import dev.bakke.artofjuice.engine.utils.Perlin
 import ktx.graphics.use
 
 class ScreenshakeSystem(private val camera: Camera, private val player: Entity) {

@@ -1,8 +1,8 @@
 package dev.bakke.artofjuice
 
-import dev.bakke.artofjuice.Event.Event
-import dev.bakke.artofjuice.Event.Event1
-import dev.bakke.artofjuice.components.Component
+import dev.bakke.artofjuice.engine.Event.Event
+import dev.bakke.artofjuice.engine.Event.Event1
+import dev.bakke.artofjuice.engine.components.Component
 
 class HealthComponent(val maxHealth: Int) : Component() {
     var health = maxHealth

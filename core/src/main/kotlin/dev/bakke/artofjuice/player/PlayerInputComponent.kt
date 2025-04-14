@@ -3,8 +3,9 @@ package dev.bakke.artofjuice.player
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import dev.bakke.artofjuice.ScreenshakeSystem
-import dev.bakke.artofjuice.components.Component
-import dev.bakke.artofjuice.components.PhysicsComponent
+import dev.bakke.artofjuice.engine.components.Component
+import dev.bakke.artofjuice.engine.components.PhysicsComponent
+import dev.bakke.artofjuice.gun.*
 import ktx.assets.disposeSafely
 import ktx.math.vec2
 

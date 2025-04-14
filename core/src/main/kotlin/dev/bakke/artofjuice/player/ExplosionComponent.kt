@@ -8,10 +8,10 @@ import com.badlogic.gdx.math.Vector2
 import dev.bakke.artofjuice.HealthComponent
 import dev.bakke.artofjuice.ScreenshakeSystem
 import dev.bakke.artofjuice.Tag
-import dev.bakke.artofjuice.collision.CollisionSystem
-import dev.bakke.artofjuice.collision.shapes.CircleCollisionShape
-import dev.bakke.artofjuice.components.Component
-import dev.bakke.artofjuice.components.PhysicsComponent
+import dev.bakke.artofjuice.engine.collision.CollisionSystem
+import dev.bakke.artofjuice.engine.collision.shapes.CircleCollisionShape
+import dev.bakke.artofjuice.engine.components.Component
+import dev.bakke.artofjuice.engine.components.PhysicsComponent
 import ktx.graphics.use
 
 class ExplosionComponent(

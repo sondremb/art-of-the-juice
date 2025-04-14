@@ -7,8 +7,8 @@ import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils.lerp
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
-import dev.bakke.artofjuice.components.Component
-import dev.bakke.artofjuice.gdx.extensions.rect
+import dev.bakke.artofjuice.engine.components.Component
+import dev.bakke.artofjuice.engine.gdx.extensions.rect
 import ktx.graphics.use
 import ktx.math.plus
 

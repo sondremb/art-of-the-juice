@@ -2,7 +2,9 @@ package dev.bakke.artofjuice.player
 
 import com.badlogic.gdx.graphics.g2d.*
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import dev.bakke.artofjuice.components.Component
+import dev.bakke.artofjuice.engine.components.Component
+import dev.bakke.artofjuice.gun.GunComponent
+import dev.bakke.artofjuice.gun.PlayerArms
 import ktx.assets.toInternalFile
 import ktx.collections.toGdxArray
 import ktx.graphics.use

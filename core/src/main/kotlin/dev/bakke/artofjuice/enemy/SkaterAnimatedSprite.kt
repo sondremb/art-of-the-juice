@@ -4,7 +4,7 @@ package dev.bakke.artofjuice.enemy
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import dev.bakke.artofjuice.components.AnimatedSpriteComponent
+import dev.bakke.artofjuice.engine.components.AnimatedSpriteComponent
 import ktx.assets.toInternalFile
 
 class SkaterAnimatedSprite : AnimatedSpriteComponent<SkaterAnimatedSprite.State>() {
