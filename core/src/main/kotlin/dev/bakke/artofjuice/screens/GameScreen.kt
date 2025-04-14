@@ -13,23 +13,15 @@ import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Matrix4
-import com.badlogic.gdx.math.Rectangle
 import dev.bakke.artofjuice.DebugUI
 import dev.bakke.artofjuice.GamePreferences
 import dev.bakke.artofjuice.ScreenshakeSystem
-import dev.bakke.artofjuice.Tag
 import dev.bakke.artofjuice.enemy.SpawnEnemyComponent
 import dev.bakke.artofjuice.engine.World
-import dev.bakke.artofjuice.engine.collision.ColliderComponent
 import dev.bakke.artofjuice.engine.collision.CollisionSystem
 import dev.bakke.artofjuice.engine.collision.shapes.RectangleCollisionShape
-import dev.bakke.artofjuice.engine.components.PhysicsComponent
-import dev.bakke.artofjuice.gun.GunComponent
 import dev.bakke.artofjuice.gun.GunVisualsManager
-import dev.bakke.artofjuice.player.GrenadeThrowerComponent
-import dev.bakke.artofjuice.player.GunInventoryComponent
-import dev.bakke.artofjuice.player.PlayerInputComponent
-import dev.bakke.artofjuice.player.PlayerVisuals
+import dev.bakke.artofjuice.player.spawnPlayer
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
@@ -47,16 +39,8 @@ class GameScreen : KtxScreen {
     private val world = World(context)
     private val collisionSystem = CollisionSystem().apply { context.bindSingleton(this) }
     private val gunVisualsManager = GunVisualsManager().apply { loadJson() }
-    private val player = world.spawnEntity(vec2(100f, 100f)) {
-        +Tag.PLAYER
-        +PhysicsComponent(-900f)
-        +PlayerInputComponent()
-        +PlayerVisuals()
-        +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 24f, 32f)))
-        +GunComponent(null)
-        +GunInventoryComponent()
-        +GrenadeThrowerComponent()
-    }
+    private val player = world.spawnPlayer(vec2(100f, 100f))
+
     private val enemySpawner = world.spawnEntity(vec2(0f, 0f)) {
         +SpawnEnemyComponent(0.8f)
     }
