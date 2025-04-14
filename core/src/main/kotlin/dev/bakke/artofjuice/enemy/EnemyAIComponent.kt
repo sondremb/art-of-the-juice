@@ -1,6 +1,7 @@
 package dev.bakke.artofjuice.enemy
 
 import dev.bakke.artofjuice.HealthComponent
+import dev.bakke.artofjuice.ShockwaveSystem
 import dev.bakke.artofjuice.engine.collision.ColliderComponent
 import dev.bakke.artofjuice.engine.components.Component
 import dev.bakke.artofjuice.engine.collision.CollisionSystem
@@ -24,6 +25,7 @@ class EnemyAIComponent(private var direction: Float = 1f) : Component() {
                 entity.world.spawnEntity(entity.position.cpy()) {
                     +ExplosionComponent(50f, 70, screenshakeIntensity = 0.6f, knockbackIntensity = 1000f)
                 }
+                context.inject<ShockwaveSystem>().addExplosion(entity.position.cpy())
             }
         }
     }

@@ -12,7 +12,7 @@ class GrenadeComponent(
     override fun update(delta: Float) {
         timeSinceThrown += delta
         if (timeSinceThrown >= fuseTime) {
-            context.inject<ShockwaveSystem>().setExplosion(entity.position.cpy(), 0.5f)
+            context.inject<ShockwaveSystem>().addExplosion(entity.position.cpy(), 0.5f)
             spawnEntity(entity.position.cpy()) {
                 +ExplosionComponent(explosionRadius, damage)
             }

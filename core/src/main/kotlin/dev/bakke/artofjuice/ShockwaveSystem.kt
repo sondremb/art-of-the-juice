@@ -2,31 +2,22 @@ package dev.bakke.artofjuice
 
 import com.badlogic.gdx.math.Vector2
 
-class ShockwaveSystem {
-    var center: Vector2? = null
-        private set
+data class Shockwave(val position: Vector2, val duration: Float) {
     var time = 0f
-        private set
-    var maxTime = 0f
-        private set
+}
 
+class ShockwaveSystem {
+    var shockwaves: MutableList<Shockwave> = mutableListOf()
+        private set
 
     fun update(delta: Float) {
-        if (center == null) {
-            return
-        }
-        time += delta
-        if (time >= maxTime) {
-            center = null
-        }
+        shockwaves = shockwaves.filter {
+            it.time += delta
+            it.time <= it.duration
+        }.toMutableList()
     }
 
-    fun setExplosion(position: Vector2, duration: Float = 0.5f) {
-        if (center != null) {
-            return
-        }
-        center = position
-        maxTime = duration
-        time = 0f
+    fun addExplosion(position: Vector2, duration: Float = 0.5f) {
+        shockwaves.add(Shockwave(position, duration))
     }
 }

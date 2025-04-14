@@ -12,7 +12,7 @@ import dev.bakke.artofjuice.engine.components.SpriteComponent
 import ktx.assets.toInternalFile
 
 class GrenadeThrowerComponent : Component() {
-    private val throwCooldown = 1f
+    private val throwCooldown = 0f
     private var timeSinceThrow = throwCooldown
 
     override fun update(delta: Float) {

@@ -3,23 +3,17 @@ package dev.bakke.artofjuice.screens
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.glutils.FrameBuffer
-import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
-import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import dev.bakke.artofjuice.DebugUI
-import dev.bakke.artofjuice.GamePreferences
-import dev.bakke.artofjuice.ScreenshakeSystem
-import dev.bakke.artofjuice.ShockwaveSystem
+import dev.bakke.artofjuice.*
 import dev.bakke.artofjuice.enemy.SpawnEnemyComponent
+import dev.bakke.artofjuice.engine.RenderPipeline
 import dev.bakke.artofjuice.engine.World
 import dev.bakke.artofjuice.engine.collision.CollisionSystem
 import dev.bakke.artofjuice.engine.collision.shapes.RectangleCollisionShape
@@ -28,8 +22,6 @@ import dev.bakke.artofjuice.player.spawnPlayer
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
-import ktx.assets.toInternalFile
-import ktx.graphics.use
 import ktx.inject.Context
 import ktx.math.vec2
 import ktx.tiled.x
@@ -53,21 +45,12 @@ class GameScreen : KtxScreen {
     private lateinit var map: TiledMap
     private lateinit var renderer: OrthogonalTiledMapRenderer
     private var shockwaveSystem = ShockwaveSystem().apply { context.bindSingleton(this) }
-    lateinit var frameBuffer: FrameBuffer
-    lateinit var shader: ShaderProgram
-    lateinit var shaderBatch: SpriteBatch
-    var time = 0f
-
+    private lateinit var pipeline: RenderPipeline
 
     override fun show() {
-        frameBuffer = FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.width, Gdx.graphics.height, false)
-        shader = ShaderProgram("shaders/shockwave.vert".toInternalFile(), "shaders/shockwave.frag".toInternalFile())
+        pipeline =
+            RenderPipeline(Gdx.graphics.width, Gdx.graphics.height, listOf(ShockwavePass(shockwaveSystem, camera)))
 
-        if (!shader.isCompiled) {
-            Gdx.app.error("Shader", "Compilation failed:\n" + shader.log)
-        }
-
-        shaderBatch = SpriteBatch(1000, shader)
         map = TmxMapLoader().load("map.tmx")
         player.position = map.layers.get("Player").objects.get("Spawn").let { vec2(it.x, it.y) }
         renderer = OrthogonalTiledMapRenderer(map)
@@ -81,7 +64,6 @@ class GameScreen : KtxScreen {
     }
 
     override fun render(delta: Float) {
-        time += delta
         world.update(delta)
         collisionSystem.update(delta)
         screenshakeSystem.update(delta)
@@ -89,7 +71,7 @@ class GameScreen : KtxScreen {
         batch.projectionMatrix = camera.combined
         shape.projectionMatrix = camera.combined
         renderer.setView(camera)
-        frameBuffer.use {
+        val texture = pipeline.getTexture {
             clearScreen(red = 0.7f, green = 0.7f, blue = 0.7f)
             renderer.render()
             world.render(batch, shape)
@@ -104,29 +86,8 @@ class GameScreen : KtxScreen {
                 screenshakeSystem.render(batch, shape)
             }
         }
-
-        val screenSize = vec2(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-        shader.use {
-            it.setUniformf("u_time", shockwaveSystem.time)
-            it.setUniformf("u_maxTime", shockwaveSystem.maxTime)
-            it.setUniformf("u_center", worldToUV(shockwaveSystem.center ?: vec2(0f, 0f)))
-            it.setUniformf("u_screenSize", screenSize)
-        }
-        shaderBatch.projectionMatrix =
-            Matrix4().setToOrtho2D(0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-        shaderBatch.use {
-            it.draw(
-                frameBuffer.colorBufferTexture,
-                0f,
-                0f,
-                Gdx.graphics.width.toFloat(),
-                Gdx.graphics.height.toFloat(),
-                0f,
-                0f,
-                1f,
-                1f
-            )
-        }
+        val texture2 = pipeline.render(texture)
+        pipeline.renderToScreen(texture2)
     }
 
     fun worldToUV(world: Vector2): Vector2 {
@@ -144,8 +105,7 @@ class GameScreen : KtxScreen {
         camera.viewportWidth = width.toFloat()
         camera.viewportHeight = height.toFloat()
         camera.update()
-        frameBuffer.disposeSafely()
-        frameBuffer = FrameBuffer(Pixmap.Format.RGBA8888, width, height, false)
+        pipeline.resize(width, height)
     }
 
     override fun dispose() {
