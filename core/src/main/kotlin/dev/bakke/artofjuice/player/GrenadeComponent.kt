@@ -1,7 +1,7 @@
 package dev.bakke.artofjuice.player
 
 import dev.bakke.artofjuice.engine.components.Component
-import dev.bakke.artofjuice.screens.ShockwaveSystem
+import dev.bakke.artofjuice.ShockwaveSystem
 
 class GrenadeComponent(
     private var fuseTime: Float,
