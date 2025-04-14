@@ -98,6 +98,7 @@ class GameScreen : KtxScreen {
             }
         }
 
+        shader.setUniform2fv("u_texture", floatArrayOf(800f, 600f), 0, 2)
         shaderBatch.projectionMatrix = Matrix4().setToOrtho2D(0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         shaderBatch.use {
             it.draw(frameBuffer.colorBufferTexture, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat(), 0f, 0f, 1f, 1f)
