@@ -24,9 +24,9 @@ class BloomPass() : Renderpass {
 
     override fun render(inputTexture: Texture, buffers: PingPongBuffer) {
         val inputCopyBuffer = FrameBuffer(Pixmap.Format.RGBA8888, inputTexture.width, inputTexture.height, false)
-        val inputCopyBatch = SpriteBatch()
         inputCopyBuffer.use {  buffer ->
-            inputCopyBatch.use {
+            batch.use {
+                it.shader = null
                 it.draw(inputTexture,
                     0f,
                     0f,
@@ -39,7 +39,6 @@ class BloomPass() : Renderpass {
             }
         }
         val inputCopy = inputCopyBuffer.colorBufferTexture
-        inputCopyBatch.dispose()
 
         var texture = inputTexture
         var buffer = buffers.write
