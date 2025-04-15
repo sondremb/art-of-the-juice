@@ -3,11 +3,7 @@ package dev.bakke.artofjuice.screens
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.Pixmap
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.glutils.FrameBuffer
-import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
@@ -26,12 +22,10 @@ import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
 import ktx.assets.toInternalFile
-import ktx.graphics.use
 import ktx.inject.Context
 import ktx.math.vec2
 import ktx.tiled.x
 import ktx.tiled.y
-import kotlin.math.exp
 
 class GameScreen : KtxScreen {
     private val batch = SpriteBatch()
@@ -61,7 +55,7 @@ class GameScreen : KtxScreen {
                     //GaussianPass(true),
                     //GaussianPass(false),
                     BloomPass(),
-                    //ShaderPass("shaders/default.vert".toInternalFile(), "shaders/scanline.frag".toInternalFile())
+                    ShaderPass("shaders/default.vert".toInternalFile(), "shaders/scanline.frag".toInternalFile())
                 )
             )
 
@@ -116,8 +110,8 @@ class GameScreen : KtxScreen {
     }
 
     override fun resize(width: Int, height: Int) {
-        camera.viewportWidth = width.toFloat()
-        camera.viewportHeight = height.toFloat()
+        camera.viewportWidth = width.toFloat() / 2
+        camera.viewportHeight = height.toFloat() / 2
         camera.update()
         pipeline.resize(width, height)
     }
@@ -132,145 +126,3 @@ class GameScreen : KtxScreen {
     }
 }
 
-class GaussianPass(isY: Boolean) :
-    ShaderPass("shaders/default.vert".toInternalFile(), "shaders/bloom_blur.frag".toInternalFile()) {
-    private var direction = if (isY) Vector2.Y.cpy() else Vector2.X.cpy()
-
-    override fun beforeRender() {
-        shader.use {
-            it.setUniformf("u_direction", direction)
-        }
-    }
-}
-
-class BloomPass() : Renderpass {
-    val thresholdShader: ShaderProgram =
-        ShaderProgram("shaders/default.vert".toInternalFile(), "shaders/bloom_threshold.frag".toInternalFile())
-    val gaussianShader: ShaderProgram =
-        ShaderProgram("shaders/default.vert".toInternalFile(), "shaders/bloom_blur.frag".toInternalFile())
-    val addShader: ShaderProgram =
-        ShaderProgram("shaders/default.vert".toInternalFile(), "shaders/bloom_add.frag".toInternalFile())
-    val thresholdBatch = SpriteBatch(1000, thresholdShader)
-    val gaussianBatch = SpriteBatch(1000, gaussianShader)
-    val addBatch = SpriteBatch(1000, addShader)
-
-    override fun render(inputTexture: Texture, buffers: PingPongBuffer) {
-        val inputCopyBuffer = FrameBuffer(Pixmap.Format.RGBA8888, inputTexture.width, inputTexture.height, false)
-        val inputCopyBatch = SpriteBatch()
-        inputCopyBuffer.use {  buffer ->
-            inputCopyBatch.use {
-                it.draw(inputTexture,
-                    0f,
-                    0f,
-                    buffer.width.toFloat(),
-                    buffer.height.toFloat(),
-                    0f,
-                    0f,
-                    1f,
-                    1f)
-            }
-        }
-        val inputCopy = inputCopyBuffer.colorBufferTexture
-        inputCopyBatch.dispose()
-
-        var texture = inputTexture
-        var buffer = buffers.write
-        thresholdShader.use {
-            it.setUniformf("u_threshold", 0.8f)
-        }
-        buffer.use {
-            clearScreen(0f, 0f, 0f, 0f)
-            thresholdBatch.use {
-                it.draw(
-                    texture,
-                    0f,
-                    0f,
-                    buffer.width.toFloat(),
-                    buffer.height.toFloat(),
-                    0f,
-                    0f,
-                    1f,
-                    1f
-                )
-            }
-        }
-        buffers.swap()
-
-        texture = buffers.read.colorBufferTexture
-        gaussianShader.use {
-            it.setUniformf("u_screenSize", Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-            it.setUniformf("u_direction", Vector2.Y.cpy())
-        }
-        buffer = buffers.write
-        buffer.use {
-            clearScreen(0f, 0f, 0f, 0f)
-            gaussianBatch.use {
-                clearScreen(1f, 1f, 1f, 0f)
-                it.draw(
-                    texture,
-                    0f,
-                    0f,
-                    buffer.width.toFloat(),
-                    buffer.height.toFloat(),
-                    0f,
-                    0f,
-                    1f,
-                    1f
-                )
-            }
-        }
-        buffers.swap()
-
-        texture = buffers.read.colorBufferTexture
-        gaussianShader.use {
-            it.setUniformf("u_screenSize", Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-            it.setUniformf("u_direction", Vector2.X.cpy())
-        }
-        buffer = buffers.write
-        buffer.use {
-            clearScreen(0f, 0f, 0f, 0f)
-            gaussianBatch.use {
-                it.draw(
-                    texture,
-                    0f,
-                    0f,
-                    buffer.width.toFloat(),
-                    buffer.height.toFloat(),
-                    0f,
-                    0f,
-                    1f,
-                    1f
-                )
-            }
-        }
-        buffers.swap()
-
-        texture = buffers.read.colorBufferTexture
-        addShader.use {
-            it.setUniformf("u_intensity", 5f)
-            texture.bind(1)
-            it.setUniformi("u_bloom", 1)
-            inputCopy.bind(0)
-            it.setUniformi("u_texture", 0)
-        }
-        buffer = buffers.write
-        buffer.use {
-            clearScreen(0f, 0f, 0f, 0f)
-            addBatch.use {
-                it.draw(
-                    inputCopy,
-                    0f,
-                    0f,
-                    buffer.width.toFloat(),
-                    buffer.height.toFloat(),
-                    0f,
-                    0f,
-                    1f,
-                    1f
-                )
-            }
-        }
-        texture = buffer.colorBufferTexture
-        buffers.swap()
-    }
-}

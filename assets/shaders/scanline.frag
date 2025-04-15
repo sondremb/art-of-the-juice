@@ -9,7 +9,7 @@ uniform vec2 u_screenSize;
 void main() {
     vec4 tex = texture2D(u_texture, v_texCoord);
     vec2 screen = v_texCoord * u_screenSize;
-    if(mod(screen.y, 4.0) < 2.0) {
+    if(mod(screen.y, 3.0) < 2.0) {
         tex *= 0.6;
     }
     gl_FragColor = tex;

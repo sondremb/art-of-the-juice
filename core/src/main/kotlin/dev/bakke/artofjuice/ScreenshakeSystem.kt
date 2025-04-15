@@ -41,7 +41,7 @@ class ScreenshakeSystem(private val camera: Camera, private val player: Entity) 
         resetRotation()
         // TODO trekk ut hoved camera movement til noe annet
         camera.position.x = player.position.x
-        camera.position.y = player.position.y + 128f
+        camera.position.y = player.position.y + 64f
         if (trauma > 0f) {
             trauma = (trauma - delta * traumaDecay).coerceAtLeast(0f)
             val t2 = trauma * trauma * trauma
