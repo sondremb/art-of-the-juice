@@ -11,7 +11,14 @@ import ktx.math.vec2
 class CameraComponent(private var camera: Camera, private var player: Entity) : Component() {
     override fun update(delta: Float) {
         val target = player.position + vec2(0f, 72f)
-        
+        val minHeight = 16f
+
+        val halfHeight = camera.viewportHeight / 2f
+        // vil ikke ha nedre camera grense lavere enn minHeight ->
+        // vil ikke ha target - halfHeigt < minHeight ->
+        // vil ikke ha target < minHeight + halfHeight
+        target.y = target.y.coerceAtLeast(minHeight + halfHeight)
+
         entity.position += (target - entity.position) * 0.1f
         camera.position.x = entity.position.x
         camera.position.y = entity.position.y
