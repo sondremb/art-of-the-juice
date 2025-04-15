@@ -20,9 +20,7 @@ class BloomPass() : Renderpass {
         ShaderProgram("shaders/default.vert".toInternalFile(), "shaders/bloom_blur.frag".toInternalFile())
     val addShader: ShaderProgram =
         ShaderProgram("shaders/default.vert".toInternalFile(), "shaders/bloom_add.frag".toInternalFile())
-    val thresholdBatch = SpriteBatch(1000, thresholdShader)
-    val gaussianBatch = SpriteBatch(1000, gaussianShader)
-    val addBatch = SpriteBatch(1000, addShader)
+    val batch = SpriteBatch()
 
     override fun render(inputTexture: Texture, buffers: PingPongBuffer) {
         val inputCopyBuffer = FrameBuffer(Pixmap.Format.RGBA8888, inputTexture.width, inputTexture.height, false)
@@ -50,7 +48,8 @@ class BloomPass() : Renderpass {
         }
         buffer.use {
             clearScreen(0f, 0f, 0f, 0f)
-            thresholdBatch.use {
+            batch.use {
+                it.shader = thresholdShader
                 it.draw(
                     texture,
                     0f,
@@ -74,7 +73,8 @@ class BloomPass() : Renderpass {
         buffer = buffers.write
         buffer.use {
             clearScreen(0f, 0f, 0f, 0f)
-            gaussianBatch.use {
+            batch.use {
+                it.shader = gaussianShader
                 clearScreen(1f, 1f, 1f, 0f)
                 it.draw(
                     texture,
@@ -99,7 +99,8 @@ class BloomPass() : Renderpass {
         buffer = buffers.write
         buffer.use {
             clearScreen(0f, 0f, 0f, 0f)
-            gaussianBatch.use {
+            batch.use {
+                it.shader = gaussianShader
                 it.draw(
                     texture,
                     0f,
@@ -126,7 +127,8 @@ class BloomPass() : Renderpass {
         buffer = buffers.write
         buffer.use {
             clearScreen(0f, 0f, 0f, 0f)
-            addBatch.use {
+            batch.use {
+                it.shader = addShader
                 it.draw(
                     inputCopy,
                     0f,
