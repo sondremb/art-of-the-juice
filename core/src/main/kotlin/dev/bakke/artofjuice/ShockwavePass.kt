@@ -16,7 +16,7 @@ import ktx.math.vec2
 
 class ShockwavePass(private val shockwaveSystem: ShockwaveSystem, private val camera: Camera) : Renderpass {
     private val shader: ShaderProgram =
-        ShaderProgram("shaders/shockwave.vert".toInternalFile(), "shaders/shockwave.frag".toInternalFile())
+        ShaderProgram("shaders/default.vert".toInternalFile(), "shaders/shockwave.frag".toInternalFile())
     private val batch: SpriteBatch
 
     init {

@@ -38,7 +38,7 @@ class ExplosionComponent(
 
     override fun render(batch: SpriteBatch, shape: ShapeRenderer) {
         shape.use(ShapeRenderer.ShapeType.Filled) {
-            it.color = Color.ORANGE
+            it.color = Color.WHITE
             shape.circle(entity.position.x, entity.position.y, explosionRadius)
         }
     }
