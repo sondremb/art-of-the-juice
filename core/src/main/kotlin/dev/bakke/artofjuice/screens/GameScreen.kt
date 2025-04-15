@@ -16,6 +16,8 @@ import dev.bakke.artofjuice.enemy.SpawnEnemyComponent
 import dev.bakke.artofjuice.engine.*
 import dev.bakke.artofjuice.engine.collision.CollisionSystem
 import dev.bakke.artofjuice.engine.collision.shapes.RectangleCollisionShape
+import dev.bakke.artofjuice.engine.rendering.RenderPipeline
+import dev.bakke.artofjuice.engine.rendering.ShaderPass
 import dev.bakke.artofjuice.gun.GunVisualsManager
 import dev.bakke.artofjuice.player.spawnPlayer
 import ktx.app.KtxScreen
@@ -52,10 +54,9 @@ class GameScreen : KtxScreen {
             RenderPipeline(
                 Gdx.graphics.width, Gdx.graphics.height, listOf(
                     ShockwavePass(shockwaveSystem, camera),
-                    //GaussianPass(true),
-                    //GaussianPass(false),
                     BloomPass(),
-                    ShaderPass("shaders/default.vert".toInternalFile(), "shaders/scanline.frag".toInternalFile())
+                    ShaderPass("shaders/default.vert".toInternalFile(), "shaders/scanline.frag".toInternalFile()),
+                    ShaderPass("shaders/default.vert".toInternalFile(), "shaders/vignette.frag".toInternalFile())
                 )
             )
 
