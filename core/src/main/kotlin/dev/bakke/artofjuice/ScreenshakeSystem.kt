@@ -10,6 +10,9 @@ import dev.bakke.artofjuice.engine.utils.Perlin
 import ktx.graphics.use
 import ktx.math.unaryMinus
 
+// "trauma"-basert screenshake med Perlin noise, basert på denne GDC-talken:
+// "Math for Game Programmers: Juicing Your Cameras With Math" av Squirrel Eiserloh
+// https://www.youtube.com/watch?v=tu-Qe66AvtY
 class ScreenshakeSystem(private val camera: Camera, private val player: Entity) {
     private var trauma = 0f
     // trauma lost per second
