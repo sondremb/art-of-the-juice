@@ -42,6 +42,9 @@ class GameScreen : KtxScreen {
         +SpawnEnemyComponent(0.8f)
     }
     private val camera = OrthographicCamera()
+    private val cameraEntity = world.spawnEntity(player.position.cpy()) {
+        +CameraComponent(camera, player)
+    }
     private val screenshakeSystem = ScreenshakeSystem(camera, player).apply { context.bindSingleton(this) }
     private val debugUI = DebugUI(batch, player)
     private lateinit var map: TiledMap
