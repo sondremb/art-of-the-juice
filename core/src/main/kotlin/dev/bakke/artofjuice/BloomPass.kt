@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.FrameBuffer
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.math.Vector2
-import dev.bakke.artofjuice.engine.PingPongBuffer
-import dev.bakke.artofjuice.engine.Renderpass
+import dev.bakke.artofjuice.engine.rendering.PingPongBuffer
+import dev.bakke.artofjuice.engine.rendering.Renderpass
 import ktx.app.clearScreen
 import ktx.assets.toInternalFile
 import ktx.graphics.use

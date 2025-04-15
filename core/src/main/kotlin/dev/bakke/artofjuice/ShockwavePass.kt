@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import dev.bakke.artofjuice.engine.PingPongBuffer
-import dev.bakke.artofjuice.engine.Renderpass
+import dev.bakke.artofjuice.engine.rendering.PingPongBuffer
+import dev.bakke.artofjuice.engine.rendering.Renderpass
 import ktx.assets.toInternalFile
 import ktx.graphics.use
 import ktx.math.vec2

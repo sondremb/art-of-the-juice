@@ -1,4 +1,4 @@
-package dev.bakke.artofjuice.engine
+package dev.bakke.artofjuice.engine.rendering
 
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.glutils.FrameBuffer

@@ -1,7 +1,7 @@
 package dev.bakke.artofjuice
 
 import com.badlogic.gdx.math.Vector2
-import dev.bakke.artofjuice.engine.ShaderPass
+import dev.bakke.artofjuice.engine.rendering.ShaderPass
 import ktx.assets.toInternalFile
 import ktx.graphics.use
 

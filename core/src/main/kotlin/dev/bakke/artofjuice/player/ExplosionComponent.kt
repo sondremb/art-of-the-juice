@@ -50,10 +50,10 @@ class ExplosionComponent(
             .forEach {
                 if (it.entity.hasTag(Tag.ENEMY)) {
                     it.getComponent<HealthComponent>().damage(damage)
-                    it.getComponent<PhysicsComponent>().applyImpulse(
-                        Vector2(it.entity.position.cpy().sub(entity.position.cpy().sub(0f, 32f))), knockbackIntensity
-                    )
                 }
+                it.tryGetComponent<PhysicsComponent>()?.applyImpulse(
+                    Vector2(it.entity.position.cpy().sub(entity.position.cpy().sub(0f, 32f))), knockbackIntensity
+                )
             }
         context.inject<ScreenshakeSystem>().shake(screenshakeIntensity)
     }

@@ -1,4 +1,4 @@
-package dev.bakke.artofjuice.engine
+package dev.bakke.artofjuice.engine.rendering
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
@@ -22,6 +22,7 @@ open class ShaderPass(vertShader: FileHandle, fragShader: FileHandle) : Renderpa
 
     override fun render(inputTexture: Texture, buffers: PingPongBuffer) {
         beforeRender()
+        ShaderProgram.pedantic = false
         shader.use {
             it.setUniformf("u_screenSize", Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         }
