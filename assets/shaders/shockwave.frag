@@ -9,6 +9,7 @@ uniform float u_time;
 uniform float u_maxTime;
 uniform vec2 u_center;
 
+// hentet fra https://godotshaders.com/shader/distortion/
 void main() {
     vec2 uv = v_texCoord;
     if(u_time >= u_maxTime) {
@@ -30,14 +31,14 @@ void main() {
 
     float mask = (1.0 - smoothstep(radius - feather, radius, dist)) * smoothstep(radius - width - feather, radius - width, dist);
     vec2 offset = normalize(dir) * strength * mask;
-    vec2 biased_st = uv - offset;
+    vec2 biasedUv = uv - offset;
 
-    vec2 abber_vec = offset * aberration * mask;
+    vec2 abberationVec = offset * aberration * mask;
 
-    vec2 final_st = uv * (1.0 - mask) + biased_st * mask;
+    vec2 finalUv = uv * (1.0 - mask) + biasedUv * mask;
 
-    vec4 red = texture2D(u_texture, final_st + abber_vec);
-    vec4 blue = texture2D(u_texture, final_st - abber_vec);
-    vec4 ori = texture2D(u_texture, final_st);
+    vec4 red = texture2D(u_texture, finalUv + abberationVec);
+    vec4 blue = texture2D(u_texture, finalUv - abberationVec);
+    vec4 ori = texture2D(u_texture, finalUv);
     gl_FragColor = vec4(red.x, ori.y, blue.z, 1.0);
 }
