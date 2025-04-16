@@ -6,6 +6,7 @@ varying vec2 v_texCoord;
 uniform sampler2D u_texture;
 
 void main() {
+    // https://blog.yarsalabs.com/lens-distortion-and-chromatic-aberration-unity-part1/
     float magnitudeFactor = 5.0;
     float strength = 0.1;
     vec2 uvNormalized = v_texCoord * 2.0 - 1.0; //change UV range from (0,1) to (-1,1)
