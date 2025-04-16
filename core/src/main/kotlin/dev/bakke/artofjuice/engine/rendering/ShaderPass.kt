@@ -26,12 +26,12 @@ open class ShaderPass(
     override fun render(inputTexture: Texture, buffers: PingPongBuffer) {
         beforeRender()
         ShaderProgram.pedantic = false
+        val buffer = buffers.write
         shader.use {
-            it.setUniformf("u_screenSize", Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+            it.setUniformf("u_screenSize", buffer.width.toFloat(), buffer.height.toFloat())
         }
         batch.projectionMatrix =
-            Matrix4().setToOrtho2D(0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-        val buffer = buffers.write
+            Matrix4().setToOrtho2D(0f, 0f, buffer.width.toFloat(), buffer.height.toFloat())
         buffer.use {
             batch.use {
                 it.draw(

@@ -3,7 +3,7 @@ package dev.bakke.artofjuice.engine.rendering
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.glutils.FrameBuffer
 
-class PingPongBuffer(width: Int, height: Int) {
+class PingPongBuffer(var width: Int, var height: Int) {
     private var buffers = arrayOf(
         FrameBuffer(Pixmap.Format.RGBA8888, width, height, false),
         FrameBuffer(Pixmap.Format.RGBA8888, width, height, false)
@@ -26,6 +26,8 @@ class PingPongBuffer(width: Int, height: Int) {
 
     fun resize(width: Int, height: Int) {
         dispose()
+        this.width = width
+        this.height = height
         buffers[0] = FrameBuffer(Pixmap.Format.RGBA8888, width, height, false)
         buffers[1] = FrameBuffer(Pixmap.Format.RGBA8888, width, height, false)
     }

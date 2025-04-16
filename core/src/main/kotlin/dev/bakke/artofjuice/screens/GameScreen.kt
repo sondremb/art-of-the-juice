@@ -11,7 +11,6 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.utils.Pool
 import dev.bakke.artofjuice.*
 import dev.bakke.artofjuice.enemy.SpawnEnemyComponent
 import dev.bakke.artofjuice.engine.*
@@ -69,7 +68,7 @@ class GameScreen : KtxScreen {
         map = TmxMapLoader().load("map.tmx")
         player.position = map.layers.get("Player").objects.get("Spawn").let { vec2(it.x, it.y) }
         renderer = OrthogonalTiledMapRenderer(map)
-        camera.setToOrtho(false, 800f, 600f) // Adjust to match your game window size
+        camera.setToOrtho(false, 400f, 300f) // Adjust to match your game window size
         map.layers.get("Player").objects.get("Enemy").let { enemySpawner.position.set(it.x, it.y) }
 
         val layer = map.layers.get("metal_collision")

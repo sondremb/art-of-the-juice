@@ -58,6 +58,7 @@ class RenderPipeline(
 
     fun resize(width: Int, height: Int) {
         buffers.resize(width, height)
+        passes.forEach { it.resize(width, height) }
     }
 
     fun dispose() {
