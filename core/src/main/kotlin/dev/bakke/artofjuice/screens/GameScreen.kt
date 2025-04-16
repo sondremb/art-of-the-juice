@@ -60,9 +60,9 @@ class GameScreen : KtxScreen {
                 Gdx.graphics.width, Gdx.graphics.height, listOf(
                     ShockwavePass(shockwaveSystem, camera),
                     BloomPass(),
-                    ShaderPass("shaders/default.vert".toInternalFile(), "shaders/scanline.frag".toInternalFile()),
-                    ShaderPass("shaders/default.vert".toInternalFile(), "shaders/vignette.frag".toInternalFile()),
-                    ShaderPass("shaders/default.vert".toInternalFile(), "shaders/barrel_distortion.frag".toInternalFile()),
+                    ShaderPass("shaders/scanline.frag".toInternalFile()),
+                    ShaderPass("shaders/vignette.frag".toInternalFile()),
+                    ShaderPass("shaders/barrel_distortion.frag".toInternalFile()),
                 )
             )
 

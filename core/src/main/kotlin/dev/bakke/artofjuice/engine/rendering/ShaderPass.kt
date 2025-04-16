@@ -6,9 +6,12 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.math.Matrix4
+import ktx.assets.toInternalFile
 import ktx.graphics.use
 
-open class ShaderPass(vertShader: FileHandle, fragShader: FileHandle) : Renderpass {
+open class ShaderPass(
+        fragShader: FileHandle,
+        vertShader: FileHandle = "shaders/default.vert".toInternalFile()) : Renderpass {
     protected val shader: ShaderProgram = ShaderProgram(vertShader, fragShader)
     private val batch: SpriteBatch
 
