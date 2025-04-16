@@ -9,10 +9,9 @@ import dev.bakke.artofjuice.engine.collision.ColliderComponent
 import dev.bakke.artofjuice.engine.collision.shapes.RectangleCollisionShape
 import dev.bakke.artofjuice.engine.components.PhysicsComponent
 import dev.bakke.artofjuice.gun.GunComponent
-import ktx.math.vec2
 
 fun World.spawnPlayer(position: Vector2): Entity {
-    return this.spawnEntity(vec2(100f, 100f)) {
+    return this.spawnEntity(position) {
         +Tag.PLAYER
         +PhysicsComponent(-900f)
         +PlayerInputComponent()
