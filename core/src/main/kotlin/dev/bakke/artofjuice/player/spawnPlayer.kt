@@ -17,7 +17,7 @@ fun World.spawnPlayer(position: Vector2): Entity {
         +PhysicsComponent(-900f)
         +PlayerInputComponent()
         +PlayerVisuals()
-        +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 24f, 32f)))
+        +ColliderComponent(RectangleCollisionShape(24f, 32f))
         +GunComponent(null)
         +GunInventoryComponent()
         +GrenadeThrowerComponent()

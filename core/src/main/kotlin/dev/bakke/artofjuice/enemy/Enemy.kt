@@ -29,7 +29,7 @@ fun World.spawnEnemy(position: Vector2, direction: Float) {
         +EnemyAIComponent(direction)
         +PhysicsComponent(-900f)
         +SkaterAnimatedSprite()
-        +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 24f, 32f)))
+        +ColliderComponent(RectangleCollisionShape(24f, 32f))
         +HealthComponent(100)
         +HealthBarComponent(vec2(0f, 20f), 32f, 4f)
     }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Rectangle
 import dev.bakke.artofjuice.engine.gdx.extensions.rect
 
 class RectangleCollisionShape(val rect: Rectangle) : CollisionShape {
+    constructor(width: Float, height: Float) : this(Rectangle(0f, 0f, width, height))
     override fun collidesWith(other: CollisionShape): Boolean {
         return other.collidesWithRect(this)
     }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Circle
 
 class CircleCollisionShape(val circle: Circle) : CollisionShape {
+    constructor(radius: Float) : this(Circle(0f, 0f, radius))
     override fun collidesWith(other: CollisionShape): Boolean {
         return other.collidesWithCircle(this)
     }

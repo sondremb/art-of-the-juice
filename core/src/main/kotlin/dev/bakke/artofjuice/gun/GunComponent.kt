@@ -95,7 +95,7 @@ class GunComponent(initialGun: Gun?) : Component() {
             +Tag.PROJECTILE
             +BulletComponent(gun.stats)
             +SpriteComponent(gun.bulletSprite)
-            +ColliderComponent(RectangleCollisionShape(Rectangle(0f, 0f, 12f, 4f)), true)
+            +ColliderComponent(RectangleCollisionShape( 12f, 4f), true)
         }
     }
 }
