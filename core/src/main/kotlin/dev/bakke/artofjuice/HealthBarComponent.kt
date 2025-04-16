@@ -16,7 +16,7 @@ class HealthBarComponent(private var offset: Vector2, private var width: Float, 
     private lateinit var healthComponent: HealthComponent
     private val rect = Rectangle(0f, 0f, width, height)
     private var shownHealth: Int = 0
-    private var waitTime = 1f
+    private var waitTime = 0.6f
     private var animationTime = 0.2f
     private var timeSinceLastDamage = waitTime
 

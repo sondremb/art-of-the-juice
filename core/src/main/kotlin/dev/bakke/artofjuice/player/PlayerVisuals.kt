@@ -151,7 +151,7 @@ class PlayerVisuals : Component() {
                     null -> playerAtlas.findRegions("both_hands_run")
                     PlayerArms.One -> playerAtlas.findRegions("one_hand_walk")
                     PlayerArms.Two -> playerAtlas.findRegions("no_hands_walk")
-                }.let { Animation(1f / 8f, it, Animation.PlayMode.LOOP) }
+                }.let { Animation(1f / 16f, it, Animation.PlayMode.LOOP) }
             }
             State.JUMP -> {
                 when (gunComponent.gun?.visuals?.arms) {

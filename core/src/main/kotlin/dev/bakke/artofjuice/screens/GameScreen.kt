@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.utils.Pool
 import dev.bakke.artofjuice.*
 import dev.bakke.artofjuice.enemy.SpawnEnemyComponent
 import dev.bakke.artofjuice.engine.*
@@ -35,6 +36,7 @@ class GameScreen : KtxScreen {
     private val context = Context()
     private val world = World(context)
     private val collisionSystem = CollisionSystem().apply { context.bindSingleton(this) }
+    private val particleSystem = ParticleSystem().apply { context.bindSingleton(this) }
     private val gunVisualsManager = GunVisualsManager().apply { loadJson() }
     private val player = world.spawnPlayer(vec2(100f, 100f))
 
@@ -82,6 +84,7 @@ class GameScreen : KtxScreen {
         collisionSystem.update(delta)
         screenshakeSystem.update(delta)
         shockwaveSystem.update(delta)
+        particleSystem.update(delta)
         batch.projectionMatrix = camera.combined
         shape.projectionMatrix = camera.combined
         renderer.setView(camera)
@@ -90,6 +93,7 @@ class GameScreen : KtxScreen {
             renderer.render()
             world.render(batch, shape)
             collisionSystem.render(batch, shape)
+            particleSystem.render(batch)
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
                 GamePreferences.setRenderDebug(!GamePreferences.renderDebug())

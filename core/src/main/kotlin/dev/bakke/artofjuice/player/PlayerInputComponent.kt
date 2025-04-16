@@ -151,17 +151,11 @@ class GunInventoryComponent() : Component() {
                 gunVisualsManager.getVisualsBySpriteName(GunSprites.Rifle6),
                 gunVisualsManager.getSpriteByName(BulletSprites.RifleBullet6)),
             Gun(
-                GunStats.DEFAULT,
+                GunStats.PISTOL,
                 gunVisualsManager.getVisualsBySpriteName(GunSprites.Pistol2),
                 gunVisualsManager.getSpriteByName(BulletSprites.PistolBullet2)),
             Gun(
-                GunStats(
-                    100,
-                    100f,
-                    1f,
-                    0f,
-                    1f
-                ),
+                GunStats.RIFLE,
                 gunVisualsManager.getVisualsBySpriteName(GunSprites.Rifle10),
                 gunVisualsManager.getSpriteByName(BulletSprites.RifleBullet10)
             ),
