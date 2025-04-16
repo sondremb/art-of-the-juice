@@ -59,7 +59,8 @@ class GameScreen : KtxScreen {
                     ShockwavePass(shockwaveSystem, camera),
                     BloomPass(),
                     ShaderPass("shaders/default.vert".toInternalFile(), "shaders/scanline.frag".toInternalFile()),
-                    ShaderPass("shaders/default.vert".toInternalFile(), "shaders/vignette.frag".toInternalFile())
+                    ShaderPass("shaders/default.vert".toInternalFile(), "shaders/vignette.frag".toInternalFile()),
+                    ShaderPass("shaders/default.vert".toInternalFile(), "shaders/barrel_distortion.frag".toInternalFile()),
                 )
             )
 
@@ -76,6 +77,7 @@ class GameScreen : KtxScreen {
     }
 
     override fun render(delta: Float) {
+        val delta = delta.coerceAtMost(1 / 30f)
         world.update(delta)
         collisionSystem.update(delta)
         screenshakeSystem.update(delta)

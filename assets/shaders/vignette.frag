@@ -20,4 +20,5 @@ void main() {
     vignette = mix(1.0, vignette, 1.0);   // blend in based on strength
 
     gl_FragColor = color * vignette;
+    gl_FragColor.a = 1.0;
 }
