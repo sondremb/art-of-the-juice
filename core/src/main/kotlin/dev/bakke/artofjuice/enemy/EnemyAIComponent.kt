@@ -20,13 +20,16 @@ class EnemyAIComponent(private var direction: Float = 1f) : Component() {
         animatedSprite = getComponent()
         collisionSystem = context.inject()
         colliderComponent = getComponent()
-        getComponent<HealthComponent>().onDeath += {
+        val healthComponent = getComponent<HealthComponent>()
+        healthComponent.onDeath += {
             if (Math.random() < 0.3f) {
                 entity.world.spawnEntity(entity.position.cpy()) {
                     +ExplosionComponent(50f, 70, screenshakeIntensity = 0.6f, knockbackIntensity = 1000f)
                 }
                 context.inject<ShockwaveSystem>().addExplosion(entity.position.cpy())
             }
+        healthComponent.onDamage += {
+            animatedSprite.requestTransition(SkaterAnimatedSprite.State.HURT)
         }
     }
 
@@ -38,6 +41,6 @@ class EnemyAIComponent(private var direction: Float = 1f) : Component() {
         }
         colliderComponent.resetPosition()
         animatedSprite.flipX = entity.velocity.x < 0
-        animatedSprite.setState(SkaterAnimatedSprite.State.RUN)
+        animatedSprite.requestTransition(SkaterAnimatedSprite.State.RUN)
     }
 }
