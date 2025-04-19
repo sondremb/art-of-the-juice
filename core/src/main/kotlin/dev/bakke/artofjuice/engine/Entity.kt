@@ -41,6 +41,15 @@ open class Entity(val world: World, var position: Vector2) : Disposable {
         component.init()
     }
 
+    fun removeComponent(kClass: KClass<out Component>) {
+        components[kClass]?.dispose()
+        components.remove(kClass)
+    }
+
+    inline fun <reified  T : Component> removeComponent() {
+        removeComponent(T::class)
+    }
+
     operator fun String.unaryPlus() {
         tags.add(this)
     }

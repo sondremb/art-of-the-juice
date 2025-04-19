@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
 import dev.bakke.artofjuice.engine.Entity
 import ktx.inject.Context
+import kotlin.reflect.KClass
 
 abstract class Component : Disposable {
     lateinit var entity: Entity
@@ -18,6 +19,11 @@ abstract class Component : Disposable {
 
     inline fun <reified T : Component> tryGetComponent(): T? {
         return entity.tryGetComponent<T>()
+    }
+
+    fun removeFromEntity() {
+        val kClass = this::class as KClass<Component>
+        entity.removeComponent(kClass)
     }
 
     fun spawnEntity(position: Vector2, block: Entity.() -> Unit): Entity {
