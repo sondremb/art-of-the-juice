@@ -19,7 +19,7 @@ class BloomPass() : Renderpass {
     private val thresholdShader: ShaderProgram =
         ShaderProgram("shaders/default.vert".toInternalFile(), "shaders/bloom_threshold.frag".toInternalFile())
     private val gaussianShader: ShaderProgram =
-        ShaderProgram("shaders/default.vert".toInternalFile(), "shaders/bloom_blur.frag".toInternalFile())
+        ShaderProgram("shaders/default.vert".toInternalFile(), "shaders/gaussian_m4_sigma10_00.frag".toInternalFile())
     private val addShader: ShaderProgram =
         ShaderProgram("shaders/default.vert".toInternalFile(), "shaders/bloom_add.frag".toInternalFile())
     var frameBuffer: FrameBuffer? = null
