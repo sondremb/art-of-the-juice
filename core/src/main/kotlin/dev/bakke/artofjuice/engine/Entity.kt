@@ -15,7 +15,7 @@ open class Entity(val world: World, var position: Vector2) : Disposable {
     private val tags = mutableSetOf<String>()
     private var isActive: Boolean = true
     var velocity: Vector2 = vec2(0f, 0f)
-    @PublishedApi internal val components: Map<KClass<*>, Component> = mutableMapOf()
+    @PublishedApi internal val components: MutableMap<KClass<*>, Component> = mutableMapOf()
 
     val hasTag: (String) -> Boolean = { tags.contains(it) }
 
@@ -36,7 +36,7 @@ open class Entity(val world: World, var position: Vector2) : Disposable {
     }
 
     inline fun <reified T : Component> addComponent(component: T) {
-        (components as MutableMap)[T::class] = component
+        components[T::class] = component
         component.entity = this
         component.init()
     }
