@@ -11,15 +11,11 @@ class HealthComponent(val maxHealth: Int) : Component() {
     val onDeath = Event()
     val onDamage = Event1<Int>()
 
-    override fun update(delta: Float) {
-        if (health <= 0) {
-            onDeath.invoke()
-            entity.destroy()
-        }
-    }
-
     fun damage(amount: Int) {
         health = (health - amount).coerceAtLeast(0)
         onDamage.invoke(amount)
+        if (health <= 0) {
+            onDeath.invoke()
+        }
     }
 }
