@@ -19,6 +19,10 @@ open class ColliderComponent(val shape: CollisionShape, val collidesWithTerrain:
     fun onTerrainCollision(callback: (CollisionShape) -> Unit) {
         this.onTerrainCollision = callback
     }
+
+    fun disableEntityCollisions() {
+        context.inject<CollisionSystem>().removeEntityCollider(this)
+    }
     override fun init() {
         context.inject<CollisionSystem>().addEntityCollider(this)
         resetPosition()

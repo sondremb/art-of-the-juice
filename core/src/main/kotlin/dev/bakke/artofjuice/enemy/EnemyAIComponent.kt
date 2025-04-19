@@ -1,5 +1,6 @@
 package dev.bakke.artofjuice.enemy
 
+import dev.bakke.artofjuice.HealthBarComponent
 import dev.bakke.artofjuice.HealthComponent
 import dev.bakke.artofjuice.ShockwaveSystem
 import dev.bakke.artofjuice.engine.collision.ColliderComponent
@@ -22,18 +23,32 @@ class EnemyAIComponent(private var direction: Float = 1f) : Component() {
         colliderComponent = getComponent()
         val healthComponent = getComponent<HealthComponent>()
         healthComponent.onDeath += {
+            animatedSprite.requestTransition(SkaterAnimatedSprite.State.DEATH)
+            healthComponent.isActive = false
+            this.isActive = false
+            colliderComponent.isActive = false
+            colliderComponent.disableEntityCollisions()
+            getComponent<HealthBarComponent>().let {
+                it.animationFinished += {
+                    it.removeFromEntity()
+                    healthComponent.removeFromEntity()
+                }
+            }
+            entity.velocity.setZero()
             if (Math.random() < 0.3f) {
                 entity.world.spawnEntity(entity.position.cpy()) {
                     +ExplosionComponent(50f, 70, screenshakeIntensity = 0.6f, knockbackIntensity = 1000f)
                 }
                 context.inject<ShockwaveSystem>().addExplosion(entity.position.cpy())
             }
+        }
         healthComponent.onDamage += {
             animatedSprite.requestTransition(SkaterAnimatedSprite.State.HURT)
         }
     }
 
     override fun update(delta: Float) {
+        if (!isActive) return
         val nextPosition = vec2(entity.position.x + entity.velocity.x * delta, entity.position.y)
         colliderComponent.shape.setPosition(nextPosition.x, nextPosition.y)
         if (collisionSystem.collidesWithTerrain(colliderComponent.shape)) {
