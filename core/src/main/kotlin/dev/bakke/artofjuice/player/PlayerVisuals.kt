@@ -70,7 +70,6 @@ class PlayerVisuals : Component() {
                 // invalid state transition
             }
         }
-
     }
 
     private lateinit var gunComponent: GunComponent
