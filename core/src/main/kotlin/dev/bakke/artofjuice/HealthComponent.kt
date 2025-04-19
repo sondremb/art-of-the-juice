@@ -12,6 +12,7 @@ class HealthComponent(val maxHealth: Int) : Component() {
     val onDamage = Event1<Int>()
 
     fun damage(amount: Int) {
+        if (!isActive) return
         health = (health - amount).coerceAtLeast(0)
         onDamage.invoke(amount)
         if (health <= 0) {
