@@ -10,5 +10,6 @@ uniform float u_intensity;
 void main() {
     vec4 color = texture2D(u_texture, v_texCoord);
     vec4 bloom = texture2D(u_bloom, v_texCoord);
-    gl_FragColor = color + bloom * u_intensity;
+    color = color + bloom * u_intensity;
+    gl_FragColor = vec4(color.rgb, 1.0);
 }

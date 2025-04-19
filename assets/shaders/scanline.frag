@@ -10,8 +10,7 @@ void main() {
     vec4 tex = texture2D(u_texture, v_texCoord);
     vec2 screen = v_texCoord * u_screenSize;
     if(mod(screen.y, 3.0) < 2.0) {
-        tex *= 0.6;
+        tex *= 0.8;
     }
-    gl_FragColor = tex;
-    gl_FragColor.a = 1.0;
+    gl_FragColor = vec4(tex.rgb, 1.0);
 }
