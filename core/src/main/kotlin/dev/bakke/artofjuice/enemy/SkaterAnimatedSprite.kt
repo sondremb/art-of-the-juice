@@ -33,6 +33,7 @@ class SkaterAnimatedSprite : Component() {
         when (transition) {
             true -> {
                 currentState = state
+                nextState = null
                 stateTime = 0f
             }
             false -> {
@@ -49,6 +50,7 @@ class SkaterAnimatedSprite : Component() {
             State.RUN -> Animation(1f / 8f, atlas.findRegions("Walk"), Animation.PlayMode.LOOP)
             State.IDLE -> Animation(1f / 6f, atlas.findRegions("Idle"), Animation.PlayMode.LOOP)
             State.HURT -> Animation(1f / 8f, atlas.findRegions("Hurt").drop(1).toGdxArray(), Animation.PlayMode.NORMAL)
+            State.DEATH -> Animation(1f / 8f, atlas.findRegions("Death"), Animation.PlayMode.NORMAL)
         }
     }
 
@@ -56,7 +58,7 @@ class SkaterAnimatedSprite : Component() {
         stateTime += delta
         currentAnimation = getCurrentAnimation()
         if (currentAnimation.isAnimationFinished(stateTime) && nextState != null) {
-            currentState = nextState ?: currentState
+            currentState = nextState!!
             nextState = null
             stateTime = 0f
             currentAnimation = getCurrentAnimation()
@@ -80,23 +82,27 @@ class SkaterAnimatedSprite : Component() {
     private val transitions = mapOf(
         State.IDLE to mapOf(
             State.RUN to true,
-            State.HURT to true
+            State.HURT to true,
+            State.DEATH to true
         ),
         State.RUN to mapOf(
             State.IDLE to true,
-            State.HURT to true
+            State.HURT to true,
+            State.DEATH to true
         ),
         State.HURT to mapOf(
             State.RUN to false,
             State.IDLE to false,
-            State.HURT to true
-        )
+            State.HURT to true,
+            State.DEATH to true
+        ), State.DEATH to mapOf()
     )
 
     enum class State {
         RUN,
         IDLE,
-        HURT
+        HURT,
+        DEATH
     }
 }
 
