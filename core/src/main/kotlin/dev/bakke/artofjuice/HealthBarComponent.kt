@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils.lerp
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import dev.bakke.artofjuice.engine.Event.Event
 import dev.bakke.artofjuice.engine.components.Component
 import dev.bakke.artofjuice.engine.gdx.extensions.rect
 import ktx.graphics.use
@@ -19,6 +20,7 @@ class HealthBarComponent(private var offset: Vector2, private var width: Float, 
     private var waitTime = 0.6f
     private var animationTime = 0.2f
     private var timeSinceLastDamage = waitTime
+    var animationFinished = Event()
 
     override fun lateInit() {
         healthComponent = getComponent()
@@ -27,10 +29,16 @@ class HealthBarComponent(private var offset: Vector2, private var width: Float, 
     }
 
     override fun update(delta: Float) {
+        if (!isActive) return
+        val timeRemaining = waitTime + animationTime - timeSinceLastDamage
         timeSinceLastDamage += delta
+        if (timeRemaining > 0f && delta >= timeRemaining) {
+            animationFinished.invoke()
+        }
     }
 
     override fun render(batch: SpriteBatch, shape: ShapeRenderer) {
+        if (!isActive) return
         rect.setCenter(entity.position + offset)
         val health = healthComponent.health
         if (timeSinceLastDamage <= waitTime + animationTime) {
@@ -63,6 +71,9 @@ class HealthBarComponent(private var offset: Vector2, private var width: Float, 
             shownHealth = healthComponent.health + damageTaken
         }
         timeSinceLastDamage = 0f
+        if (healthComponent.health <= 0f) {
+            timeSinceLastDamage = timeSinceLastDamage.coerceAtLeast(waitTime)
+        }
     }
 
     private fun getWidth(health: Int): Float {
