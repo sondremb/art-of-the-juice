@@ -12,7 +12,7 @@ data class GunStats(
             15,
             800f,
             0.25f,
-            50f,
+            100f,
             0.3f
         )
         val RIFLE = GunStats(
