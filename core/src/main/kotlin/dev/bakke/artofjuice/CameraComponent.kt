@@ -14,8 +14,8 @@ import ktx.math.vec2
 class CameraComponent(private var camera: Camera, private var player: Entity) : Component() {
     private val deadzone = Rectangle(-20f, -10f, 40f, 20f)
     private val minHeight = 16f
-    private val moveSpeedX = 0.05f
-    private val moveSpeedY = 0.1f
+    private val moveSpeedX = 6f
+    private val moveSpeedY = 12f
     override fun update(delta: Float) {
         var target = player.position + vec2(0f, 72f)
         deadzone.setCenter(entity.position)
@@ -31,9 +31,9 @@ class CameraComponent(private var camera: Camera, private var player: Entity) : 
         // vil ikke ha target < minHeight + halfHeight
         target.y = target.y.coerceAtLeast(minHeight + halfHeight)
 
-        entity.position.x += (target.x - entity.position.x) * moveSpeedX
+        entity.position.x += (target.x - entity.position.x) * moveSpeedX* delta
         camera.position.x = entity.position.x
-        entity.position.y += (target.y - entity.position.y) * moveSpeedY
+        entity.position.y += (target.y - entity.position.y) * moveSpeedY * delta
         camera.position.y = entity.position.y
     }
 
