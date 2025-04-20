@@ -45,7 +45,7 @@ class ExplosionComponent(
 
     private fun explode() {
         hasExploded = true
-        val collisionSystem = context.inject<CollisionSystem>()
+        val collisionSystem = getSystem<CollisionSystem>()
         collisionSystem.getEntityCollisions(CircleCollisionShape(Circle(entity.position.cpy(), explosionRadius)))
             .forEach {
                 if (it.entity.hasTag(Tag.ENEMY)) {
@@ -55,6 +55,6 @@ class ExplosionComponent(
                     Vector2(it.entity.position.cpy().sub(entity.position.cpy().sub(0f, 32f))), knockbackIntensity
                 )
             }
-        context.inject<ScreenshakeSystem>().shake(screenshakeIntensity)
+        getSystem<ScreenshakeSystem>().shake(screenshakeIntensity)
     }
 }

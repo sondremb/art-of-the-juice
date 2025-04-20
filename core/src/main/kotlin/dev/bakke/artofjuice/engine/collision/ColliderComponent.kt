@@ -21,15 +21,15 @@ open class ColliderComponent(val shape: CollisionShape, val collidesWithTerrain:
     }
 
     fun disableEntityCollisions() {
-        context.inject<CollisionSystem>().removeEntityCollider(this)
+        getSystem<CollisionSystem>().removeEntityCollider(this)
     }
     override fun init() {
-        context.inject<CollisionSystem>().addEntityCollider(this)
+        getSystem<CollisionSystem>().addEntityCollider(this)
         resetPosition()
     }
 
     override fun dispose() {
-        context.inject<CollisionSystem>().removeEntityCollider(this)
+        getSystem<CollisionSystem>().removeEntityCollider(this)
     }
 
     override fun update(delta: Float) {

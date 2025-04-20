@@ -24,7 +24,7 @@ class BulletComponent(private val gunStats: GunStats) : Component() {
                 val animation = TextureAtlas("Effects.atlas".toInternalFile())
                     .findRegions("effect$number")
                     .let { Animation(1/24f, it) }
-                context.inject<ParticleSystem>().spawn(AnimationRenderable(animation), entity.position.cpy(), Vector2.Zero.cpy(), 0.2f)
+                getSystem<ParticleSystem>().spawn(AnimationRenderable(animation), entity.position.cpy(), Vector2.Zero.cpy(), 0.2f)
                 entity.destroy()
             }
         }
@@ -33,7 +33,7 @@ class BulletComponent(private val gunStats: GunStats) : Component() {
             val animation = TextureAtlas("Effects.atlas".toInternalFile())
                 .findRegions("effect$number")
                 .let { Animation(1/24f, it) }
-            context.inject<ParticleSystem>().spawn(AnimationRenderable(animation), entity.position.cpy(), Vector2.Zero.cpy(), 0.2f)
+            getSystem<ParticleSystem>().spawn(AnimationRenderable(animation), entity.position.cpy(), Vector2.Zero.cpy(), 0.2f)
             entity.destroy()
         }
     }

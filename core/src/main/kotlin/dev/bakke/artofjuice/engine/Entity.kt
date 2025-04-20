@@ -23,6 +23,10 @@ open class Entity(val world: World, var position: Vector2) : Disposable {
         return world.spawnEntity(position, block)
     }
 
+    inline fun <reified  T : Any> getSystem(): T {
+        return world.context.inject<T>()
+    }
+
     inline fun <reified T : Component> getComponent(): T {
         return components[T::class] as T
     }

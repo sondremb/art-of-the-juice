@@ -19,7 +19,7 @@ class PhysicsComponent(var gravity: Float) : Component() {
 
     override fun lateInit() {
         colliderComponent = getComponent()
-        collisionSystem = context.inject()
+        collisionSystem = getSystem()
     }
 
     override fun update(delta: Float) {

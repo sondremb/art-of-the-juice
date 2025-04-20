@@ -40,8 +40,8 @@ class GunComponent(initialGun: Gun?) : Component() {
     private lateinit var particleSystem: ParticleSystem
     override fun lateInit() {
         physicsComponent = tryGetComponent()
-        screenshakeSystem = context.inject()
-        particleSystem = context.inject()
+        screenshakeSystem = getSystem()
+        particleSystem = getSystem()
         gun?.let { g ->
             timeSinceLastShot = g.stats.fireRate
         }

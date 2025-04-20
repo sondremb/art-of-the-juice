@@ -19,7 +19,7 @@ class EnemyAIComponent(private var direction: Float = 1f) : Component() {
     override fun lateInit() {
         entity.velocity.x = speed * sign(direction)
         animatedSprite = getComponent()
-        collisionSystem = context.inject()
+        collisionSystem = getSystem()
         colliderComponent = getComponent()
         val healthComponent = getComponent<HealthComponent>()
         healthComponent.onDeath += {
@@ -39,7 +39,7 @@ class EnemyAIComponent(private var direction: Float = 1f) : Component() {
                 entity.world.spawnEntity(entity.position.cpy()) {
                     +ExplosionComponent(50f, 70, screenshakeIntensity = 0.6f, knockbackIntensity = 1000f)
                 }
-                context.inject<ShockwaveSystem>().addExplosion(entity.position.cpy())
+                getSystem<ShockwaveSystem>().addExplosion(entity.position.cpy())
             }
         }
         healthComponent.onDamage += {

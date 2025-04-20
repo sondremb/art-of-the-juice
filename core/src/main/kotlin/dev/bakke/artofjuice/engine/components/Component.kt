@@ -21,6 +21,10 @@ abstract class Component : Disposable {
         return entity.tryGetComponent<T>()
     }
 
+    inline fun <reified  T : Any> getSystem(): T {
+        return entity.getSystem<T>()
+    }
+
     fun removeFromEntity() {
         val kClass = this::class as KClass<Component>
         entity.removeComponent(kClass)
