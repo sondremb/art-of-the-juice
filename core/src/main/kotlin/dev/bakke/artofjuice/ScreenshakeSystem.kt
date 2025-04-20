@@ -1,5 +1,6 @@
 package dev.bakke.artofjuice
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -25,16 +26,16 @@ class ScreenshakeSystem(private val camera: Camera, private val player: Entity) 
 
     fun render(batch: SpriteBatch, shape: ShapeRenderer) {
         if (GamePreferences.renderDebug()) {
-            // TODO hvorfor fungerer ikke dette? Sett opp UI camera i stedet
+            val w = Gdx.graphics.width.toFloat() - 20f
             shape.use(ShapeRenderer.ShapeType.Filled) {
                 shape.color = Color.RED
-                shape.rect(10f, 10f, 800f * trauma, 10f)
+                shape.rect(10f, 10f, w * trauma, 10f)
                 shape.color = Color.ORANGE
-                shape.rect(10f, 20f, 800f * trauma * trauma, 10f)
+                shape.rect(10f, 20f, w * trauma * trauma, 10f)
             }
             shape.use(ShapeRenderer.ShapeType.Line) {
                 shape.color = Color.WHITE
-                shape.rect(10f, 10f, 800f, 20f)
+                shape.rect(10f, 10f, w, 20f)
             }
         }
     }

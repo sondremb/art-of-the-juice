@@ -46,6 +46,7 @@ class GameScreen : KtxScreen {
     private val cameraEntity = world.spawnEntity(player.position.cpy()) {
         +CameraComponent(camera, player)
     }
+    private val uiCamera = OrthographicCamera()
     private val screenshakeSystem = ScreenshakeSystem(camera, player).apply { context.bindSingleton(this) }
     private val debugUI = DebugUI(batch, player)
     private lateinit var map: TiledMap
@@ -69,6 +70,7 @@ class GameScreen : KtxScreen {
         player.position = map.layers.get("Player").objects.get("Spawn").let { vec2(it.x, it.y) }
         renderer = OrthogonalTiledMapRenderer(map)
         camera.setToOrtho(false, 400f, 300f) // Adjust to match your game window size
+        uiCamera.setToOrtho(false, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         map.layers.get("Player").objects.get("Enemy").let { enemySpawner.position.set(it.x, it.y) }
 
         val layer = map.layers.get("metal_collision")
@@ -97,31 +99,24 @@ class GameScreen : KtxScreen {
             if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
                 GamePreferences.setRenderDebug(!GamePreferences.renderDebug())
             }
-
-            if (GamePreferences.renderDebug()) {
-                debugUI.render(delta)
-                screenshakeSystem.render(batch, shape)
-            }
         }
         val texture2 = pipeline.render(texture)
         pipeline.renderToScreen(texture2)
-    }
-
-    fun worldToUV(world: Vector2): Vector2 {
-        // 1. Project world coords to screen space
-        val projected = camera.project(Vector3(world.x, world.y, 0f))
-
-        // 2. Normalize to UV [0, 1]
-        val uvX = projected.x / Gdx.graphics.width
-        val uvY = projected.y / Gdx.graphics.height
-
-        return vec2(uvX, uvY)
+        batch.projectionMatrix = uiCamera.combined
+        shape.projectionMatrix = uiCamera.combined
+        if (GamePreferences.renderDebug()) {
+            debugUI.render(delta)
+            screenshakeSystem.render(batch, shape)
+        }
     }
 
     override fun resize(width: Int, height: Int) {
         camera.viewportWidth = width.toFloat() / 2
         camera.viewportHeight = height.toFloat() / 2
         camera.update()
+        uiCamera.viewportHeight = height.toFloat()
+        uiCamera.viewportWidth = width.toFloat()
+        uiCamera.update()
         pipeline.resize(width, height)
     }
 
