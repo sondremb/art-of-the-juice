@@ -61,11 +61,11 @@ class ScreenshakeSystem(private val camera: Camera, private val player: Entity) 
         return Perlin.perlin(seed, time * frequency) * 2 - 1
     }
 
-    fun shake(intensity: Float) {
+    fun addScreenShake(intensity: Float) {
         trauma = (trauma + intensity).coerceAtMost(1f)
     }
 
-    fun setMin(intensity: Float) {
+    fun setMinimumShake(intensity: Float) {
         trauma = trauma.coerceAtLeast(intensity)
     }
 

@@ -78,7 +78,7 @@ class GunComponent(initialGun: Gun?) : Component() {
             // TODO player knockback som egen stat?
             -direction, gun.stats.impulse
         )
-        screenshakeSystem.setMin(gun.stats.shakeIntensity)
+        screenshakeSystem.setMinimumShake(gun.stats.shakeIntensity)
         val offsetScaleX = if (direction.x < 0) -1f else 1f
         val offset = (gun.visuals.gunOffset + gun.visuals.bulletOffset).scl(offsetScaleX, 1f)
         val animation = TextureAtlas("Effects.atlas".toInternalFile())

@@ -55,6 +55,6 @@ class ExplosionComponent(
                     Vector2(it.entity.position.cpy().sub(entity.position.cpy().sub(0f, 32f))), knockbackIntensity
                 )
             }
-        getSystem<ScreenshakeSystem>().shake(screenshakeIntensity)
+        getSystem<ScreenshakeSystem>().addScreenShake(screenshakeIntensity)
     }
 }
