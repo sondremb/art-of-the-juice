@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.utils.Array
 import ktx.assets.load
-import ktx.assets.toInternalFile
 
 class Assets {
     private val assetManager = AssetManager()
@@ -16,6 +15,10 @@ class Assets {
         assetManager.load<TextureAtlas>(Atlases.Bullets)
         assetManager.load<TextureAtlas>(Atlases.Weapons)
         assetManager.load<TextureAtlas>(Atlases.Effects)
+    }
+
+    fun loadAllBlocking() {
+        loadAll()
         assetManager.finishLoading()
     }
 

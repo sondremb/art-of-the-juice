@@ -9,8 +9,6 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
 import dev.bakke.artofjuice.*
 import dev.bakke.artofjuice.enemy.SpawnEnemyComponent
 import dev.bakke.artofjuice.engine.*
@@ -38,7 +36,7 @@ class GameScreen : KtxScreen {
     private val particleSystem = ParticleSystem().apply { context.bindSingleton(this) }
     private val assets = Assets().apply {
         context.bindSingleton(this)
-        loadAll()
+        loadAllBlocking()
     }
     private val gunVisualsManager = GunVisualsManager(assets).apply {
         context.bindSingleton(this)
