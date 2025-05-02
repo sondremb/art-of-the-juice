@@ -30,7 +30,11 @@ class ConfigGunVisualsScreen : KtxScreen {
         addTerrainCollider(RectangleCollisionShape(Rectangle(0f, -100f, 800f, 100f)))
         addTerrainCollider(RectangleCollisionShape(Rectangle(0f, 600f, 800f, 100f)))
     }
-    val gunVisualsManager = GunVisualsManager().apply { loadJson() }
+    val assets = Assets().apply { context.bindSingleton(this) }
+    val gunVisualsManager = GunVisualsManager(assets).apply {
+        loadJson()
+        context.bindSingleton(this)
+    }
     val gun = Gun(
         GunStats.SNIPER.copy(bulletSpeed = 100f),
         gunVisualsManager.getVisualsBySpriteName(GunSprites.Rifle1),

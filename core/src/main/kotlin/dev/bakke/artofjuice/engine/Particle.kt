@@ -26,9 +26,9 @@ class SpriteRenderable(val sprite: Sprite) : ParticleRenderable {
     }
 }
 
-class AnimationRenderable(private val animation: Animation<TextureAtlas.AtlasRegion>) : ParticleRenderable {
+class AnimationRenderable<T : TextureRegion>(private val animation: Animation<T>) : ParticleRenderable {
     private var stateTime = 0f
-    private lateinit var frame: TextureRegion
+    private lateinit var frame: T
     override fun update(particle: Particle, delta: Float) {
         frame = animation.getKeyFrame(stateTime)
         stateTime += delta

@@ -36,7 +36,13 @@ class GameScreen : KtxScreen {
     private val world = World(context)
     private val collisionSystem = CollisionSystem().apply { context.bindSingleton(this) }
     private val particleSystem = ParticleSystem().apply { context.bindSingleton(this) }
-    private val gunVisualsManager = GunVisualsManager().apply { loadJson() }
+    private val assets = Assets().apply {
+        context.bindSingleton(this)
+        loadAll()
+    }
+    private val gunVisualsManager = GunVisualsManager(assets).apply {
+        context.bindSingleton(this)
+    }
     private val player = world.spawnPlayer(vec2(100f, 100f))
 
     private val enemySpawner = world.spawnEntity(vec2(0f, 0f)) {
@@ -55,6 +61,8 @@ class GameScreen : KtxScreen {
     private lateinit var pipeline: RenderPipeline
 
     override fun show() {
+        assets.loadAll()
+        gunVisualsManager.loadJson()
         pipeline =
             RenderPipeline(
                 Gdx.graphics.width, Gdx.graphics.height, listOf(

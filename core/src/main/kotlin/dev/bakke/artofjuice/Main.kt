@@ -13,7 +13,7 @@ class Main : KtxGame<KtxScreen>() {
 
         addScreen(GameScreen())
         addScreen(PerlinTest())
-        addScreen(ConfigGunVisualsScreen())
+//        addScreen(ConfigGunVisualsScreen())
         setScreen<GameScreen>()
     }
 }

@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import dev.bakke.artofjuice.Assets
+import dev.bakke.artofjuice.TextureAssets
 import dev.bakke.artofjuice.engine.components.AnimatedSpriteComponent
 import dev.bakke.artofjuice.engine.components.Component
 import dev.bakke.artofjuice.player.PlayerVisuals.State
@@ -14,18 +16,16 @@ import ktx.collections.toGdxArray
 import ktx.graphics.use
 
 class SkaterAnimatedSprite : Component() {
-    private var atlas = TextureAtlas("Skater.atlas".toInternalFile())
     private var currentState = State.IDLE
     private var nextState: State? = null
     private lateinit var currentAnimation: Animation<TextureRegion>
     private var stateTime = 0f
     var flipX = false
 
-    var animations = mapOf<State, Animation<TextureRegion>>(
-        State.RUN to Animation(1f / 8f, atlas.findRegions("Walk"), Animation.PlayMode.LOOP),
-        State.IDLE to Animation(1f / 6f, atlas.findRegions("Idle"), Animation.PlayMode.LOOP),
-        State.HURT to Animation(1f / 8f, atlas.findRegions("Hurt"), Animation.PlayMode.NORMAL)
-    )
+    private lateinit var assets: Assets
+    override fun lateInit() {
+        assets = getSystem()
+    }
 
     fun requestTransition(state: SkaterAnimatedSprite.State) {
         if (currentState == state) return
@@ -47,10 +47,10 @@ class SkaterAnimatedSprite : Component() {
 
     private fun getCurrentAnimation(): Animation<TextureRegion> {
         return when (currentState) {
-            State.RUN -> Animation(1f / 8f, atlas.findRegions("Walk"), Animation.PlayMode.LOOP)
-            State.IDLE -> Animation(1f / 6f, atlas.findRegions("Idle"), Animation.PlayMode.LOOP)
-            State.HURT -> Animation(1f / 8f, atlas.findRegions("Hurt").drop(1).toGdxArray(), Animation.PlayMode.NORMAL)
-            State.DEATH -> Animation(1f / 8f, atlas.findRegions("Death"), Animation.PlayMode.NORMAL)
+            State.RUN -> Animation(1f / 8f, assets.getRegions(TextureAssets.Enemy.Walk), Animation.PlayMode.LOOP)
+            State.IDLE -> Animation(1f / 6f, assets.getRegions(TextureAssets.Enemy.Idle), Animation.PlayMode.LOOP)
+            State.HURT -> Animation(1f / 8f, assets.getRegions(TextureAssets.Enemy.Hurt).drop(1).toGdxArray(), Animation.PlayMode.NORMAL)
+            State.DEATH -> Animation(1f / 8f, assets.getRegions(TextureAssets.Enemy.Death), Animation.PlayMode.NORMAL)
         }
     }
 

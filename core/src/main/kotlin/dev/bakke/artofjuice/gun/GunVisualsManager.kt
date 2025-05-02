@@ -5,11 +5,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.Json
 import com.badlogic.gdx.utils.JsonWriter
+import dev.bakke.artofjuice.Assets
+import dev.bakke.artofjuice.Atlases
+import dev.bakke.artofjuice.TextureAssets
 import ktx.assets.disposeSafely
 import ktx.assets.toInternalFile
 
-class GunVisualsManager : Disposable {
-    private val atlas = TextureAtlas("weapons.atlas".toInternalFile())
+class GunVisualsManager(private val assets: Assets) : Disposable {
     private lateinit var serializables: Array<GunVisualsSerializable>
 
     private fun fromSerializable(gunVisualsSerializable: GunVisualsSerializable): GunVisuals {
@@ -32,10 +34,9 @@ class GunVisualsManager : Disposable {
     }
 
     fun getSpriteByName(spriteName: String): Sprite {
-        return Sprite(atlas.findRegion(spriteName))
+        return Sprite(assets.getRegion(Atlases.Weapons, spriteName))
     }
 
     override fun dispose() {
-        atlas.disposeSafely()
     }
 }

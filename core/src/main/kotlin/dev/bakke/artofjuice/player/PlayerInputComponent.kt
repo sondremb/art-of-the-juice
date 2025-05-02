@@ -142,8 +142,10 @@ class GunInventoryComponent() : Component() {
     private lateinit var gunComponent: GunComponent
     private lateinit var guns: List<Gun>
     private var currentGun = 0
+
+
     override fun lateInit() {
-        gunVisualsManager = GunVisualsManager().apply { loadJson() }
+        gunVisualsManager = getSystem()
         gunComponent = getComponent()
         guns = listOf(
             Gun(
