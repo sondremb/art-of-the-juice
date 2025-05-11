@@ -22,8 +22,8 @@ class CollisionSystem() {
                 val other = entities[j]
                 if (!other.isActive) continue
                 if (collider.collidesWith(other)) {
-                    collider.onCollision?.invoke(other.entity)
-                    other.onCollision?.invoke(collider.entity)
+                    collider.onCollision.invoke(other.entity)
+                    other.onCollision.invoke(collider.entity)
                 }
             }
             checkTerrainCollisions(collider)
@@ -35,7 +35,7 @@ class CollisionSystem() {
         if (collider.collidesWithTerrain) {
             terrainColliders.forEach {
                 if (collider.collidesWith(it)) {
-                    collider.onTerrainCollision?.invoke(it)
+                    collider.onTerrainCollision.invoke(it)
                 }
             }
         }

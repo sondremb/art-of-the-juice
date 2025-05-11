@@ -19,7 +19,7 @@ class BulletComponent(private val gunStats: GunStats) : Component() {
     override fun lateInit() {
         val assets = getSystem<Assets>()
         val colliderComponent = getComponent<ColliderComponent>()
-        colliderComponent.onCollision {
+        colliderComponent.onCollision += {
             if (it.hasTag(Tag.ENEMY)) {
                 it.getComponent<HealthComponent>().damage(gunStats.damage)
                 it.getComponent<PhysicsComponent>().applyImpulse(vec2(entity.velocity.x, entity.velocity.x * 0.2f), gunStats.impulse)
@@ -29,7 +29,7 @@ class BulletComponent(private val gunStats: GunStats) : Component() {
                 entity.destroy()
             }
         }
-        colliderComponent.onTerrainCollision {
+        colliderComponent.onTerrainCollision += {
             val animation = assets.getRegions(TextureAssets.Effects.random())
                 .let { Animation(1/24f, it) }
             getSystem<ParticleSystem>().spawn(AnimationRenderable(animation), entity.position.cpy(), Vector2.Zero.cpy(), 0.2f)

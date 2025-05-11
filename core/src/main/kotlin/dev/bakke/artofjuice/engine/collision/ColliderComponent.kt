@@ -5,20 +5,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import dev.bakke.artofjuice.engine.Entity
 import dev.bakke.artofjuice.GamePreferences
+import dev.bakke.artofjuice.engine.Event.Event1
 import dev.bakke.artofjuice.engine.collision.shapes.CollisionShape
 import dev.bakke.artofjuice.engine.components.Component
 import ktx.graphics.use
 
 open class ColliderComponent(val shape: CollisionShape, val collidesWithTerrain: Boolean = false) : Component() {
-    var onCollision: ((Entity) -> Unit)? = null
-    var onTerrainCollision: ((CollisionShape) -> Unit)? = null
-
-    fun onCollision(callback: (Entity) -> Unit) {
-        this.onCollision = callback
-    }
-    fun onTerrainCollision(callback: (CollisionShape) -> Unit) {
-        this.onTerrainCollision = callback
-    }
+    val onCollision = Event1<Entity>()
+    var onTerrainCollision = Event1<CollisionShape>()
 
     fun disableEntityCollisions() {
         getSystem<CollisionSystem>().removeEntityCollider(this)
