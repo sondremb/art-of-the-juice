@@ -13,7 +13,7 @@ import kotlin.math.sign
 class EnemyAIComponent(private var direction: Float = 1f) : Component() {
     private val speed = 100f // Horizontal speed
 
-    private lateinit var animatedSprite: SkaterAnimatedSprite
+    private lateinit var animatedSprite: EnemyAnimtedSprite
     private lateinit var collisionSystem: CollisionSystem
     private lateinit var colliderComponent: ColliderComponent
     override fun lateInit() {
@@ -23,7 +23,7 @@ class EnemyAIComponent(private var direction: Float = 1f) : Component() {
         colliderComponent = getComponent()
         val healthComponent = getComponent<HealthComponent>()
         healthComponent.onDeath += {
-            animatedSprite.requestTransition(SkaterAnimatedSprite.State.DEATH)
+            animatedSprite.requestTransition(EnemyAnimtedSprite.State.DEATH)
             healthComponent.isActive = false
             this.isActive = false
             colliderComponent.isActive = false
@@ -43,7 +43,7 @@ class EnemyAIComponent(private var direction: Float = 1f) : Component() {
             }
         }
         healthComponent.onDamage += {
-            animatedSprite.requestTransition(SkaterAnimatedSprite.State.HURT)
+            animatedSprite.requestTransition(EnemyAnimtedSprite.State.HURT)
         }
     }
 
@@ -56,6 +56,6 @@ class EnemyAIComponent(private var direction: Float = 1f) : Component() {
         }
         colliderComponent.resetPosition()
         animatedSprite.flipX = entity.velocity.x < 0
-        animatedSprite.requestTransition(SkaterAnimatedSprite.State.RUN)
+        animatedSprite.requestTransition(EnemyAnimtedSprite.State.RUN)
     }
 }

@@ -3,19 +3,15 @@ package dev.bakke.artofjuice.enemy
 
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import dev.bakke.artofjuice.Assets
 import dev.bakke.artofjuice.TextureAssets
-import dev.bakke.artofjuice.engine.components.AnimatedSpriteComponent
 import dev.bakke.artofjuice.engine.components.Component
-import dev.bakke.artofjuice.player.PlayerVisuals.State
-import ktx.assets.toInternalFile
 import ktx.collections.toGdxArray
 import ktx.graphics.use
 
-class SkaterAnimatedSprite : Component() {
+class EnemyAnimtedSprite : Component() {
     private var currentState = State.IDLE
     private var nextState: State? = null
     private lateinit var currentAnimation: Animation<TextureRegion>
@@ -27,7 +23,7 @@ class SkaterAnimatedSprite : Component() {
         assets = getSystem()
     }
 
-    fun requestTransition(state: SkaterAnimatedSprite.State) {
+    fun requestTransition(state: EnemyAnimtedSprite.State) {
         if (currentState == state) return
         val transition = transitions[currentState]?.get(state)
         when (transition) {
