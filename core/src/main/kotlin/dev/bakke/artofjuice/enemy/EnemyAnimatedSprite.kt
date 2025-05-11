@@ -11,7 +11,7 @@ import dev.bakke.artofjuice.engine.components.Component
 import ktx.collections.toGdxArray
 import ktx.graphics.use
 
-class EnemyAnimtedSprite : Component() {
+class EnemyAnimatedSprite : Component() {
     private var currentState = State.IDLE
     private var nextState: State? = null
     private lateinit var currentAnimation: Animation<TextureRegion>
@@ -23,7 +23,7 @@ class EnemyAnimtedSprite : Component() {
         assets = getSystem()
     }
 
-    fun requestTransition(state: EnemyAnimtedSprite.State) {
+    fun requestTransition(state: EnemyAnimatedSprite.State) {
         if (currentState == state) return
         val transition = transitions[currentState]?.get(state)
         when (transition) {

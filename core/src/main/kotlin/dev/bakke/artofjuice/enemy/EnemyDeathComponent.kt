@@ -16,7 +16,7 @@ class EnemyDeathComponent : Component() {
 
         healthComponent.onDeath += {
             // Play death animation
-            getComponent<EnemyAnimtedSprite>().requestTransition(EnemyAnimtedSprite.State.DEATH)
+            getComponent<EnemyAnimatedSprite>().requestTransition(EnemyAnimatedSprite.State.DEATH)
             // Remove behaviors, including health and AI
             healthComponent.isActive = false
             aiComponent.isActive = false

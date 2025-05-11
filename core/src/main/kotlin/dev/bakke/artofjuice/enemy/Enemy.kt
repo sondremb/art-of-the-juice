@@ -1,6 +1,5 @@
 package dev.bakke.artofjuice.enemy
 
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import dev.bakke.artofjuice.HealthBarComponent
 import dev.bakke.artofjuice.HealthComponent
@@ -27,8 +26,9 @@ fun World.spawnEnemy(position: Vector2, direction: Float) {
     spawnEntity(position) {
         +Tag.ENEMY
         +EnemyAIComponent(direction)
+        +EnemyDeathComponent()
         +PhysicsComponent(-900f)
-        +EnemyAnimtedSprite()
+        +EnemyAnimatedSprite()
         +ColliderComponent(RectangleCollisionShape(24f, 32f))
         +HealthComponent(100)
         +HealthBarComponent(vec2(0f, 20f), 32f, 4f)
