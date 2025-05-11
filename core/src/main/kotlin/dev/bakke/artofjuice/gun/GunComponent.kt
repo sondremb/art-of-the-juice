@@ -23,7 +23,6 @@ import ktx.math.plus
 import ktx.math.unaryMinus
 
 
-
 class GunComponent(initialGun: Gun?) : Component() {
     private var timeSinceLastShot = 0f
 
@@ -83,15 +82,25 @@ class GunComponent(initialGun: Gun?) : Component() {
         screenshakeSystem.setMinimumShake(gun.stats.shakeIntensity)
         val offsetScaleX = if (direction.x < 0) -1f else 1f
         val offset = (gun.visuals.gunOffset + gun.visuals.bulletOffset).scl(offsetScaleX, 1f)
+        val position = entity.position + offset
+        createMuzzleFlash(position)
+        spawnBullet(position, direction)
+    }
+
+    fun createMuzzleFlash(position: Vector2) {
         val animation = assets.getRegions(TextureAssets.Effects.Effect8)
             .let { Animation(1/24f, it) }
         particleSystem.spawn(
             AnimationRenderable(animation),
-            entity.position + offset,
+            position,
             Vector2.Zero.cpy(),
             0.05f
         )
-        spawnEntity(entity.position + offset) {
+    }
+
+    fun spawnBullet(position: Vector2, direction: Vector2) {
+        val gun = this.gun!!
+        spawnEntity(position) {
             velocity = direction.cpy().setLength(gun.stats.bulletSpeed)
             +Tag.PROJECTILE
             +BulletComponent(gun.stats)
