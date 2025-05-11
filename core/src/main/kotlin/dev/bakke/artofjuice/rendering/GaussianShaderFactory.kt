@@ -1,8 +1,10 @@
-package dev.bakke.artofjuice
+package dev.bakke.artofjuice.rendering
 
 import java.io.File
 import kotlin.math.exp
 
+/** Standalone program som lager en gaussian-blur-shader gitt en kernel-radius m og en blur strength sigma
+ */
 fun main() {
     makeShader(4, 10f)
 }

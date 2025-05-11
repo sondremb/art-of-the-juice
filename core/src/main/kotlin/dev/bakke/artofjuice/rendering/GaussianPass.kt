@@ -1,4 +1,4 @@
-package dev.bakke.artofjuice
+package dev.bakke.artofjuice.rendering
 
 import com.badlogic.gdx.math.Vector2
 import dev.bakke.artofjuice.engine.rendering.ShaderPass

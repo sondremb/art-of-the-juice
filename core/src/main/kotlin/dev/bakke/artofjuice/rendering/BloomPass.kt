@@ -1,4 +1,4 @@
-package dev.bakke.artofjuice
+package dev.bakke.artofjuice.rendering
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
