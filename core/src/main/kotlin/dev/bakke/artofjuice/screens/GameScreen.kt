@@ -53,7 +53,7 @@ class GameScreen : KtxScreen {
         +CameraComponent(camera, player)
     }
     private val uiCamera = OrthographicCamera()
-    private val screenshakeSystem = ScreenshakeSystem(camera, player).apply { context.bindSingleton(this) }
+    private val screenshakeSystem = ScreenshakeSystem(camera).apply { context.bindSingleton(this) }
     private val debugUI = DebugUI(batch, player)
     private lateinit var map: TiledMap
     private lateinit var renderer: OrthogonalTiledMapRenderer
