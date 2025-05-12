@@ -15,6 +15,13 @@ import ktx.assets.disposeSafely
 import ktx.assets.toInternalFile
 import ktx.graphics.use
 
+/**
+ * Et renderpass for bloom-effekt, som gjør at lyse områder vil gløde.
+ * Det er delt opp i tre shader-pass:
+ * 1. Threshold-pass: Fjerner alt som er under en viss terskelverdi av lysstyrke.
+ * 2. Gaussian-pass: Blurrer bildet i to retninger (X og Y) for å lage en glød.
+ * 3. Add-pass: Legger til gløden på det originale bildet.
+ */
 class BloomPass() : Renderpass {
     private val thresholdShader: ShaderProgram =
         ShaderProgram("shaders/default.vert".toInternalFile(), "shaders/bloom_threshold.frag".toInternalFile())
