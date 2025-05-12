@@ -57,7 +57,7 @@ class ConfigGunVisualsScreen : KtxScreen {
 
     // registrert, men updates ikke
     private val screenshakeSystem =
-        ScreenshakeSystem(OrthographicCamera(), player1).apply { context.bindSingleton(this) }
+        ScreenshakeSystem(OrthographicCamera()).apply { context.bindSingleton(this) }
     private val camera = OrthographicCamera()
     private val debugUI = DebugUI(batch, player1)
 

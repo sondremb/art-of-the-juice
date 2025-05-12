@@ -89,6 +89,10 @@ class GameScreen : KtxScreen {
 
     override fun render(delta: Float) {
         val delta = delta.coerceAtMost(1 / 30f)
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
+            GamePreferences.setRenderDebug(!GamePreferences.renderDebug())
+        }
         world.update(delta)
         collisionSystem.update(delta)
         screenshakeSystem.update(delta)
@@ -103,10 +107,6 @@ class GameScreen : KtxScreen {
             world.render(batch, shape)
             collisionSystem.render(batch, shape)
             particleSystem.render(batch)
-
-            if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
-                GamePreferences.setRenderDebug(!GamePreferences.renderDebug())
-            }
         }
         batch.projectionMatrix = uiCamera.combined
         shape.projectionMatrix = uiCamera.combined
