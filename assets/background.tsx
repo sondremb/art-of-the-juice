@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.11.2" name="background" tilewidth="32" tileheight="32" tilecount="82" columns="41">
- <image source="assets/background.png" width="1312" height="64"/>
+ <image source="background.png" width="1312" height="64"/>
  <wangsets>
   <wangset name="Unnamed Set" type="corner" tile="-1">
    <wangcolor name="Dark" color="#ff0000" tile="-1" probability="1"/>

@@ -2,19 +2,19 @@
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="25" nextobjectid="468">
  <tileset firstgid="1" source="background.tsx"/>
  <imagelayer id="18" name="Image Layer 1" tintcolor="#37446e" offsetx="-114.843" offsety="642.074" repeatx="1">
-  <image source="assets/backgroundImages/1.png" trans="37446e" width="576" height="324"/>
+  <image source="backgroundImages/1.png" trans="37446e" width="576" height="324"/>
  </imagelayer>
  <imagelayer id="19" name="Image Layer 1" offsetx="-104.402" offsety="-179.224" parallaxx="0.2" parallaxy="0.5" repeatx="1">
-  <image source="assets/backgroundImages/2.png" width="576" height="324"/>
+  <image source="backgroundImages/2.png" width="576" height="324"/>
  </imagelayer>
  <imagelayer id="20" name="Image Layer 1" offsetx="0" offsety="320.167" parallaxx="0.5" repeatx="1">
-  <image source="assets/backgroundImages/3.png" width="576" height="324"/>
+  <image source="backgroundImages/3.png" width="576" height="324"/>
  </imagelayer>
  <imagelayer id="21" name="Image Layer 1" offsetx="0" offsety="320.167" parallaxx="0.7" repeatx="1">
-  <image source="assets/backgroundImages/4.png" width="576" height="324"/>
+  <image source="backgroundImages/4.png" width="576" height="324"/>
  </imagelayer>
  <imagelayer id="22" name="Image Layer 1" offsetx="0" offsety="320.167" parallaxx="0.9" repeatx="1">
-  <image source="assets/backgroundImages/5.png" width="576" height="324"/>
+  <image source="backgroundImages/5.png" width="576" height="324"/>
  </imagelayer>
  <layer id="3" name="background" width="30" height="20">
   <data encoding="csv">
