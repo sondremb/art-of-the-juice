@@ -25,12 +25,12 @@ class SpawnEnemyComponent(private var timeBetween: Float) : Component() {
 fun World.spawnEnemy(position: Vector2, direction: Float) {
     spawnEntity(position) {
         +Tag.ENEMY
-        +EnemyAIComponent(direction)
+        +EnemyAIComponent(direction, speed = 100f)
         +EnemyDeathComponent()
-        +PhysicsComponent(-900f)
+        +PhysicsComponent(gravity = -900f)
         +EnemyAnimatedSprite()
         +ColliderComponent(RectangleCollisionShape(24f, 32f))
-        +HealthComponent(100)
+        +HealthComponent(maxHealth = 100)
         +HealthBarComponent(vec2(0f, 20f), 32f, 4f)
     }
 }

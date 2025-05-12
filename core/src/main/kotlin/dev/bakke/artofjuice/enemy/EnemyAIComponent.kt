@@ -7,9 +7,7 @@ import dev.bakke.artofjuice.engine.collision.CollisionSystem
 import ktx.math.vec2
 import kotlin.math.sign
 
-class EnemyAIComponent(private var direction: Float = 1f) : Component() {
-    private val speed = 100f // Horizontal speed
-
+class EnemyAIComponent(private var direction: Float = 1f, private var speed: Float) : Component() {
     private lateinit var animatedSprite: EnemyAnimatedSprite
     private lateinit var collisionSystem: CollisionSystem
     private lateinit var colliderComponent: ColliderComponent
