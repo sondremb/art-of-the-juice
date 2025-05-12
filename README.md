@@ -41,10 +41,27 @@ Fila [GrenadeThrowerComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/play
 
 ## Oppgaver
 
+### Oppgave 1: Skade-animasjon på fiende
+
+Spillet funker, men fiendene er litt kjedelige - de reagerer jo ikke når du treffer de!  
+Vi kan fikse dette ved å legge til en animasjon når fienden tar skade.
+
+I fila [EnemyAIComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/enemy/EnemyAIComponent.kt) finner du en tom funksjon `onHit()`.
+
+<details>
+<summary>Løsningsforslag</summary>
+
+```kotlin
+private fun onHit(damage: Int) {
+    animatedSprite.requestTransition(EnemyAnimatedSprite.State.HURT)
+}
+```
+</details>
+
 * Legg til animasjon på hit
 * Impuls/knockback på hit
 * Legg til screenshake
-Forbedre kamerabevegelse
+* Forbedre kamerabevegelse
 * Endre til OnDeath
 * Muzzle flash?
 * Skru på post-processing

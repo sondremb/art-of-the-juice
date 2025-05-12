@@ -25,6 +25,10 @@ abstract class Component : Disposable {
         return entity.tryGetComponent<T>()
     }
 
+    inline fun <reified  T : Any> getSystemLazy(): Lazy<T> {
+        return lazy { entity.getSystem() }
+    }
+
     inline fun <reified  T : Any> getSystem(): T {
         return entity.getSystem<T>()
     }
