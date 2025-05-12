@@ -1,6 +1,5 @@
 package dev.bakke.artofjuice.player
 
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import dev.bakke.artofjuice.Tag
 import dev.bakke.artofjuice.engine.Entity

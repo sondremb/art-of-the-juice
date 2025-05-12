@@ -23,9 +23,11 @@ class PlayerInputComponent : Component() {
         handleSwitchGun()
     }
 
+    // how fast the player moves, in units per second
     private val speed = 10 * 32f
     private var isFacingRight = true
     private fun handleMove() {
+        // hmm, maybe some acceleration and deceleration would be nice here
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             entity.velocity.x = -speed
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
@@ -55,20 +57,29 @@ class PlayerInputComponent : Component() {
 
     // parameterized jump, thanks to the GDC talk "Math for Game Programmers: Building a Better Jump" by Kyle Pittman
     // https://www.youtube.com/watch?v=hG9SzQxaCm8&t=1325s
+    // how high the player can jump, in units, which presently equal pixels
+    // one tile in the game is 32x32 pixels
     private val jumpHeight = 6.5f * 32f
 
-    // how much distance the player will travel in the x direction before reaching the peak of the jump
+    // how much distance the player will travel in the x direction before reaching the peak of the jump, in units
     private val jumpLength = 4 * 32f
 
     // derived values, don't change these
     private val jumpVelocity = 2 * jumpHeight * speed / jumpLength
     private val upwardsGravity = -2 * jumpHeight * speed * speed / (jumpLength * jumpLength)
 
+    // how much gravity to apply after the player releases the jump button, before their speed turns negative
     private val releaseGravity = upwardsGravity * 3f
+    // how much gravity to apply when the player is falling, i.e. when their speed is negative
     private val fallGravity = upwardsGravity * 1.2f
+    // how long before the player hits the ground a jump can be "buffered", so that it activates when the player lands
     private val jumpBufferTime = 0.1f
-    private var jumpBuffer = 0f
+    // how long after the player leaves the ground they can still jump, i.e. when they are in the air
+    // named after Wile E. Coyote from Looney Tunes, who can run off a cliff and still be in the air for a short time
     private val coyoteTime = 0.1f
+
+    // timer values, let these be 0f
+    private var jumpBuffer = 0f
     private var coyoteTimer = 0f
 
     private fun handleJump(delta: Float) {
@@ -125,4 +136,3 @@ class PlayerInputComponent : Component() {
         }
     }
 }
-

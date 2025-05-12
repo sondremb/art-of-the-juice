@@ -26,9 +26,9 @@ class GrenadeThrowerComponent : Component() {
             position = entity.position.cpy()
             velocity = direction.cpy().setLength(400f)
             +SpriteComponent(Sprite(Texture("grenade.png".toInternalFile())))
-            +PhysicsComponent(-900f)
+            +PhysicsComponent(gravity = -900f)
             +ColliderComponent(CircleCollisionShape(Circle(entity.position.cpy(), 8f)))
-            +GrenadeComponent(1f, 100f, 70)
+            +GrenadeComponent(fuseTime = 1f, explosionRadius = 100f, damage = 70)
         }
     }
 }
