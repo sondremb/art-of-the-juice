@@ -75,10 +75,10 @@ class GunComponent(initialGun: Gun?) : Component() {
         val gun = this.gun!!
         if (timeSinceLastShot < gun.stats.fireRate) return
         timeSinceLastShot %= gun.stats.fireRate
-        physicsComponent?.applyImpulse(
+/*        physicsComponent?.applyImpulse(
             // TODO player knockback som egen stat?
-            -direction, gun.stats.impulse
-        )
+            -direction, gun.stats.
+        )*/
         screenshakeSystem.setMinimumShake(gun.stats.shakeIntensity)
         val offsetScaleX = if (direction.x < 0) -1f else 1f
         val offset = (gun.visuals.gunOffset + gun.visuals.bulletOffset).scl(offsetScaleX, 1f)

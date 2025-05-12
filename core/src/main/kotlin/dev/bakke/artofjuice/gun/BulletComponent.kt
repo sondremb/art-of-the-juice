@@ -11,8 +11,6 @@ import dev.bakke.artofjuice.engine.Entity
 import dev.bakke.artofjuice.engine.ParticleSystem
 import dev.bakke.artofjuice.engine.collision.ColliderComponent
 import dev.bakke.artofjuice.engine.components.Component
-import dev.bakke.artofjuice.engine.components.PhysicsComponent
-import ktx.math.vec2
 
 class BulletComponent(private val gunStats: GunStats) : Component() {
     override fun lateInit() {
@@ -34,8 +32,13 @@ class BulletComponent(private val gunStats: GunStats) : Component() {
     }
 
     private fun onEnemyHit(enemy: Entity) {
+        // 💡Sånn kan jeg få tak i en komponent på en annen entity
         enemy.getComponent<HealthComponent>().damage(gunStats.damage)
-        enemy.getComponent<PhysicsComponent>().applyImpulse(vec2(entity.velocity.x, entity.velocity.x * 0.2f), gunStats.impulse)
+
+        // OPPGAVE 2:
+        // legg på litt impuls
+
+
         spawnParticleEffect()
         entity.destroy()
     }
@@ -43,7 +46,12 @@ class BulletComponent(private val gunStats: GunStats) : Component() {
     private fun spawnParticleEffect() {
         val assets = getSystem<Assets>()
         val animation = assets.getRegions(TextureAssets.Effects.random())
-            .let { Animation(1/24f, it) }
-        getSystem<ParticleSystem>().spawn(AnimationRenderable(animation), entity.position.cpy(), Vector2.Zero.cpy(), 0.2f)
+            .let { Animation(1 / 24f, it) }
+        getSystem<ParticleSystem>().spawn(
+            AnimationRenderable(animation),
+            entity.position.cpy(),
+            Vector2.Zero.cpy(),
+            0.2f
+        )
     }
 }

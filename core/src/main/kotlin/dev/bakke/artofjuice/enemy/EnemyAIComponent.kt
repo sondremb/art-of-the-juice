@@ -9,8 +9,8 @@ import kotlin.math.sign
 
 class EnemyAIComponent(private var direction: Float = 1f, private var speed: Float) : Component() {
     private val animatedSprite: EnemyAnimatedSprite by getComponentLazy()
-    private val collisionSystem: CollisionSystem by getSystemLazy()
     private val colliderComponent: ColliderComponent by getComponentLazy()
+    private val collisionSystem: CollisionSystem by getSystemLazy()
 
     override fun lateInit() {
         entity.velocity.x = speed * sign(direction)

@@ -58,8 +58,84 @@ private fun onHit(damage: Int) {
 ```
 </details>
 
-* Legg til animasjon på hit
-* Impuls/knockback på hit
+### Oppgave 2: Mer skade-reaksjon!
+
+Det var bedre!
+Men vi tåler enda litt mer reaksjon, synes jeg. Hva hvis fienden ble dyttet litt tilbake når den ble truffet?
+
+
+
+I fila [BulletComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/gun/BulletComponent.kt) finner funksjonen `onEnemyHit(enemy: Entity)`.
+* Få tak i fiendens `PhysicsComponent`
+* Kall `applyImpulse()` på den, med en vektor som er langs kulas bevegelsesretning - `entity.velocity`
+* For litt mer juice: vinkle impulsen litt oppover!
+
+<details>
+<summary>Løsningsforslag</summary>
+
+```kotlin
+private fun onEnemyHit(enemy: Entity) {
+    ...
+    val direction = entity.velocity.cpy()
+    // eller, for å vinkle litt opp:
+    // val direction = Vector2(entity.velocity.x, entity.velocity.x * 0.2f)
+    val physicsComponent = enemy.getComponent<PhysicsComponent>()
+    physicsComponent.applyImpulse(direction, force = 100f)
+    ...
+}
+```
+</details>
+
+### Oppgave 2B: Knockback per våpen
+Du fant kanskje en impulse-styrke som passet bra for ett av våpnene, men synes du det passet for alle?
+Sniperrifla skyter jo sjeldnere, og gjør mer skade per skudd - kanskje den burde ha mer knockback?
+
+* I [GunStats.kt](core/src/main/kotlin/dev/bakke/artofjuice/gun/GunStats.kt), legg til en ny parameter som bestemmer hvor mye knockback det skal være på hvert våpen.
+* I hver av de definerte gunstatsene - `PISTOL`, `RIFLE`, `SNIPER` - velg en passende verdi
+* Der du løste oppgave 2, bytt ut den hardkodede verdien med den nye parameteren fra `gunStats`
+
+<details>
+<summary>Løsningsforslag</summary>
+
+```kotlin
+// GunStats.kt
+data class GunStats(
+    ...
+    val knockbackForce: Float,
+) {
+    companion object {
+        val PISTOL = GunStats(
+            ...
+            knockbackForce = 100f,
+        )
+        val RIFLE = GunStats(
+            ...
+            knockbackForce = 150f,
+        )
+        val SNIPER = GunStats(
+            ...
+            knockbackForce = 800f,
+        )
+    }
+}
+```
+
+```kotlin
+// BulletComponent.kt
+private fun onEnemyHit(enemy: Entity) {
+    ...
+    physicsComponent.applyImpulse(direction, force = gunStats.knockbackForce)
+    ...
+}
+```
+</details>
+
+### Oppgave 3: Knockback på spilleren
+
+I oppgave 2 fikk vi til knockback på fienden nå de ble truffet - for å gi våpenet enda mer futt, kanskje det skal dytte spilleren tilbake hver gang det skytes?
+
+### Oppgaver
+
 * Legg til screenshake
 * Forbedre kamerabevegelse
 * Endre til OnDeath
