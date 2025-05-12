@@ -11,20 +11,11 @@ import ktx.math.vec2
 
 class PlayerInputComponent : Component() {
 
-    private lateinit var physicsComponent: PhysicsComponent
-    private lateinit var animatedSpriteComponent: PlayerVisuals
-    private lateinit var gunComponent: GunComponent
-    private lateinit var grenadeComponent: GrenadeThrowerComponent
-    private lateinit var screenshakeSystem: ScreenshakeSystem
-    private lateinit var gunInventoryComponent: GunInventoryComponent
-    override fun lateInit() {
-        physicsComponent = getComponent()
-        animatedSpriteComponent = getComponent()
-        gunComponent = getComponent()
-        grenadeComponent = getComponent()
-        screenshakeSystem = context.inject()
-        gunInventoryComponent = getComponent()
-    }
+    private val physicsComponent: PhysicsComponent by getComponentLazy()
+    private val animatedSpriteComponent: PlayerVisuals by getComponentLazy()
+    private val gunComponent: GunComponent by getComponentLazy()
+    private val grenadeComponent: GrenadeThrowerComponent by getComponentLazy()
+    private val gunInventoryComponent: GunInventoryComponent by getComponentLazy()
 
     override fun update(delta: Float) {
         handleMove()

@@ -13,6 +13,10 @@ abstract class Component : Disposable {
     val context: Context get() = entity.world.context
     var isActive: Boolean = true
 
+    inline fun <reified T : Component> getComponentLazy(): Lazy<T> {
+        return lazy { entity.getComponent<T>() }
+    }
+
     inline fun <reified T : Component> getComponent(): T {
         return entity.getComponent<T>()
     }
