@@ -63,8 +63,6 @@ private fun onHit(damage: Int) {
 Det var bedre!
 Men vi tåler enda litt mer reaksjon, synes jeg. Hva hvis fienden ble dyttet litt tilbake når den ble truffet?
 
-
-
 I fila [BulletComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/gun/BulletComponent.kt) finner funksjonen `onEnemyHit(enemy: Entity)`.
 * Få tak i fiendens `PhysicsComponent`
 * Kall `applyImpulse()` på den, med en vektor som er langs kulas bevegelsesretning - `entity.velocity`
@@ -132,7 +130,34 @@ private fun onEnemyHit(enemy: Entity) {
 
 ### Oppgave 3: Knockback på spilleren
 
-I oppgave 2 fikk vi til knockback på fienden nå de ble truffet - for å gi våpenet enda mer futt, kanskje det skal dytte spilleren tilbake hver gang det skytes?
+I oppgave 2 fikk vi til knockback på fienden nå de ble truffet - for å gi våpenet enda mer futt, kanskje det skal dytte spilleren tilbake hver gang det skytes?  
+Gjør endringen i [GunComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/gun/GunComponent.kt) - legg på impuls på spilleren i hver gang det skytes.
+
+<details>
+<summary>Hint 💡</summary>
+
+* Endringen gjøres i `shoot()`-metoden
+* Få tak i spillerens `PhysicsComponent` enten i metoden, eller utenfor - da må den være "lazy"
+* Knockback-retning bør være motsatt av retningen det skytes i
+* Impulsen kan være konstant, eller det avhengig av våpenets stats, hvis du gjorde oppgave 2B
+</details>
+
+<details>
+<summary>Løsningsforslag</summary>
+
+```kotlin
+// GunComponent.kt
+private val physicsComponent: PhysicsComponent by getComponentLazy()
+...
+fun shoot(direction: Vector2) {
+    ...
+    val physicsComponent = physicsComponent
+    val knockbackDirection = -direction
+    physicsComponent.applyImpulse(knockbackDirection, force = 100f) // eller gunStats.knockbackForce
+    ...
+}
+```
+</details>
 
 ### Oppgaver
 

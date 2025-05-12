@@ -22,7 +22,6 @@ import ktx.graphics.use
 import ktx.math.plus
 import ktx.math.unaryMinus
 
-
 class GunComponent(initialGun: Gun?) : Component() {
     private var timeSinceLastShot = 0f
 
@@ -34,22 +33,62 @@ class GunComponent(initialGun: Gun?) : Component() {
             }
         }
 
-    private  var physicsComponent: PhysicsComponent? = null
-    private lateinit var screenshakeSystem: ScreenshakeSystem
-    private lateinit var particleSystem: ParticleSystem
-    private lateinit var assets: Assets
+    private val screenshakeSystem: ScreenshakeSystem by getSystemLazy()
+    private val particleSystem: ParticleSystem by getSystemLazy()
+    private val assets: Assets by getSystemLazy()
     override fun lateInit() {
-        physicsComponent = tryGetComponent()
-        screenshakeSystem = getSystem()
-        particleSystem = getSystem()
-        assets = getSystem()
         gun?.let { g ->
             timeSinceLastShot = g.stats.fireRate
         }
     }
 
     override fun update(delta: Float) {
-        timeSinceLastShot = (timeSinceLastShot + delta).coerceAtMost(gun?.stats?.fireRate ?: 0f)
+        timeSinceLastShot += delta
+    }
+
+    fun shoot(direction: Vector2) {
+        if (gun == null) return
+        val gun = this.gun!!
+        if (timeSinceLastShot < gun.stats.fireRate)  {
+            return
+        }
+        timeSinceLastShot = 0f
+
+        // OPPGAVE 3:
+
+        screenshakeSystem.setMinimumShake(gun.stats.shakeIntensity)
+
+        val bulletPosition = getBulletPosition(direction)
+        spawnBullet(bulletPosition, direction)
+        createMuzzleFlash(bulletPosition)
+    }
+
+    private fun getBulletPosition(direction: Vector2): Vector2 {
+        val offsetScaleX = if (direction.x < 0) -1f else 1f
+        val offset = (gun!!.visuals.gunOffset + gun!!.visuals.bulletOffset).scl(offsetScaleX, 1f)
+        return entity.position + offset
+    }
+
+    private fun createMuzzleFlash(position: Vector2) {
+        val animation = assets.getRegions(TextureAssets.Effects.Effect8)
+            .let { Animation(1/24f, it) }
+        particleSystem.spawn(
+            AnimationRenderable(animation),
+            position,
+            Vector2.Zero.cpy(),
+            0.05f
+        )
+    }
+
+    private fun spawnBullet(position: Vector2, direction: Vector2) {
+        val gun = this.gun!!
+        spawnEntity(position) {
+            velocity = direction.cpy().setLength(gun.stats.bulletSpeed)
+            +Tag.PROJECTILE
+            +BulletComponent(gun.stats)
+            +SpriteComponent(gun.bulletSprite)
+            +ColliderComponent(RectangleCollisionShape( 12f, 4f), true)
+        }
     }
 
     override fun render(batch: SpriteBatch, shape: ShapeRenderer) {
@@ -67,45 +106,6 @@ class GunComponent(initialGun: Gun?) : Component() {
                 rect.y += gun!!.visuals.bulletOffset.y
                 shape.rect(rect)
             }
-        }
-    }
-
-    fun shoot(direction: Vector2) {
-        if (gun == null) return
-        val gun = this.gun!!
-        if (timeSinceLastShot < gun.stats.fireRate) return
-        timeSinceLastShot %= gun.stats.fireRate
-/*        physicsComponent?.applyImpulse(
-            // TODO player knockback som egen stat?
-            -direction, gun.stats.
-        )*/
-        screenshakeSystem.setMinimumShake(gun.stats.shakeIntensity)
-        val offsetScaleX = if (direction.x < 0) -1f else 1f
-        val offset = (gun.visuals.gunOffset + gun.visuals.bulletOffset).scl(offsetScaleX, 1f)
-        val position = entity.position + offset
-        createMuzzleFlash(position)
-        spawnBullet(position, direction)
-    }
-
-    fun createMuzzleFlash(position: Vector2) {
-        val animation = assets.getRegions(TextureAssets.Effects.Effect8)
-            .let { Animation(1/24f, it) }
-        particleSystem.spawn(
-            AnimationRenderable(animation),
-            position,
-            Vector2.Zero.cpy(),
-            0.05f
-        )
-    }
-
-    fun spawnBullet(position: Vector2, direction: Vector2) {
-        val gun = this.gun!!
-        spawnEntity(position) {
-            velocity = direction.cpy().setLength(gun.stats.bulletSpeed)
-            +Tag.PROJECTILE
-            +BulletComponent(gun.stats)
-            +SpriteComponent(gun.bulletSprite)
-            +ColliderComponent(RectangleCollisionShape( 12f, 4f), true)
         }
     }
 }
