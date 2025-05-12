@@ -18,6 +18,8 @@ import dev.bakke.artofjuice.engine.rendering.RenderPipeline
 import dev.bakke.artofjuice.engine.rendering.ShaderPass
 import dev.bakke.artofjuice.gun.GunVisualsManager
 import dev.bakke.artofjuice.player.spawnPlayer
+import dev.bakke.artofjuice.rendering.BloomPass
+import dev.bakke.artofjuice.rendering.ShockwavePass
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
@@ -95,7 +97,7 @@ class GameScreen : KtxScreen {
         batch.projectionMatrix = camera.combined
         shape.projectionMatrix = camera.combined
         renderer.setView(camera)
-        val texture = pipeline.getTexture {
+        pipeline.render {
             clearScreen(red = 0.7f, green = 0.7f, blue = 0.7f)
             renderer.render()
             world.render(batch, shape)
@@ -106,8 +108,6 @@ class GameScreen : KtxScreen {
                 GamePreferences.setRenderDebug(!GamePreferences.renderDebug())
             }
         }
-        val texture2 = pipeline.render(texture)
-        pipeline.renderToScreen(texture2)
         batch.projectionMatrix = uiCamera.combined
         shape.projectionMatrix = uiCamera.combined
         if (GamePreferences.renderDebug()) {

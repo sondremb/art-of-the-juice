@@ -14,6 +14,12 @@ class RenderPipeline(
     private val screenBatch = SpriteBatch()
     private val buffers = PingPongBuffer(width, height)
 
+    fun render(block: () -> Unit) {
+        val texture = getTexture(block)
+        val postProcessedTexture = applyToTexture(texture)
+        renderToScreen(postProcessedTexture)
+    }
+
     fun getTexture(block: () -> Unit): Texture {
         buffers.write.use {
             block.invoke()
@@ -22,7 +28,7 @@ class RenderPipeline(
         return buffers.read.colorBufferTexture
     }
 
-    fun render(inputTexture: Texture): Texture {
+    fun applyToTexture(inputTexture: Texture): Texture {
         // Start with input texture
         var currentTexture = inputTexture
 
