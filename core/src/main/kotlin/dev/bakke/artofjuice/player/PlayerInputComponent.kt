@@ -2,11 +2,9 @@ package dev.bakke.artofjuice.player
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
-import dev.bakke.artofjuice.ScreenshakeSystem
 import dev.bakke.artofjuice.engine.components.Component
 import dev.bakke.artofjuice.engine.components.PhysicsComponent
 import dev.bakke.artofjuice.gun.*
-import ktx.assets.disposeSafely
 import ktx.math.vec2
 
 class PlayerInputComponent : Component() {
@@ -128,40 +126,3 @@ class PlayerInputComponent : Component() {
     }
 }
 
-class GunInventoryComponent() : Component() {
-    private lateinit var gunVisualsManager: GunVisualsManager
-    private lateinit var gunComponent: GunComponent
-    private lateinit var guns: List<Gun>
-    private var currentGun = 0
-
-
-    override fun lateInit() {
-        gunVisualsManager = getSystem()
-        gunComponent = getComponent()
-        guns = listOf(
-            Gun(
-                GunStats.SNIPER,
-                gunVisualsManager.getVisualsBySpriteName(GunSprites.Rifle6),
-                gunVisualsManager.getSpriteByName(BulletSprites.RifleBullet6)),
-            Gun(
-                GunStats.PISTOL,
-                gunVisualsManager.getVisualsBySpriteName(GunSprites.Pistol2),
-                gunVisualsManager.getSpriteByName(BulletSprites.PistolBullet2)),
-            Gun(
-                GunStats.RIFLE,
-                gunVisualsManager.getVisualsBySpriteName(GunSprites.Rifle10),
-                gunVisualsManager.getSpriteByName(BulletSprites.RifleBullet10)
-            ),
-        )
-        gunComponent.gun = guns.first()
-    }
-
-    fun nextGun() {
-        currentGun = (currentGun + 1) % guns.size
-        gunComponent.gun = guns[currentGun]
-    }
-
-    override fun dispose() {
-        gunVisualsManager.disposeSafely()
-    }
-}
