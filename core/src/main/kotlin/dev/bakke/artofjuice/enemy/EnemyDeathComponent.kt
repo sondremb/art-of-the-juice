@@ -8,39 +8,38 @@ import dev.bakke.artofjuice.engine.components.Component
 import dev.bakke.artofjuice.player.ExplosionComponent
 
 class EnemyDeathComponent : Component() {
-
+    val healthComponent: HealthComponent by getComponentLazy<HealthComponent>()
     override fun lateInit() {
-        val healthComponent = getComponent<HealthComponent>()
-        val colliderComponent = getComponent<ColliderComponent>()
+        healthComponent.onDeath += ::onDeath
+    }
+
+    private fun onDeath() {
+        // Play death animation
+        val animatedSprite = getComponent<EnemyAnimatedSprite>()
+        animatedSprite.requestTransition(EnemyAnimatedSprite.State.DEATH)
+        // Remove behaviors, including health and AI
+        healthComponent.isActive = false
         val aiComponent = getComponent<EnemyAIComponent>()
+        aiComponent.isActive = false
+        // with AI disabled, entity may still have some velocity, so set it to zero
+        entity.velocity.setZero()
+        // disable entity collisions, so bullets can pass through,
+        // but leave terrain collisions enabled, so the entity can fall and not pass through the ground
+        getComponent<ColliderComponent>().disableEntityCollisions()
 
-        healthComponent.onDeath += {
-            // Play death animation
-            getComponent<EnemyAnimatedSprite>().requestTransition(EnemyAnimatedSprite.State.DEATH)
-            // Remove behaviors, including health and AI
-            healthComponent.isActive = false
-            aiComponent.isActive = false
-            // with AI disable, entity may still have some velocity, so set it to zero
-            entity.velocity.setZero()
-            // disable entity collisions, so bullets can pass through,
-            // but leave terrain collisions enabled, so the entity can fall and not pass through the ground
-            colliderComponent.disableEntityCollisions()
+        // allow the healthbar to drain to zero, and then remove it from the entity
+        val healthBarComponent = getComponent<HealthBarComponent>()
+        healthBarComponent.animationFinished  += {
+            healthComponent.removeFromEntity()
+            healthBarComponent.removeFromEntity()
+        }
 
-            // allow the healthbar to drain to zero, and then remove it from the entity
-            getComponent<HealthBarComponent>().let {
-                it.animationFinished += {
-                    it.removeFromEntity()
-                    healthComponent.removeFromEntity()
-                }
+        // random chance to spawn an explosion on death!
+        if (Math.random() < 0.3f) {
+            entity.world.spawnEntity(entity.position.cpy()) {
+                +ExplosionComponent(50f, 70, knockbackIntensity = 1000f)
             }
-
-            // random chance to spawn an explosion on death!
-            if (Math.random() < 0.3f) {
-                entity.world.spawnEntity(entity.position.cpy()) {
-                    +ExplosionComponent(50f, 70, knockbackIntensity = 1000f)
-                }
-                getSystem<ShockwaveSystem>().addExplosion(entity.position.cpy())
-            }
+            getSystem<ShockwaveSystem>().addExplosion(entity.position.cpy())
         }
     }
 }

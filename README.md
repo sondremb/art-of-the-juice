@@ -258,11 +258,45 @@ fun shoot(direction: Vector2) {
 
 ### Oppgave 5: En betydningsfull død
 
+Det er litt trist hvordan fiendene bare forsvinner når de dør.
+Hva hvis vi fikk en liten animasjon på det - og så ble de liggende?
+
+Her er det flere problemer vi skal løse.
+Når fienden dør, så bør den:
+* Ikke umiddelbart fjernes
+* Starte en animasjon
+* Ikke ha noe "oppførsel" lenger
+* Ikke bevege seg
+* Ikke bli truffet av kuler
+* Ikke ha en health bar - hvert fall ikke etter at den har animert ned til null helse
+
+Denne er litt ekstra knotete, det er ganske mange ting du bare må vite hvordan gjøres.  
+Ha lav terskel for å spørre om hjelp eller sjekke ut løsningsforslaget her!
+
+<details>
+<summary>Løsningsforslag</summary>
+
+Koden er allerede skrevet, og ligger i fila [EnemyDeathComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/enemy/EnemyDeathComponent.kt).  
+Du kan enten copy/paste den inn i `onDeath()` i `EnemyAIComponent.kt`, eller så kan du bruke den ferdigskrevne komponenten:
+
+I [EnemyAIComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/enemy/EnemyAIComponent.kt), fjern `onDeath()`-metoden, og linja i `lateInit()` som legger den til.
+
+I [Enemy.kt](core/src/main/kotlin/dev/bakke/artofjuice/enemy/Enemy.kt), legg til den den ferdigskrevene komponenten.
+```kotlin
+fun World.spawnEnemy(position: Vector2, direction: Float) {
+    spawnEntity(position) {
+        ...
+        +EnemyDeathComponent()
+        ...
+    }
+}
+```
+
+</details>
 
 ### Oppgaver
 
 * Forbedre kamerabevegelse
-* Endre til OnDeath
 * Muzzle flash?
 * Skru på post-processing
 * Skriv din egen shader
