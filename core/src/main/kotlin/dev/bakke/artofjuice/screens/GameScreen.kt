@@ -10,7 +10,6 @@ import dev.bakke.artofjuice.engine.*
 import dev.bakke.artofjuice.engine.collision.shapes.RectangleCollisionShape
 import dev.bakke.artofjuice.engine.rendering.RenderPipeline
 import dev.bakke.artofjuice.player.spawnPlayer
-import dev.bakke.artofjuice.rendering.GaussianPass
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely

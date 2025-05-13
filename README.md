@@ -1,5 +1,20 @@
 # The Art of Juice - Spillutviklingsworkshop i Kotlin med LibGDX
 
+![img.png](img.png)
+
+En introduksjon til spillutvikling med Kotlin og LibGDX, med fokus på "juice" - det som gjør spill gøye å spille!
+
+Basert på talkene:
+>_"The art of screenshake"_ - Jan Willem Nijman ("Vlambeer")
+>https://www.youtube.com/watch?v=AJdEqssNZ-U
+
+>_"Juice it or lose it"_ - Martin Jonasson ("grapefrukt")  
+>https://www.youtube.com/watch?v=Fy0aCDmgnxg
+
+En ekstra ressurs som jeg anbefaler på det aller varmeste:
+>_"Game Programming Patterns"_ (bok) av Robert Nystrom.  
+>Den er tilgjengelig gratis, i sin helhet, på [forfatterens egen hjemmeside](https://gameprogrammingpatterns.com/contents.html)
+
 ## Test ut spillet
 
 For å teste ut spillet, gjør en av følgende:
@@ -18,6 +33,10 @@ Prøv ut spillet! Keybinds:
 | \[C\]          | Kaste granat           |                              |
 | \[F1\]         | Toggle debug rendering | Huskes mellom launcher       |
 
+>💡 **Hint: klikkbare lenker i README**  
+> Hvis du åpner denne fila i IntelliJ etter å ha klonet prosjektet, kan du få opp en preview-visning. Hver gang et fil- eller mappenavn nevnes, er det en klikkbar lenke som tar deg dit.
+> Hvis du er i edit mode, kan du holde inne `⌘` (eller `CTRL` på Windows) og klikke på lenken for å åpne fila i en ny fane.  
+> Prøv f.eks. å gå til [Enemy.kt](core/src/main/kotlin/dev/bakke/artofjuice/enemy/Enemy.kt)
 
 ## Lett oppvarming: parameterjustering
 
