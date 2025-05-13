@@ -1,6 +1,7 @@
 package dev.bakke.artofjuice
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
@@ -9,18 +10,25 @@ import dev.bakke.artofjuice.engine.Entity
 import ktx.assets.disposeSafely
 import ktx.graphics.use
 
-class DebugUI(private val batch: SpriteBatch, private val player: Entity) : Disposable {
+class DebugUI() : Disposable {
+    lateinit var player: Entity
     private val font = BitmapFont()
     private var frames: List<Float> = listOf()
 
-    fun render(delta: Float) {
+    fun update(delta: Float) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
+            GamePreferences.setRenderDebug(!GamePreferences.renderDebug())
+        }
         frames = frames.map { it + delta }.dropWhile { it > 1 }.plus(delta)
-        val h = Gdx.graphics.height.toFloat()
+    }
+
+    fun render(batch: SpriteBatch) {
+        val top = Gdx.graphics.height.toFloat()
         batch.use {
-            font.draw(batch, "Pos: ${printVector2(player.position)}", 20f, h - 20f)
-            font.draw(batch, "Vel: ${printVector2(player.velocity)}", 20f, h - 40f)
-            font.draw(batch, "fps: ${frames.size}", 20f, h -60f)
-            font.draw(batch, "Entities: ${player.world.entities.items.size}", 20f, h - 80f)
+            font.draw(batch, "Pos: ${printVector2(player.position)}", 20f, top - 20f)
+            font.draw(batch, "Vel: ${printVector2(player.velocity)}", 20f, top - 40f)
+            font.draw(batch, "fps: ${frames.size}", 20f, top - 60f)
+            font.draw(batch, "Entities: ${player.world.entities.items.size}", 20f, top - 80f)
         }
     }
 

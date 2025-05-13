@@ -22,7 +22,9 @@ import ktx.math.unaryMinus
 // for mer om hvorfor Perlin-Noise er en sykt god idé til dette og alt annet, se denne GDC-talken av samme person:
 // "Math for Game Programmers: Noise-Based RNG" av Squirrel Eiserloh
 // https://www.youtube.com/watch?v=LWFzPP8ZbdU
-class ScreenshakeSystem(private val camera: Camera) {
+class ScreenshakeSystem() {
+    lateinit var camera: Camera
+
     // parametere du kan tukle med:
     // trauma tapt per sekund
     private var traumaDecay = 0.8f

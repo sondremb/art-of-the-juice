@@ -1,3 +1,4 @@
+/*
 package dev.bakke.artofjuice.screens
 
 import com.badlogic.gdx.Gdx
@@ -109,3 +110,4 @@ class AutoShooterComponent(private var direction: Float) : Component() {
     }
 }
 
+*/

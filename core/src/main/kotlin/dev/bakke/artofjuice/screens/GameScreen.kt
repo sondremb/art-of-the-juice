@@ -8,11 +8,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import dev.bakke.artofjuice.*
 import dev.bakke.artofjuice.enemy.SpawnEnemyComponent
 import dev.bakke.artofjuice.engine.*
-import dev.bakke.artofjuice.engine.collision.CollisionSystem
 import dev.bakke.artofjuice.engine.collision.shapes.RectangleCollisionShape
 import dev.bakke.artofjuice.engine.rendering.RenderPipeline
 import dev.bakke.artofjuice.engine.rendering.ShaderPass
-import dev.bakke.artofjuice.gun.GunVisualsManager
 import dev.bakke.artofjuice.player.spawnPlayer
 import dev.bakke.artofjuice.rendering.BloomPass
 import dev.bakke.artofjuice.rendering.ShockwavePass
@@ -27,86 +25,76 @@ class GameScreen : KtxScreen {
     private val batch = SpriteBatch()
     private val shape = ShapeRenderer()
     private val context = Context()
+    private val systems = Systems(context)
     private val world = World(context)
-    private val collisionSystem = CollisionSystem().apply { context.bindSingleton(this) }
-    private val particleSystem = ParticleSystem().apply { context.bindSingleton(this) }
-    private val assets = Assets().apply {
-        context.bindSingleton(this)
-        loadAllBlocking()
-    }
-    private val gunVisualsManager = GunVisualsManager(assets).apply {
-        context.bindSingleton(this)
-    }
+
     private val player = world.spawnPlayer(vec2(100f, 100f))
 
     private val enemySpawner = world.spawnEntity(vec2(0f, 0f)) {
         +SpawnEnemyComponent(0.8f)
     }
     private val camera = OrthographicCamera()
-    private val cameraEntity = world.spawnEntity(player.position.cpy()) {
-        +CameraComponent(camera, player)
-    }
     private val uiCamera = OrthographicCamera()
-    private val screenshakeSystem = ScreenshakeSystem(camera).apply { context.bindSingleton(this) }
-    private val debugUI = DebugUI(batch, player)
-    private var shockwaveSystem = ShockwaveSystem().apply { context.bindSingleton(this) }
+    private val debugUI = DebugUI()
     private lateinit var pipeline: RenderPipeline
     private lateinit var mapLoader: MapLoader
 
     override fun show() {
-        assets.loadAll()
-        gunVisualsManager.loadJson()
-        pipeline =
-            RenderPipeline(
-                Gdx.graphics.width, Gdx.graphics.height, listOf(
-                    ShockwavePass(shockwaveSystem, camera),
-                    BloomPass(),
-                    ShaderPass("shaders/scanline.frag".toInternalFile()),
-                    ShaderPass("shaders/vignette.frag".toInternalFile()),
-                    ShaderPass("shaders/barrel_distortion.frag".toInternalFile()),
-                )
+        world.spawnEntity(player.position.cpy()) {
+            +CameraComponent(camera, player)
+        }
+        systems.assets.loadAllBlocking()
+        systems.screenshakeSystem.camera = camera
+        systems.gunVisualsManager.loadJson()
+        debugUI.player = player
+        pipeline = RenderPipeline(
+            Gdx.graphics.width, Gdx.graphics.height, listOf(
+//                ShockwavePass(systems.shockwaveSystem, camera),
+//                BloomPass(),
+//                ShaderPass("shaders/scanline.frag".toInternalFile()),
+//                ShaderPass("shaders/vignette.frag".toInternalFile()),
+//                ShaderPass("shaders/barrel_distortion.frag".toInternalFile()),
             )
+        )
 
-        mapLoader = MapLoader(assets)
+        mapLoader = MapLoader(systems.assets)
         player.position = mapLoader.getPlayerPosition()
         enemySpawner.position = mapLoader.getEnemySpawnerPosition()
         camera.setToOrtho(false, 400f, 300f)
         uiCamera.setToOrtho(false, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
 
         mapLoader.getCollisionRects()
-            .forEach { collisionSystem.addTerrainCollider(RectangleCollisionShape(it)) }
+            .forEach { systems.collisionSystem.addTerrainCollider(RectangleCollisionShape(it)) }
     }
 
     override fun render(delta: Float) {
+        // lar ikke delta time bli større enn 1/30s, da kan skjer morsomme ting med fysikk
         val delta = delta.coerceAtMost(1 / 30f)
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
-            GamePreferences.setRenderDebug(!GamePreferences.renderDebug())
-        }
         world.update(delta)
-        collisionSystem.update(delta)
-        screenshakeSystem.update(delta)
-        shockwaveSystem.update(delta)
-        particleSystem.update(delta)
+        systems.update(delta)
+        debugUI.update(delta)
+
         batch.projectionMatrix = camera.combined
         shape.projectionMatrix = camera.combined
         mapLoader.renderer.setView(camera)
+
         pipeline.render {
             clearScreen(red = 0.7f, green = 0.7f, blue = 0.7f)
             mapLoader.renderer.render()
             world.render(batch, shape)
-            collisionSystem.render(batch, shape)
-            particleSystem.render(batch)
+            systems.render(batch, shape)
         }
         batch.projectionMatrix = uiCamera.combined
         shape.projectionMatrix = uiCamera.combined
         if (GamePreferences.renderDebug()) {
-            debugUI.render(delta)
-            screenshakeSystem.render(batch, shape)
+            systems.screenshakeSystem.render(batch, shape)
+            debugUI.render(batch)
         }
     }
 
     override fun resize(width: Int, height: Int) {
+        // vil ha en 2:1 pixel ratio
         camera.viewportWidth = width.toFloat() / 2
         camera.viewportHeight = height.toFloat() / 2
         camera.update()
@@ -121,7 +109,7 @@ class GameScreen : KtxScreen {
         batch.disposeSafely()
         shape.disposeSafely()
         debugUI.disposeSafely()
-        gunVisualsManager.disposeSafely()
+        systems.disposeSafely()
     }
 }
 
