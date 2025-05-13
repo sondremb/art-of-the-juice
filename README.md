@@ -377,6 +377,10 @@ Kanskje spilleren burde få XP, gå opp i level og gjøre mer skade?
 Hva hvis fiendene kunne skyte tilbake?  
 Hvorfor ikke lage en boss?
 
+...
+
+Jeg har hørt rykter om at noen andre spill inneholder lyd?
+
 ## Jeg vil endre på "mappet"!
 
 Synd 🤡🤠
