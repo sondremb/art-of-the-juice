@@ -17,7 +17,7 @@ class ShockwaveSystem {
         }.toMutableList()
     }
 
-    fun addExplosion(position: Vector2, duration: Float = 0.5f) {
+    fun addShockwave(position: Vector2, duration: Float = 0.5f) {
         shockwaves.add(Shockwave(position, duration))
     }
 }

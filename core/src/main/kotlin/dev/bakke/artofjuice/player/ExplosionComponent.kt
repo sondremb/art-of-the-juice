@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Circle
 import dev.bakke.artofjuice.HealthComponent
+import dev.bakke.artofjuice.ShockwaveSystem
 import dev.bakke.artofjuice.Tag
 import dev.bakke.artofjuice.engine.Entity
 import dev.bakke.artofjuice.engine.collision.CollisionSystem
@@ -48,6 +49,8 @@ class ExplosionComponent(
         collisionSystem
             .getEntityCollisions(CircleCollisionShape(Circle(entity.position.cpy(), explosionRadius)))
             .forEach { applyExplossionToEntity(it.entity) }
+        val shockwaveSystem = getSystem<ShockwaveSystem>()
+        shockwaveSystem.addShockwave(entity.position.cpy())
 
         // OPPGAVE 3C
     }

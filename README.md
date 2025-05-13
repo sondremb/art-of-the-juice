@@ -354,6 +354,30 @@ fun World.spawnEnemy(position: Vector2, direction: Float) {
 
 </details>
 
+### Oppgave 6B: En morsom død
+
+Okei, så nå ligger fiendene bare der, og ser triste ut. Hva hadde gjort dette bedre?
+Helt riktig, 💥**EKSPLOSJONER**💥. Kanskje som en tilfeldig sjanse?
+
+Når fienden dør, ha en sjanse til å eksplodere - spawn en ny entity med `spawnEntity`. Gi den kun en `ExplosionComponent`.
+
+<details>
+<summary>Løsningsforslag</summary>
+
+Gjøres hvor enn `onDeath()`-metoden din er - enten i [EnemyAIComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/enemy/EnemyAIComponent.kt), eller i [EnemyDeathComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/enemy/EnemyDeathComponent.kt)
+```kotlin
+private fun onDeath() {
+    ...
+    if (Math.random() < 0.3f) {
+        spawnEntity(entity.position.cpy()) {
+            +ExplosionComponent(explosionRadius =  50f, damage = 40, knockbackIntensity = 1000f)
+        }
+    }
+}
+```
+
+</details>
+
 ### Oppgave 7: Post-processing shaders
 
 LibGDX har støtte for shaders! Jeg har laget en enkel post-processing pipeline, som vi nå kan teste ut.  
