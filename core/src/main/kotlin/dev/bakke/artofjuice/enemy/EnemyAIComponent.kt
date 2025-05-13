@@ -14,12 +14,21 @@ class EnemyAIComponent(private var direction: Float = 1f, private var speed: Flo
 
     override fun lateInit() {
         entity.velocity.x = speed * sign(direction)
-        getComponent<HealthComponent>().onDamage += ::onHit
+        val healthComponent = getComponent<HealthComponent>()
+        healthComponent.onDamage += ::onHit
+        healthComponent.onDeath += ::onDeath
     }
 
     private fun onHit(damage: Int) {
         // OPPGAVE 1
         // hva bør skje her? 🤔
+    }
+
+    private fun onDeath() {
+        // OPPGAVE 5
+
+        // fjerner enemy fra verden
+        entity.destroy()
     }
 
     override fun update(delta: Float) {

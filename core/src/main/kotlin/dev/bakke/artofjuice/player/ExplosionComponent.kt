@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.Vector2
 import dev.bakke.artofjuice.HealthComponent
-import dev.bakke.artofjuice.ScreenshakeSystem
 import dev.bakke.artofjuice.Tag
+import dev.bakke.artofjuice.engine.Entity
 import dev.bakke.artofjuice.engine.collision.CollisionSystem
 import dev.bakke.artofjuice.engine.collision.shapes.CircleCollisionShape
 import dev.bakke.artofjuice.engine.components.Component
@@ -18,7 +18,6 @@ class ExplosionComponent(
     private var explosionRadius: Float,
     private var damage: Int,
     private var knockbackIntensity: Float = 1000f,
-    private var screenshakeIntensity: Float = 0.8f,
     private var lingerTime: Float = 0.1f
 ) : Component() {
 
@@ -46,15 +45,19 @@ class ExplosionComponent(
     private fun explode() {
         hasExploded = true
         val collisionSystem = getSystem<CollisionSystem>()
-        collisionSystem.getEntityCollisions(CircleCollisionShape(Circle(entity.position.cpy(), explosionRadius)))
-            .forEach {
-                if (it.entity.hasTag(Tag.ENEMY)) {
-                    it.getComponent<HealthComponent>().damage(damage)
-                }
-                it.tryGetComponent<PhysicsComponent>()?.applyImpulse(
-                    Vector2(it.entity.position.cpy().sub(entity.position.cpy().sub(0f, 32f))), knockbackIntensity
-                )
-            }
-        getSystem<ScreenshakeSystem>().addScreenShake(screenshakeIntensity)
+        collisionSystem
+            .getEntityCollisions(CircleCollisionShape(Circle(entity.position.cpy(), explosionRadius)))
+            .forEach { applyExplossionToEntity(it.entity) }
+
+        // OPPGAVE 3C
+    }
+
+    private fun applyExplossionToEntity(entity: Entity) {
+        if (entity.hasTag(Tag.ENEMY)) {
+            getComponent<HealthComponent>().damage(damage)
+        }
+        tryGetComponent<PhysicsComponent>()?.applyImpulse(
+            Vector2(entity.position.cpy().sub(entity.position.cpy().sub(0f, 32f))), knockbackIntensity
+        )
     }
 }

@@ -207,6 +207,21 @@ fun shoot(direction: Vector2) {
 ```
 </details>
 
+### Oppgave 3C: Screnshake på granat
+Granaten er jo også et våpen, og den kan også lage litt screenshake når den eksploderer!
+
+Legg til litt screenshake når den eksploderer - titt i [ExplosionComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/player/ExplosionComponent.kt)
+
+<details>
+<summary>Løsningsforslag</summary>
+
+```kotlin
+private fun explode() {
+    ...
+    getSystem<ScreenShakeSystem>().addScreenShake(0.5f)
+}
+```
+</details>
 
 ### Oppgave 4: Knockback på spilleren
 
@@ -240,6 +255,9 @@ fun shoot(direction: Vector2) {
 }
 ```
 </details>
+
+### Oppgave 5: En betydningsfull død
+
 
 ### Oppgaver
 

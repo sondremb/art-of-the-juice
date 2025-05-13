@@ -16,8 +16,9 @@ class CameraComponent(private var camera: Camera, private var player: Entity) : 
     private val minHeight = 16f
     private val moveSpeedX = 6f
     private val moveSpeedY = 12f
+
     override fun update(delta: Float) {
-        var target = player.position + vec2(0f, 72f)
+        val target = player.position + vec2(0f, 72f)
         deadzone.setCenter(entity.position)
         if (target.x > deadzone.x && target.x < deadzone.x + deadzone.width) {
             target.x = entity.position.x
@@ -49,5 +50,4 @@ class CameraComponent(private var camera: Camera, private var player: Entity) : 
             }
         }
     }
-
 }

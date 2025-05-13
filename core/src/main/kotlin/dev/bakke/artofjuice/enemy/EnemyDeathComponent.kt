@@ -37,7 +37,7 @@ class EnemyDeathComponent : Component() {
             // random chance to spawn an explosion on death!
             if (Math.random() < 0.3f) {
                 entity.world.spawnEntity(entity.position.cpy()) {
-                    +ExplosionComponent(50f, 70, screenshakeIntensity = 0.6f, knockbackIntensity = 1000f)
+                    +ExplosionComponent(50f, 70, knockbackIntensity = 1000f)
                 }
                 getSystem<ShockwaveSystem>().addExplosion(entity.position.cpy())
             }
