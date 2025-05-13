@@ -335,15 +335,28 @@ fun World.spawnEnemy(position: Vector2, direction: Float) {
 
 </details>
 
-### Oppgaver
+### Oppgave 7: Post-processing shaders
 
-* Forbedre kamerabevegelse
-* Muzzle flash?
-* Skru på post-processing
-* Skriv din egen shader
-* Legg til poeng-system?
-* Flytt på fiende-spawner / legg til ny
+LibGDX har støtte for shaders! Jeg har laget en enkel post-processing pipeline, som vi nå kan teste ut.  
 
+I [GameScreen.kt](core/src/main/kotlin/dev/bakke/artofjuice/screens/GameScreen.kt), finn oppsettet av `RenderPipeline`.
+Jeg har kommentert ut pipeline-stegene - kommenter de inn igjen, og se hva som skjer! 🎆
+
+Se om du kan lage din egen shader, ved å herme etter et av de eksisterende `ShaderPass`-ene.
+Shaders legger du i mappa [assets/shaders](assets/shaders).
+
+Hvis du har behov for å sette uniforms før hver frame, så kan du arve av `ShaderPass` - sjekk ut [GaussianPass.kt](core/src/main/kotlin/dev/bakke/artofjuice/rendering/GaussianPass.kt) for et eksempel!
+
+
+### Oppgave 8 - ∞: Frilek
+
+Det er i dine hender nå, finn på noe gøy!
+
+Kanskje spilleren burde ha helse, og kunne ta skade?  
+Kanskje burde man ha en UI som viser score, som går opp for hver fiende man dreper?  
+Kanskje spilleren burde få XP, gå opp i level og gjøre mer skade?  
+Hva hvis fiendene kunne skyte tilbake?  
+Hvorfor ikke lage en boss?
 
 ## Jeg vil endre på "mappet"!
 

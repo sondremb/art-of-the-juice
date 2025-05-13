@@ -10,6 +10,7 @@ import dev.bakke.artofjuice.engine.*
 import dev.bakke.artofjuice.engine.collision.shapes.RectangleCollisionShape
 import dev.bakke.artofjuice.engine.rendering.RenderPipeline
 import dev.bakke.artofjuice.player.spawnPlayer
+import dev.bakke.artofjuice.rendering.GaussianPass
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
@@ -42,6 +43,7 @@ class GameScreen : KtxScreen {
         systems.screenshakeSystem.camera = camera
         systems.gunVisualsManager.loadJson()
         debugUI.player = player
+        // OPPGAVE 7
         pipeline = RenderPipeline(
             Gdx.graphics.width, Gdx.graphics.height, listOf(
 //                ShockwavePass(systems.shockwaveSystem, camera),
