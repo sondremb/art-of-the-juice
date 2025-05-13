@@ -54,9 +54,9 @@ class ExplosionComponent(
 
     private fun applyExplossionToEntity(entity: Entity) {
         if (entity.hasTag(Tag.ENEMY)) {
-            getComponent<HealthComponent>().damage(damage)
+            entity.getComponent<HealthComponent>().damage(damage)
         }
-        tryGetComponent<PhysicsComponent>()?.applyImpulse(
+        entity.tryGetComponent<PhysicsComponent>()?.applyImpulse(
             Vector2(entity.position.cpy().sub(entity.position.cpy().sub(0f, 32f))), knockbackIntensity
         )
     }
