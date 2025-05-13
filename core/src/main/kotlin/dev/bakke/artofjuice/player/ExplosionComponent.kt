@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Circle
-import com.badlogic.gdx.math.Vector2
 import dev.bakke.artofjuice.HealthComponent
 import dev.bakke.artofjuice.Tag
 import dev.bakke.artofjuice.engine.Entity
@@ -13,6 +12,7 @@ import dev.bakke.artofjuice.engine.collision.shapes.CircleCollisionShape
 import dev.bakke.artofjuice.engine.components.Component
 import dev.bakke.artofjuice.engine.components.PhysicsComponent
 import ktx.graphics.use
+import ktx.math.minus
 
 class ExplosionComponent(
     private var explosionRadius: Float,
@@ -52,12 +52,16 @@ class ExplosionComponent(
         // OPPGAVE 3C
     }
 
-    private fun applyExplossionToEntity(entity: Entity) {
-        if (entity.hasTag(Tag.ENEMY)) {
-            entity.getComponent<HealthComponent>().damage(damage)
+    private fun applyExplossionToEntity(other: Entity) {
+        if (other.hasTag(Tag.ENEMY)) {
+            other.getComponent<HealthComponent>().damage(damage)
         }
-        entity.tryGetComponent<PhysicsComponent>()?.applyImpulse(
-            Vector2(entity.position.cpy().sub(entity.position.cpy().sub(0f, 32f))), knockbackIntensity
+        // jukser og later som om eksplosjonen er lavere, for å få mer oppover-retning på knockback
+        val belowExplosion = entity.position.cpy().sub(0f, explosionRadius)
+        val directionFromExplosion = other.position - belowExplosion
+        other.tryGetComponent<PhysicsComponent>()?.applyImpulse(
+            directionFromExplosion,
+            knockbackIntensity
         )
     }
 }

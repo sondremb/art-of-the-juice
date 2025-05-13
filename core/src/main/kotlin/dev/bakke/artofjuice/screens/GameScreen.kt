@@ -1,7 +1,6 @@
 package dev.bakke.artofjuice.screens
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -10,14 +9,10 @@ import dev.bakke.artofjuice.enemy.SpawnEnemyComponent
 import dev.bakke.artofjuice.engine.*
 import dev.bakke.artofjuice.engine.collision.shapes.RectangleCollisionShape
 import dev.bakke.artofjuice.engine.rendering.RenderPipeline
-import dev.bakke.artofjuice.engine.rendering.ShaderPass
 import dev.bakke.artofjuice.player.spawnPlayer
-import dev.bakke.artofjuice.rendering.BloomPass
-import dev.bakke.artofjuice.rendering.ShockwavePass
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
-import ktx.assets.toInternalFile
 import ktx.inject.Context
 import ktx.math.vec2
 
