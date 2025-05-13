@@ -25,7 +25,7 @@ class EnemyAIComponent(private var direction: Float = 1f, private var speed: Flo
     }
 
     private fun onDeath() {
-        // OPPGAVE 5
+        // OPPGAVE 6
 
         // fjerner enemy fra verden
         entity.destroy()

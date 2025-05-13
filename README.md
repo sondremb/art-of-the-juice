@@ -256,7 +256,48 @@ fun shoot(direction: Vector2) {
 ```
 </details>
 
-### Oppgave 5: En betydningsfull død
+
+### Oppgave 5: Kamerabevegelse
+
+⚠️**Matte-advarsel** ⚠️ -️ dette handler nesten utelukkende om vektormatte. Hvis du synes matte er kjipt, gå rett til løsningsforslag!
+
+Kamerabevegelse er nesten litt usynlig - du merker det sjeldent bevisst, men den har mye å si for følelsen av et spill!  
+Den nåværende kamerabevegelsen er satt opp i [CameraComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/CameraComponent.kt), og oppdaterer kameraet til å være en bestemt avstand over spilleren, hver eneste frame.
+
+Det er mye man kan gjøre med kamerabevegelse. 
+
+<details>
+<summary>Ting du kan prøve ut</summary>
+
+### Asymptotic averaging
+For å smoothe den ut, kan man bruke "asymptotic averaging", et skummelt begrep for en overraskende enkel formel:
+```raw
+cameraPosition += (targetPosition - cameraPosition) * 0.1
+```
+Altså, for hvert steg (hver frame), legger man til en liten del (10%) av forskjellen mellom den nåværende posisjonen og målet.
+Her kan man justere på verdien - jo høyere tallet er, jo raskere vil kameraet bevege seg mot målet. Hvis verdien er 1, så vil kameraet alltid være på målet. Hvis verdien er 0, så vil kameraet aldri bevege seg.  
+Merk at dette er framerate-avhengig, siden vi ikke har ganget inn delta time. Det kan man gjøre, men da bør koeffisienten økes - den enkleste måten å finne gode verdier, er ved å eksperimentere!
+
+En enkel utvidelse er å ha to forskjellige hastigheter for x- og y-aksene. Da kan man f.eks. ha en mer "snappy" bevegelse på y, og en mer "smooth" bevegelse på x.  
+Så kan man gå mer avansert: kanskje det skal være forskjell på når spilleren beveger seg oppover og nedover?
+
+### Dead zones og lookahead
+Man kan også ha _dead zones_ - at spilleren må ha beveget seg en viss avstand fra kameraets nåværende posisjon for at kamera skal gidde å flytte på seg.
+
+Litt motsatt _dead zones_ er _lookahead_ - at kameraet ligger "foran" spilleren, slik at når spilleren snur seg mot høyre, ser man mer av høyresiden - og omvendt. 
+I et spill med hopping, er det også lurt å f.eks. ha _lookahead_ nedover når man faller, så man kan se hvor man skal lande.
+</details>
+
+**Prøv ut litt forskjellig, se hva som føles bra!**
+
+<details>
+<summary>Løsningsforslag</summary>
+
+Et kamera kan justeres inn i evigheten - mitt eget svar på "godt nok" ligger i [SondresCameraComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/SondresCameraComponent.kt).
+Kopier koden inn i `CameraComponent`, eller bytt ut hvilken komponent som brukes i [GameScreen.kt](core/src/main/kotlin/dev/bakke/artofjuice/screens/GameScreen.kt) med den.
+</details>
+
+### Oppgave 6: En betydningsfull død
 
 Det er litt trist hvordan fiendene bare forsvinner når de dør.
 Hva hvis vi fikk en liten animasjon på det - og så ble de liggende?
@@ -270,7 +311,7 @@ Når fienden dør, så bør den:
 * Ikke bli truffet av kuler
 * Ikke ha en health bar - hvert fall ikke etter at den har animert ned til null helse
 
-Denne er litt ekstra knotete, det er ganske mange ting du bare må vite hvordan gjøres.  
+⚠️ **Denne er litt ekstra knotete**, det er ganske mange ting du bare må vite hvordan gjøres.  
 Ha lav terskel for å spørre om hjelp eller sjekke ut løsningsforslaget her!
 
 <details>
@@ -324,34 +365,16 @@ Objektene i laget `Player` bestemmer hvor spiller spawner (`Player`), og hvor en
 
 ## Assets
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+Spillet er laget med gratis (krever innlogging) assets fra [craftpix.net](https://craftpix.net/).
 
-This project was generated with a Kotlin project template that includes Kotlin application launchers and [KTX](https://libktx.github.io/) utilities.
+Hele eller deler av følgende assets er brukt i spillet:
 
-## Platforms
+https://craftpix.net/freebies/free-industrial-zone-tileset-pixel-art/
 
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
+https://craftpix.net/freebies/free-3-cyberpunk-characters-pixel-art/
 
-## Gradle
+https://craftpix.net/freebies/free-city-enemies-pixel-art-sprite-sheets/
 
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
+https://craftpix.net/freebies/free-guns-for-cyberpunk-characters-pixel-art/
 
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
-
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+https://craftpix.net/freebies/free-guns-pack-2-for-main-characters-pixel-art/
