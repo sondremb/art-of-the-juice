@@ -19,7 +19,7 @@ Prøv ut spillet! Keybinds:
 | \[F1\]         | Toggle debug rendering | Huskes mellom launcher       |
 
 
-## Lett oppvarming: parametertukling
+## Lett oppvarming: parameterjustering
 
 Spillet er konfigurert med masse forskjellige parametere.
 
@@ -128,7 +128,87 @@ private fun onEnemyHit(enemy: Entity) {
 ```
 </details>
 
-### Oppgave 3: Knockback på spilleren
+### Oppgave 3: Screenshake
+
+Workshopen er jo oppkalt etter talken "The Art of Screenshake" - så det var vel på tide å få til litt screenshake?
+Screenshake løses av et globalt "system" som rister på kameraet. Det har en intern tilstand som bestemmer hvor mye shake det er, som har en verdi mellom 0 og 1.
+For å se litt hvordan det er implementert, ta en titt i [ScreenShakeSystem.kt](core/src/main/kotlin/dev/bakke/artofjuice/ScreenshakeSystem.kt). Der er det også noen parametere du kan justere på!
+
+Vi kan ta det i bruk - legg til litt screenshake når spilleren skyter.
+Få tak i `ScreenShakeSystem`-instansen i `GunComponent.kt`, og kall enten `addScreenShake()` eller `setMinimumShake()` hver gang det skytes.
+
+<details>
+<summary>Løsningsforslag</summary>
+
+```kotlin
+// GunComponent.kt
+...
+private val screenShakeSystem: ScreenShakeSystem by getSystemLazy()
+...
+fun shoot(direction: Vector2) {
+    ...
+    // alternativt kan man hente screenshakeSystem her
+    val screenShakeSystem = getSystem<PhysicsComponent>()
+    // men lazy-varianten er litt mer effektiv
+    screenShakeSystem.addScreenShake(0.1f)
+    // eller
+    screenShakeSystem.setMinimumShake(0.1f)
+    ...
+}
+```
+</details>
+
+### Oppgave 3B: Screenshake per våpen
+
+Samme deal som 2B - valg av våpen føles mer betydningsfullt hvis de oppfører seg forskjellig.
+Da kan de gjerne ha forskjellig mengde screenshake også!
+
+<details>
+<summary>Hint 💡</summary>
+
+* Legg på en ny parameter i `GunStats.kt` som bestemmer hvor mye screenshake det skal være
+* Oppdater `PISTOL`, `RIFLE` og `SNIPER` med passende verdier
+* Bytt ut den hardkodede verdien i `GunComponent.kt` med den nye parameteren
+</details>
+
+<details>
+<summary>Løsningsforslag</summary>
+
+```kotlin
+// GunStats.kt
+data class GunStats(
+    ...
+    val screenshakeAmount: Float,
+) {
+    companion object {
+        val PISTOL = GunStats(
+            ...
+            screenshakeAmount = 0.3f,
+        )
+        val RIFLE = GunStats(
+            ...
+            screenshakeAmount = 0.45f,
+        )
+        val SNIPER = GunStats(
+            ...
+            screenshakeAmount = 0.6f,
+        )
+    }
+}
+```
+
+```kotlin
+// GunComponent.kt
+fun shoot(direction: Vector2) {
+    ...
+    screenShakeSystem.setMinimumShake(gun.stats.screenshakeAmount)
+    ...
+}
+```
+</details>
+
+
+### Oppgave 4: Knockback på spilleren
 
 I oppgave 2 fikk vi til knockback på fienden nå de ble truffet - for å gi våpenet enda mer futt, kanskje det skal dytte spilleren tilbake hver gang det skytes?  
 Gjør endringen i [GunComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/gun/GunComponent.kt) - legg på impuls på spilleren i hver gang det skytes.
@@ -151,7 +231,9 @@ private val physicsComponent: PhysicsComponent by getComponentLazy()
 ...
 fun shoot(direction: Vector2) {
     ...
-    val physicsComponent = physicsComponent
+    // alternativt kan man hente physicsComponent her
+    val physicsComponent = getComponent<PhysicsComponent>()
+    // men lazy-varianten er litt mer effektiv
     val knockbackDirection = -direction
     physicsComponent.applyImpulse(knockbackDirection, force = 100f) // eller gunStats.knockbackForce
     ...
@@ -161,7 +243,6 @@ fun shoot(direction: Vector2) {
 
 ### Oppgaver
 
-* Legg til screenshake
 * Forbedre kamerabevegelse
 * Endre til OnDeath
 * Muzzle flash?

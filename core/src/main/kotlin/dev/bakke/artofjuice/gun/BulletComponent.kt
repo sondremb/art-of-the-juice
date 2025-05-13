@@ -32,7 +32,7 @@ class BulletComponent(private val gunStats: GunStats) : Component() {
     }
 
     private fun onEnemyHit(enemy: Entity) {
-        // 💡Sånn kan jeg få tak i en komponent på en annen entity
+        // 💡HINT: sånn kan man få tak i en komponent på en annen entity
         enemy.getComponent<HealthComponent>().damage(gunStats.damage)
 
         // OPPGAVE 2:

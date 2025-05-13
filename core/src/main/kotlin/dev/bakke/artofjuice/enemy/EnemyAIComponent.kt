@@ -30,7 +30,7 @@ class EnemyAIComponent(private var direction: Float = 1f, private var speed: Flo
         }
         animatedSprite.flipX = entity.velocity.x < 0
 
-        // 💡 sånn setter man animasjon!
+        // 💡HINT: sånn setter man animasjon!
         animatedSprite.requestTransition(EnemyAnimatedSprite.State.RUN)
     }
 

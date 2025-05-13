@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import dev.bakke.artofjuice.Assets
 import dev.bakke.artofjuice.GamePreferences
-import dev.bakke.artofjuice.ScreenshakeSystem
 import dev.bakke.artofjuice.Tag
 import dev.bakke.artofjuice.TextureAssets
 import dev.bakke.artofjuice.engine.AnimationRenderable
@@ -15,12 +14,10 @@ import dev.bakke.artofjuice.engine.ParticleSystem
 import dev.bakke.artofjuice.engine.collision.ColliderComponent
 import dev.bakke.artofjuice.engine.collision.shapes.RectangleCollisionShape
 import dev.bakke.artofjuice.engine.components.Component
-import dev.bakke.artofjuice.engine.components.PhysicsComponent
 import dev.bakke.artofjuice.engine.components.SpriteComponent
 import dev.bakke.artofjuice.engine.gdx.extensions.rect
 import ktx.graphics.use
 import ktx.math.plus
-import ktx.math.unaryMinus
 
 class GunComponent(initialGun: Gun?) : Component() {
     private var timeSinceLastShot = 0f
@@ -33,8 +30,8 @@ class GunComponent(initialGun: Gun?) : Component() {
             }
         }
 
-    private val screenshakeSystem: ScreenshakeSystem by getSystemLazy()
     private val particleSystem: ParticleSystem by getSystemLazy()
+    // 💡HINT: sånn får du tak i et system
     private val assets: Assets by getSystemLazy()
     override fun lateInit() {
         gun?.let { g ->
@@ -56,7 +53,7 @@ class GunComponent(initialGun: Gun?) : Component() {
 
         // OPPGAVE 3:
 
-        screenshakeSystem.setMinimumShake(gun.stats.shakeIntensity)
+        // OPPGAVE 4:
 
         val bulletPosition = getBulletPosition(direction)
         spawnBullet(bulletPosition, direction)
