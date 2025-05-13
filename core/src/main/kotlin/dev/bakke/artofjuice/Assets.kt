@@ -3,6 +3,8 @@ package dev.bakke.artofjuice
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.utils.Array
 import ktx.assets.load
 
@@ -10,6 +12,8 @@ class Assets {
     private val assetManager = AssetManager()
 
     fun loadAll() {
+        assetManager.setLoader(TiledMap::class.java, TmxMapLoader())
+        assetManager.load<TiledMap>(MAP)
         assetManager.load<TextureAtlas>(Atlases.Player)
         assetManager.load<TextureAtlas>(Atlases.Skater)
         assetManager.load<TextureAtlas>(Atlases.Bullets)
@@ -44,10 +48,14 @@ class Assets {
             ?: error("Missing region '$region' in atlas '$atlas'")
     }
 
+    fun getMap() = assetManager.get<TiledMap>(MAP)
+
     fun dispose() {
         assetManager.dispose()
     }
 }
+
+const val MAP = "map.tmx"
 
 object Atlases {
     const val Weapons = "weapons.atlas"

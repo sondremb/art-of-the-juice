@@ -5,10 +5,6 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.maps.objects.RectangleMapObject
-import com.badlogic.gdx.maps.tiled.TiledMap
-import com.badlogic.gdx.maps.tiled.TmxMapLoader
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import dev.bakke.artofjuice.*
 import dev.bakke.artofjuice.enemy.SpawnEnemyComponent
 import dev.bakke.artofjuice.engine.*
@@ -26,8 +22,6 @@ import ktx.assets.disposeSafely
 import ktx.assets.toInternalFile
 import ktx.inject.Context
 import ktx.math.vec2
-import ktx.tiled.x
-import ktx.tiled.y
 
 class GameScreen : KtxScreen {
     private val batch = SpriteBatch()
@@ -55,10 +49,9 @@ class GameScreen : KtxScreen {
     private val uiCamera = OrthographicCamera()
     private val screenshakeSystem = ScreenshakeSystem(camera).apply { context.bindSingleton(this) }
     private val debugUI = DebugUI(batch, player)
-    private lateinit var map: TiledMap
-    private lateinit var renderer: OrthogonalTiledMapRenderer
     private var shockwaveSystem = ShockwaveSystem().apply { context.bindSingleton(this) }
     private lateinit var pipeline: RenderPipeline
+    private lateinit var mapLoader: MapLoader
 
     override fun show() {
         assets.loadAll()
@@ -74,16 +67,13 @@ class GameScreen : KtxScreen {
                 )
             )
 
-        map = TmxMapLoader().load("map.tmx")
-        player.position = map.layers.get("Player").objects.get("Spawn").let { vec2(it.x, it.y) }
-        renderer = OrthogonalTiledMapRenderer(map)
-        camera.setToOrtho(false, 400f, 300f) // Adjust to match your game window size
+        mapLoader = MapLoader(assets)
+        player.position = mapLoader.getPlayerPosition()
+        enemySpawner.position = mapLoader.getEnemySpawnerPosition()
+        camera.setToOrtho(false, 400f, 300f)
         uiCamera.setToOrtho(false, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-        map.layers.get("Player").objects.get("Enemy").let { enemySpawner.position.set(it.x, it.y) }
 
-        val layer = map.layers.get("metal_collision")
-        layer.objects
-            .map { (it as RectangleMapObject).rectangle }
+        mapLoader.getCollisionRects()
             .forEach { collisionSystem.addTerrainCollider(RectangleCollisionShape(it)) }
     }
 
@@ -100,10 +90,10 @@ class GameScreen : KtxScreen {
         particleSystem.update(delta)
         batch.projectionMatrix = camera.combined
         shape.projectionMatrix = camera.combined
-        renderer.setView(camera)
+        mapLoader.renderer.setView(camera)
         pipeline.render {
             clearScreen(red = 0.7f, green = 0.7f, blue = 0.7f)
-            renderer.render()
+            mapLoader.renderer.render()
             world.render(batch, shape)
             collisionSystem.render(batch, shape)
             particleSystem.render(batch)
@@ -127,8 +117,7 @@ class GameScreen : KtxScreen {
     }
 
     override fun dispose() {
-        map.disposeSafely()
-        renderer.disposeSafely()
+        mapLoader.disposeSafely()
         batch.disposeSafely()
         shape.disposeSafely()
         debugUI.disposeSafely()
