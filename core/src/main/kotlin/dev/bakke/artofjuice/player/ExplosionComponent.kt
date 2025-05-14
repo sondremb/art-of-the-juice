@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Circle
 import dev.bakke.artofjuice.HealthComponent
+import dev.bakke.artofjuice.ScreenshakeSystem
 import dev.bakke.artofjuice.ShockwaveSystem
 import dev.bakke.artofjuice.Tag
 import dev.bakke.artofjuice.engine.Entity
@@ -54,6 +55,7 @@ class ExplosionComponent(
 
         // OPPGAVE 3C
         // få tak i ScreenshakeSystem, og kall .addShake() eller .setMinimumShake()
+        getSystem<ScreenshakeSystem>().addScreenShake(0.5f)
     }
 
     private fun applyExplossionToEntity(other: Entity) {

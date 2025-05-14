@@ -28,6 +28,7 @@ fun World.spawnEnemy(position: Vector2, direction: Float) {
         +EnemyAIComponent(direction, speed = 100f)
         +PhysicsComponent(gravity = -900f)
         +EnemyAnimatedSprite()
+        +EnemyDeathComponent()
         +ColliderComponent(RectangleCollisionShape(24f, 32f))
         +HealthComponent(maxHealth = 100)
         +HealthBarComponent(vec2(0f, 20f), 32f, 4f)

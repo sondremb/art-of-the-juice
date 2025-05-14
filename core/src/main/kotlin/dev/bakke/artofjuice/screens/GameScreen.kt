@@ -9,10 +9,14 @@ import dev.bakke.artofjuice.enemy.SpawnEnemyComponent
 import dev.bakke.artofjuice.engine.*
 import dev.bakke.artofjuice.engine.collision.shapes.RectangleCollisionShape
 import dev.bakke.artofjuice.engine.rendering.RenderPipeline
+import dev.bakke.artofjuice.engine.rendering.ShaderPass
 import dev.bakke.artofjuice.player.spawnPlayer
+import dev.bakke.artofjuice.rendering.BloomPass
+import dev.bakke.artofjuice.rendering.ShockwavePass
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
+import ktx.assets.toInternalFile
 import ktx.inject.Context
 import ktx.math.vec2
 
@@ -36,7 +40,7 @@ class GameScreen : KtxScreen {
 
     override fun show() {
         world.spawnEntity(player.position.cpy()) {
-            +CameraComponent(camera, player)
+            +SondresCameraComponent(camera, player)
         }
         systems.assets.loadAllBlocking()
         systems.screenshakeSystem.camera = camera
@@ -45,11 +49,11 @@ class GameScreen : KtxScreen {
         // OPPGAVE 7
         pipeline = RenderPipeline(
             Gdx.graphics.width, Gdx.graphics.height, listOf(
-//                ShockwavePass(systems.shockwaveSystem, camera),
-//                BloomPass(),
-//                ShaderPass("shaders/scanline.frag".toInternalFile()),
-//                ShaderPass("shaders/vignette.frag".toInternalFile()),
-//                ShaderPass("shaders/barrel_distortion.frag".toInternalFile()),
+                ShockwavePass(systems.shockwaveSystem, camera),
+                BloomPass(),
+                ShaderPass("shaders/scanline.frag".toInternalFile()),
+                ShaderPass("shaders/vignette.frag".toInternalFile()),
+                ShaderPass("shaders/barrel_distortion.frag".toInternalFile()),
             )
         )
 

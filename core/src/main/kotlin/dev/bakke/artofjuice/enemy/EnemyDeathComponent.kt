@@ -4,6 +4,7 @@ import dev.bakke.artofjuice.HealthBarComponent
 import dev.bakke.artofjuice.HealthComponent
 import dev.bakke.artofjuice.engine.collision.ColliderComponent
 import dev.bakke.artofjuice.engine.components.Component
+import dev.bakke.artofjuice.player.ExplosionComponent
 
 class EnemyDeathComponent : Component() {
     val healthComponent: HealthComponent by getComponentLazy<HealthComponent>()
@@ -30,6 +31,12 @@ class EnemyDeathComponent : Component() {
         healthBarComponent.animationFinished  += {
             healthComponent.removeFromEntity()
             healthBarComponent.removeFromEntity()
+        }
+
+        if (Math.random() < 0.3f) {
+            spawnEntity(entity.position.cpy()) {
+                +ExplosionComponent(explosionRadius = 50f, damage = 40, knockbackIntensity = 1000f)
+            }
         }
     }
 }

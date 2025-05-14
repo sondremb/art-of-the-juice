@@ -16,20 +16,13 @@ class EnemyAIComponent(private var direction: Float = 1f, private var speed: Flo
         entity.velocity.x = speed * sign(direction)
         val healthComponent = getComponent<HealthComponent>()
         healthComponent.onDamage += ::onHit
-        healthComponent.onDeath += ::onDeath
     }
 
     private fun onHit(damage: Int) {
         // OPPGAVE 1
         // spill av en "skadet" ("hurt") animasjon
         // det finnes et hint lenger ned!
-    }
-
-    private fun onDeath() {
-        // OPPGAVE 6
-
-        // fjerner enemy fra verden
-        entity.destroy()
+        animatedSprite.requestTransition(EnemyAnimatedSprite.State.HURT)
     }
 
     override fun update(delta: Float) {

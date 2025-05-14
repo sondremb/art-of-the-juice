@@ -11,6 +11,7 @@ import dev.bakke.artofjuice.engine.Entity
 import dev.bakke.artofjuice.engine.ParticleSystem
 import dev.bakke.artofjuice.engine.collision.ColliderComponent
 import dev.bakke.artofjuice.engine.components.Component
+import dev.bakke.artofjuice.engine.components.PhysicsComponent
 
 class BulletComponent(private val gunStats: GunStats) : Component() {
     override fun lateInit() {
@@ -39,7 +40,9 @@ class BulletComponent(private val gunStats: GunStats) : Component() {
         // Få tak i PhysicsComponent
         // applyImpulse() på den, med en vektor som er langs kulas bevegelsesretning - `entity.velocity`
         // For litt mer juice: vinkle impulsen litt oppover!
-
+        val direction = Vector2(entity.velocity.x, entity.velocity.x * 0.2f)
+        val physicsComponent = enemy.getComponent<PhysicsComponent>()
+        physicsComponent.applyImpulse(direction, force = gunStats.knockbackForce)
 
         spawnParticleEffect()
         entity.destroy()
