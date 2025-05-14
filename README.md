@@ -158,12 +158,12 @@ private fun onEnemyHit(enemy: Entity) {
 
 Workshopen er jo oppkalt etter talken "The Art of Screenshake" - så det var vel på tide å få til litt screenshake?
 Screenshake løses av et globalt "system" som rister på kameraet. Det har en intern tilstand som bestemmer hvor mye shake det er, som har en verdi mellom 0 og 1.
-For å se litt hvordan det er implementert, ta en titt i [ScreenShakeSystem.kt](core/src/main/kotlin/dev/bakke/artofjuice/ScreenshakeSystem.kt). Der er det også noen parametere du kan justere på!
+For å se litt hvordan det er implementert, ta en titt i [ScreenshakeSystem.kt](core/src/main/kotlin/dev/bakke/artofjuice/ScreenshakeSystem.kt). Der er det også noen parametere du kan justere på!
 
 **Legg til litt screenshake hver gang våpenet skyter.**
 
 
-Få tak i `ScreenShakeSystem`-instansen i `GunComponent.kt`, og kall enten `addScreenShake()` eller `setMinimumShake()` hver gang det skytes.
+Få tak i `ScreenshakeSystem`-instansen i [GunComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/gun/GunComponent.kt), og kall enten `addScreenShake()` eller `setMinimumShake()` hver gang det skytes.
 
 <details>
 <summary>Løsningsforslag</summary>
@@ -171,16 +171,16 @@ Få tak i `ScreenShakeSystem`-instansen i `GunComponent.kt`, og kall enten `addS
 ```kotlin
 // GunComponent.kt
 ...
-private val screenShakeSystem: ScreenShakeSystem by getSystemLazy()
+private val screenshakeSystem: ScreenshakeSystem by getSystemLazy()
 ...
 fun shoot(direction: Vector2) {
     ...
     // alternativt kan man hente screenshakeSystem her
-    val screenShakeSystem = getSystem<PhysicsComponent>()
+    val screenshakeSystem = getSystem<PhysicsComponent>()
     // men lazy-varianten er litt mer effektiv
-    screenShakeSystem.addScreenShake(0.1f)
+    screenshakeSystem.addScreenShake(0.1f)
     // eller
-    screenShakeSystem.setMinimumShake(0.1f)
+    screenshakeSystem.setMinimumShake(0.5f)
     ...
 }
 ```
@@ -194,9 +194,9 @@ Da kan de gjerne ha forskjellig mengde screenshake også!
 <details>
 <summary>Hint 💡</summary>
 
-* Legg på en ny parameter i `GunStats.kt` som bestemmer hvor mye screenshake det skal være
+* Legg på en ny parameter i [GunStats.kt](core/src/main/kotlin/dev/bakke/artofjuice/gun/GunStats.kt) som bestemmer hvor mye screenshake det skal være
 * Oppdater `PISTOL`, `RIFLE` og `SNIPER` med passende verdier
-* Bytt ut den hardkodede verdien i `GunComponent.kt` med den nye parameteren
+* Bytt ut den hardkodede verdien i [GunComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/gun/GunComponent.kt) med den nye parameteren fra `gun.stats`
 </details>
 
 <details>
@@ -229,7 +229,7 @@ data class GunStats(
 // GunComponent.kt
 fun shoot(direction: Vector2) {
     ...
-    screenShakeSystem.setMinimumShake(gun.stats.screenshakeAmount)
+    screenshakeSystem.setMinimumShake(gun.stats.screenshakeAmount)
     ...
 }
 ```
@@ -246,7 +246,7 @@ Legg til litt screenshake når den eksploderer - titt i [ExplosionComponent.kt](
 ```kotlin
 private fun explode() {
     ...
-    getSystem<ScreenShakeSystem>().addScreenShake(0.5f)
+    getSystem<ScreenshakeSystem>().addScreenShake(0.5f)
 }
 ```
 </details>
