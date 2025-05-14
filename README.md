@@ -4,6 +4,8 @@
 
 En introduksjon til spillutvikling med Kotlin og LibGDX, med fokus på "juice" - det som gjør spill gøye å spille!
 
+Slides ligger i mappa [slides](slides)
+
 Basert på talkene:
 >_"The art of screenshake"_ - Jan Willem Nijman ("Vlambeer")
 >https://www.youtube.com/watch?v=AJdEqssNZ-U
