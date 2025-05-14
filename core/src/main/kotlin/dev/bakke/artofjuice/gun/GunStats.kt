@@ -6,6 +6,9 @@ data class GunStats(
     val bulletSpeed: Float,
     // i kuler per sekund
     val fireRate: Float,
+    // OPPGAVE 2B
+    // OPPGAVE 3B
+    // nye stats kan legges til her
 ) {
     companion object {
         val PISTOL = GunStats(

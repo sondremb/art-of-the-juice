@@ -53,6 +53,7 @@ class ExplosionComponent(
         shockwaveSystem.addShockwave(entity.position.cpy())
 
         // OPPGAVE 3C
+        // få tak i ScreenshakeSystem, og kall .addShake() eller .setMinimumShake()
     }
 
     private fun applyExplossionToEntity(other: Entity) {

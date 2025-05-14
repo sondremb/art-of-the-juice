@@ -63,9 +63,12 @@ Fila [GrenadeThrowerComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/play
 ### Oppgave 1: Skade-animasjon på fiende
 
 Spillet funker, men fiendene er litt kjedelige - de reagerer jo ikke når du treffer de!  
-Vi kan fikse dette ved å legge til en animasjon når fienden tar skade.
+Vi kan fikse dette med en animasjon!
 
-I fila [EnemyAIComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/enemy/EnemyAIComponent.kt) finner du en tom funksjon `onHit()`.
+**Legg til en animasjon når fienden tar skade.**
+
+I fila [EnemyAIComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/enemy/EnemyAIComponent.kt) finner du en tom funksjon `onHit()`.  
+Det er et hint lenger ned i fila på hvordan man kan setter animasjon.
 
 <details>
 <summary>Løsningsforslag</summary>
@@ -81,6 +84,8 @@ private fun onHit(damage: Int) {
 
 Det var bedre!
 Men vi tåler enda litt mer reaksjon, synes jeg. Hva hvis fienden ble dyttet litt tilbake når den ble truffet?
+
+**Legg til litt "knockback" på fienden når den blir truffet.**
 
 I fila [BulletComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/gun/BulletComponent.kt) finner funksjonen `onEnemyHit(enemy: Entity)`.
 * Få tak i fiendens `PhysicsComponent`
@@ -153,7 +158,9 @@ Workshopen er jo oppkalt etter talken "The Art of Screenshake" - så det var vel
 Screenshake løses av et globalt "system" som rister på kameraet. Det har en intern tilstand som bestemmer hvor mye shake det er, som har en verdi mellom 0 og 1.
 For å se litt hvordan det er implementert, ta en titt i [ScreenShakeSystem.kt](core/src/main/kotlin/dev/bakke/artofjuice/ScreenshakeSystem.kt). Der er det også noen parametere du kan justere på!
 
-Vi kan ta det i bruk - legg til litt screenshake når spilleren skyter.
+**Legg til litt screenshake hver gang våpenet skyter.**
+
+
 Få tak i `ScreenShakeSystem`-instansen i `GunComponent.kt`, og kall enten `addScreenShake()` eller `setMinimumShake()` hver gang det skytes.
 
 <details>
@@ -253,7 +260,7 @@ Gjør endringen i [GunComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/gu
 * Endringen gjøres i `shoot()`-metoden
 * Få tak i spillerens `PhysicsComponent` enten i metoden, eller utenfor - da må den være "lazy"
 * Knockback-retning bør være motsatt av retningen det skytes i
-* Impulsen kan være konstant, eller det avhengig av våpenets stats, hvis du gjorde oppgave 2B
+* Impulsen kan være konstant, eller være avhengig av våpenets stats, hvis du gjorde oppgave 2B
 </details>
 
 <details>

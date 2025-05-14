@@ -52,6 +52,8 @@ class GunComponent(initialGun: Gun?) : Component() {
         timeSinceLastShot = 0f
 
         // OPPGAVE 3:
+        // få tak i ScreenshakeSystem
+        // kall .addShake() eller .setMinimumShake()
 
         // OPPGAVE 4:
 

@@ -36,7 +36,9 @@ class BulletComponent(private val gunStats: GunStats) : Component() {
         enemy.getComponent<HealthComponent>().damage(gunStats.damage)
 
         // OPPGAVE 2:
-        // legg på litt impuls
+        // Få tak i PhysicsComponent
+        // applyImpulse() på den, med en vektor som er langs kulas bevegelsesretning - `entity.velocity`
+        // For litt mer juice: vinkle impulsen litt oppover!
 
 
         spawnParticleEffect()

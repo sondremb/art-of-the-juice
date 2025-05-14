@@ -21,7 +21,8 @@ class EnemyAIComponent(private var direction: Float = 1f, private var speed: Flo
 
     private fun onHit(damage: Int) {
         // OPPGAVE 1
-        // hva bør skje her? 🤔
+        // spill av en "skadet" ("hurt") animasjon
+        // det finnes et hint lenger ned!
     }
 
     private fun onDeath() {
