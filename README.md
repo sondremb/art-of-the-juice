@@ -226,7 +226,7 @@ fun shoot(direction: Vector2) {
 ```
 </details>
 
-### Oppgave 3C: Screnshake på granat
+### Oppgave 3C: Screenshake på granat
 Granaten er jo også et våpen, og den kan også lage litt screenshake når den eksploderer!
 
 Legg til litt screenshake når den eksploderer - titt i [ExplosionComponent.kt](core/src/main/kotlin/dev/bakke/artofjuice/player/ExplosionComponent.kt)
